@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925062547128",
+    "project_id": "my-book-f1ef6",
+    "storage_bucket": "my-book-f1ef6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925062547128:android:f114a04b8f9c801c8ed64d",
+        "android_client_info": {
+          "package_name": "com.lamhong.mybook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925062547128-out2sk8d28sul95q31hb9b4tr7sqim2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrYxABrwQ_7hW3t89xtyt2SzRsKk4Sxss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925062547128-out2sk8d28sul95q31hb9b4tr7sqim2r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
