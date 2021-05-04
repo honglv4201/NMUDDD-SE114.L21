@@ -24,6 +24,13 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="seeFriendBtn">
+        <item name="android:background">@drawable/button_seefriends</item>
+    </style>
+    <style name="addfriendbtn">
+        <item name="android:background">@drawable/button_addfriend</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="parentsize">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

@@ -56,6 +56,36 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_logout"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_name"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_name"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edit_mota"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/edit_mota"
+            android:id="@+id/btn_save"
+            android:background="@color/green"
+            android:backgroundTint="@color/green"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

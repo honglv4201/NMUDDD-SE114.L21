@@ -32,6 +32,14 @@
                     android:src="@drawable/homebtn"
                     android:layout_alignParentRight="true"
                     />
+                <EditText
+                    android:id="@+id/edittext_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_alignParentRight="true"
+                    android:hint="Tim kiem"
+                    />
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -40,10 +48,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleview"
+        android:id="@+id/recycleviewSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appbar_layout"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

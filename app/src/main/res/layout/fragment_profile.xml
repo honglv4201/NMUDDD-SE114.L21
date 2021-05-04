@@ -12,38 +12,38 @@
         android:id="@+id/appbar_layout_profile"
         android:background="@color/white"
         >
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:id="@+id/toolbar_profile"
-            android:background="@color/colorBlack"
-            >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:id="@+id/usename_profile_fragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="username"
-                    android:textSize="20dp"
-                    android:layout_centerVertical="true"
-                    android:maxLines="1"
-                    android:textStyle="bold"
-                    />
-                <ImageView
-                    android:id="@+id/btn_options"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/homebtn"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    />
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="55dp"-->
+<!--            android:id="@+id/toolbar_profile"-->
+<!--            android:background="@color/colorBlack"-->
+<!--            >-->
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                >-->
+<!--                <TextView-->
+<!--                    android:id="@+id/usename_profile_fragment"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="username"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:textStyle="bold"-->
+<!--                    />-->
+<!--                <ImageView-->
+<!--                    android:id="@+id/btn_options"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/homebtn"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    />-->
 
 
-            </RelativeLayout>
-        </androidx.appcompat.widget.Toolbar>
+<!--            </RelativeLayout>-->
+<!--        </androidx.appcompat.widget.Toolbar>-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -91,6 +91,7 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginBottom="35dp"
                         />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -134,6 +135,7 @@
                     android:textSize="30sp"
                     />
                 <TextView
+                    android:id="@+id/tv_descrip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Này là idol của hồng"
@@ -141,8 +143,117 @@
                     android:layout_marginTop="10dp"
                     android:layout_centerHorizontal="true"
                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_descrip"
+                    android:text="lamhong"
+                    android:textSize="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/txtSetting"
+                    />
 
 
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/top_container"
+                android:id="@+id/below_container"
+
+                >
+
+                    <RelativeLayout
+                        android:layout_width="100dp"
+                        android:layout_height="250dp"
+                        android:background="@drawable/custom_leftbar_settingaccount">
+                        <RelativeLayout
+                            android:id="@+id/container_numfriends"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_marginTop="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="350"
+                                android:textSize="27sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tv_numberFriends"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="-1dp"
+                                android:text="Bạn bè"
+                                android:textSize="13sp"
+                                android:id="@+id/tv_banbe"
+                                android:layout_below="@+id/tv_numberFriends"
+                                />
+                            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:theme="@style/seeFriendBtn"
+                                android:layout_below="@+id/tv_banbe"
+                                android:text="Xem"
+                                android:textSize="12sp"
+                                android:textColor="#16C7DD"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+
+                                />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_below="@+id/container_numfriends"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_marginTop="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="350"
+                                android:textSize="27sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tv_numberFollows"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="-1dp"
+                                android:text="Theo dõi"
+                                android:textSize="13sp"
+                                android:id="@+id/tv_theodoi"
+                                android:layout_below="@+id/tv_numberFollows"
+                                />
+                            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:theme="@style/seeFriendBtn"
+                                android:layout_below="@+id/tv_theodoi"
+                                android:text="Xem"
+                                android:textSize="12sp"
+                                android:textColor="#16C7DD"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+
+                                />
+                        </RelativeLayout>
+
+
+
+                    </RelativeLayout>
 
 
             </RelativeLayout>
