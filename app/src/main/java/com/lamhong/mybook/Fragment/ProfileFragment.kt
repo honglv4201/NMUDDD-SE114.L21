@@ -16,6 +16,8 @@ import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.AccountSettingActivity
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -118,6 +120,7 @@ class ProfileFragment : Fragment() {
                 user?.setName(snapshot.child("fullname").value.toString())
                 txt_name_avatar.text=user?.getName()
                 tv_descrip.text=user?.getEmail()
+                Picasso.get().load(user?.getAvatar()).placeholder(R.drawable.duongtu1).into(avatar)
             }
             override fun onCancelled(error: DatabaseError) {
 

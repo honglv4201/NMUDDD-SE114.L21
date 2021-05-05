@@ -75,11 +75,10 @@
                         <ImageView
                             android:id="@+id/roundedImageView"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/duongtu"
+                            android:layout_height="190dp"
                             android:background="@color/white"
                             android:scaleType="centerCrop"
-                            />
+                            android:src="@drawable/duongtu" />
                     </androidx.cardview.widget.CardView>
                     <ImageButton
                         android:id="@+id/btnSetting"

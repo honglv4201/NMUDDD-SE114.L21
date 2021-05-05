@@ -37,29 +37,27 @@
 
 
     </com.google.android.material.appbar.AppBarLayout>
-    <TextView
-        android:id="@+id/setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/duongtu"
         android:layout_centerHorizontal="true"
-        android:text="Nay la setting"
-        android:textSize="30dp"
-        android:layout_marginTop="200dp"
-
+        android:id="@+id/image_avatar"
         />
     <Button
-        android:id="@+id/btn_logout"
+        android:id="@+id/btn_change_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log Out"
-        android:layout_below="@+id/setting"
+        android:text="Change"
+        android:layout_below="@+id/image_avatar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_logout"
+        android:layout_below="@+id/btn_change_avatar"
         >
         <EditText
             android:layout_width="match_parent"
@@ -74,15 +72,24 @@
             android:id="@+id/edit_mota"
             />
         <Button
+            android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_below="@+id/edit_mota"
-            android:id="@+id/btn_save"
             android:background="@color/green"
             android:backgroundTint="@color/green"
             android:layout_centerHorizontal="true"
+            />
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:layout_below="@+id/btn_save"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
             />
 
     </RelativeLayout>

@@ -22,6 +22,7 @@ import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.user_item.view.*
 
 class UserAdapter(private var _context : Context,private var _user :List<User>,private var isFragment :Boolean=false):
@@ -41,6 +42,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         var user = _user[position]
         print(user.getName())
       holder.tv_name.text=user.getName()
+        Picasso.get().load(user?.getAvatar()).placeholder(R.drawable.duongtu).into(holder.userImage)
     //    holder.tv_descript.text=user.getEmail()
 //        Picasso.get().load(user.getImageurl()).placeholder(R.drawable.duongtu1).into(holder.userImage)
         checkFriendStatus(user.getUid(), holder.btn_add)

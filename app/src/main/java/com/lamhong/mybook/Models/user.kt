@@ -4,13 +4,21 @@ class User {
     private var fullname : String=""
     private var email: String=""
     private var uid: String=""
+    private var avatar : String=""
   //  private var imageUrl : String=""
     constructor()
-    constructor( fullname : String,email: String, uid: String){
+    constructor( fullname : String,email: String, uid: String , avatar : String){
         this.fullname=fullname
         this.email=email
         this.uid=uid
+        this.avatar=avatar
        // this.imageUrl=imageUrl
+    }
+    fun getAvatar(): String{
+        return avatar
+    }
+    fun setAvatar(avatar: String){
+        this.avatar=avatar
     }
     fun getName(): String{
         return fullname
