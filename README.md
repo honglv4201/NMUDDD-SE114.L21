@@ -12,6 +12,7 @@ Social Mobile App
 * Lâm Văn Hồng - 19520094
 * Đặng Anh Tú - 19520325 
 * Ngô Tấn Hoài - 19520086
+* Nguyễn Ngọc Phúc - 19520224
 ```
 **Giáo Viên Hướng Dẫn**
 * Thầy Mai Trọng Khang
