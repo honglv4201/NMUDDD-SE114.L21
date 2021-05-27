@@ -80,12 +80,12 @@ class AccountSettingActivity : AppCompatActivity() {
         progressDialog.show()
         when{
             TextUtils.isEmpty(edit_name.text.toString()) -> {
-                Toast.makeText(this, "Vui lòng nhập tên ",Toast.LENGTH_LONG)
+                Toast.makeText(this, "Vui lòng nhập tên ",Toast.LENGTH_LONG).show()
             }
             TextUtils.isEmpty(edit_mota.text.toString()) -> {
-                Toast.makeText(this, "Vui lòng nhập mota ",Toast.LENGTH_LONG)
+                Toast.makeText(this, "Vui lòng nhập mota ",Toast.LENGTH_LONG).show()
             }
-            imageUir ==null -> Toast.makeText(this, "Vui lòng chọn ảnh" , Toast.LENGTH_LONG)
+            imageUir ==null -> Toast.makeText(this, "Vui lòng chọn ảnh" , Toast.LENGTH_LONG).show()
             else ->{
                 val file = storageAvatarRef?.child(firebaseUser.uid +".jpg")
 

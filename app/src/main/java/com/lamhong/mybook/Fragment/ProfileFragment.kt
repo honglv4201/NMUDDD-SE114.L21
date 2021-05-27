@@ -33,6 +33,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class ProfileFragment : Fragment() {
     private lateinit var profileId : String
     private lateinit var firebaseUser : FirebaseUser

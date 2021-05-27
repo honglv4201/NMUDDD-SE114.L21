@@ -1,5 +1,6 @@
 package com.lamhong.mybook
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lamhong.mybook.Fragment.HomeFragment
 import com.lamhong.mybook.Fragment.NotifyFragment
 import com.lamhong.mybook.Fragment.ProfileFragment
+import com.lamhong.mybook.Fragment.zHome
 
 class MainActivity : AppCompatActivity() {
 //    private lateinit var textview: TextView
@@ -19,11 +21,12 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.nav_search -> {
 
-               moveFragment(HomeFragment())
+               moveFragment(zHome())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_add_post -> {
-                moveFragment(NotifyFragment())
+                //item.isChecked=false
+                startActivity(Intent(this, Post_Activity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_notifications -> {
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
 
         false
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

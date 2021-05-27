@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.user_item.view.*
 class UserAdapter(private var _context : Context,private var _user :List<User>,private var isFragment :Boolean=false):
         RecyclerView.Adapter<UserAdapter.viewHolder>() {
         private var fireabaseUser: FirebaseUser?= FirebaseAuth.getInstance().currentUser
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.viewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.viewHolder {
         var view = LayoutInflater.from(_context).inflate(R.layout.user_item, parent , false)
         return UserAdapter.viewHolder(view)
     }
@@ -118,6 +118,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
             }
 
             override fun onCancelled(error: DatabaseError) {
+
 
             }
         })

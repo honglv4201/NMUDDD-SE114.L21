@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.lamhong.mybook.Adapter.PostAdapter
 import com.lamhong.mybook.Adapter.UserAdapter
+import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -30,6 +33,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
+
+//    private var postAdapter : PostAdapter?=null
+//    private var postList : MutableList<Post>?=null
+//    private var followingList : MutableList<Post>?=null
+
 
     private var recyclerView : RecyclerView?=null
     private var userAdapter : UserAdapter ?=  null
@@ -71,7 +79,7 @@ class HomeFragment : Fragment() {
 
                 }else
                 {
-                    recyclerView?.visibility= View.VISIBLE
+                   recyclerView?.visibility= View.VISIBLE
                    userMatch() // retrieve data
                    searchUser(s.toString().toLowerCase())
 
@@ -82,9 +90,20 @@ class HomeFragment : Fragment() {
 
             }
         })
+
+//        postList= ArrayList()
+//        postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post>) }
+//        recyclerView!!.adapter= postAdapter
+
+       // checkFollowing()
+
+
+
         return view
 
     }
+
+
     fun searchUser(datainput : String){
             val getdata= FirebaseDatabase.getInstance().getReference().child("UserInformation").orderByChild("fullname")
             .startAt(datainput).endAt(datainput+ "\uf8ff")
