@@ -27,6 +27,15 @@
     <style name="seeFriendBtn">
         <item name="android:background">@drawable/button_seefriends</item>
     </style>
+    <!-- home -->
+    <style name="likeButton">
+        <item name="android:background">@drawable/custombtn_like</item>
+        <item name="android:textColor">#2FBBF0</item>
+    </style>
+    <style name="likeButtonClicked">
+        <item name="android:background">@drawable/custombtn_liked</item>
+        <item name="android:textColor">#2FBBF0</item>
+    </style>
     <style name="addfriendbtn">
         <item name="android:background">@drawable/button_addfriend</item>
         <item name="android:textColor">@color/white</item>

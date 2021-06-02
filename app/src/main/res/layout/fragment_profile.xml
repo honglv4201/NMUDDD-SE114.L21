@@ -166,6 +166,7 @@
                 >
 
                     <RelativeLayout
+                        android:id="@+id/left_infor_container"
                         android:layout_width="100dp"
                         android:layout_height="250dp"
                         android:background="@drawable/custom_leftbar_settingaccount">
@@ -253,6 +254,19 @@
 
 
                     </RelativeLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_toRightOf="@+id/left_infor_container"
+                    >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/recycleview_picture_bio"
+                        android:padding="10dp"
+                        />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
 
             </RelativeLayout>
