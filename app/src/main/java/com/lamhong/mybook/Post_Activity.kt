@@ -89,15 +89,15 @@ class Post_Activity : AppCompatActivity() {
                         val ref= FirebaseDatabase.getInstance().reference.child("Posts")
 
                         val inMap = HashMap<String, Any>()
-                        inMap["post_id"]=(ref.push().key)!!
+                       // inMap["post_id"]=(ref.push().key)!!
+                        val nunu : String = ref.push().key.toString()
+                        inMap["post_id"]=(nunu)!!
                         inMap["post_image"]= myUrl
                         inMap["publisher"]= FirebaseAuth.getInstance().currentUser.uid.toString()
                         inMap["post_content"]= edit_content.text.toString()
 
+                        ref.child(nunu).setValue(inMap)
 
-
-
-                        ref.child(ref.push().key.toString()).setValue(inMap)
                         val intent = Intent(this@Post_Activity, zHome::class.java)
                         Toast.makeText(this, "Đã cập nhật thông tin !!", Toast.LENGTH_LONG).show()
                         startActivity(intent)

@@ -1,3 +1,4 @@
+
 package com.lamhong.mybook.Fragment
 
 import android.content.Context
@@ -7,6 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat.canScrollVertically
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -14,13 +19,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.AccountSettingActivity
+import com.lamhong.mybook.Adapter.ImageProfileAdapter
+import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.posts_layout.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,6 +48,9 @@ private const val ARG_PARAM2 = "param2"
 class ProfileFragment : Fragment() {
     private lateinit var profileId : String
     private lateinit var firebaseUser : FirebaseUser
+
+    private var postList : List<Post> ?=null
+    private var ImageAdapter: ImageProfileAdapter ?=null
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -102,13 +116,60 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+
+        var recycleView : RecyclerView
+        recycleView = view.findViewById(R.id.recycleview_picture_bio)
+        val linearLayoutManager: LinearLayoutManager= GridLayoutManager(context, 2)
+
+        var recycleview1 : RecyclerView
+        recycleview1= view.findViewById(R.id.recycleview_post_publish)
+        val linearLayoutManager1 = LinearLayoutManager(context)
+        recycleview1.layoutManager= linearLayoutManager1
+
+      //  recycleView.suppressLayout(false)
+       // recycleview1.suppressLayout(false)
+        recycleView.setHasFixedSize(true)
+
+        recycleView.layoutManager= linearLayoutManager
+
+        postList= ArrayList()
+         ImageAdapter= context?.let{ ImageProfileAdapter(it, postList as ArrayList<Post>)}
+        recycleView.adapter=ImageAdapter
+        recycleview1.adapter=ImageAdapter
+
+
         txtSetting
 
         getFriends()
+        getPicture()
         getInfor()
         return view;
 
     }
+    private fun getPicture(){
+        val postRef=FirebaseDatabase.getInstance().reference.child("Posts")
+        postRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    (postList as ArrayList<Post>).clear()
+                    for (s in snapshot.children){
+                        val post= s.getValue(Post::class.java)
+                        post!!.setpost_id(s.child("post_id").value.toString())
+                       // if((postList as ArrayList<Post>).size<4)
+                        (postList as ArrayList<Post>).add(post!!)
+
+                        //Collections.reverse(postList)
+                        ImageAdapter!!.notifyDataSetChanged()
+                    }
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
     private fun getInfor(){
         // get name methods 1
         val nameRef= FirebaseDatabase.getInstance().reference

@@ -68,8 +68,8 @@ class zHome : Fragment() {
         postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post>) }
         recycleView.adapter= postAdapter
         recycleView?.visibility= View.VISIBLE
-         checkFollowing()
-
+        checkFollowing()
+        retrievePosts()
         return view;
     }
 
@@ -86,7 +86,6 @@ class zHome : Fragment() {
                     for (s in snapshot.children){
                         s.key?.let { (followingList as ArrayList<String>).add(it) }
                     }
-                    retrievePosts()
                 }
             }
 

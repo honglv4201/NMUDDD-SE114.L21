@@ -113,6 +113,8 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()) {
                     numlikes.text = snapshot.childrenCount.toString() + " Yêu thích"
+                }else{
+                    numlikes.text="0 Yêu Thích"
                 }
             }
 
@@ -129,6 +131,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 if(snapshot.exists()){
                     numcomment.text="(" + snapshot.childrenCount.toString() + ")"
                 }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
