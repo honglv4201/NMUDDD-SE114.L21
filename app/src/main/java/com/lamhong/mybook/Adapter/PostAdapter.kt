@@ -26,8 +26,10 @@ import com.lamhong.mybook.MainActivity
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
+import com.lamhong.mybook.UserReacted
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_comment.*
 
 class PostAdapter (private val mcontext: Context, private val mPost : List<Post>): RecyclerView.Adapter<PostAdapter.ViewHolder>(){
 
@@ -78,8 +80,14 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         checkLikes(post.getpost_id(), holder.btnLike , holder.tvthich)
         setnumberLike(holder.numlikes,post.getpost_id())
         setComment(holder.numcomment, post.getpost_id())
+        holder.numlikes.setOnClickListener{
+            val intent = Intent(mcontext, UserReacted::class.java)
+            intent.putExtra("postID", post.getpost_id())
+            mcontext.startActivity(intent)
+        }
         holder.btnLike.setOnClickListener{
             if(holder.btnLike.tag=="Like"){
+                addNotifyLike(post.getpublisher(), post.getpost_id())
                 FirebaseDatabase.getInstance().reference
                     .child("Likes")
                     .child(post.getpost_id())
@@ -174,7 +182,16 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         return mPost.size
     }
 
-
+    private fun addNotifyLike(publisherID: String, postId: String){
+        val notiRef= FirebaseDatabase.getInstance().reference
+            .child("Notify").child(publisherID)
+        val notiMap = HashMap<String, Any>()
+        notiMap["userID"]=firebaseUser!!.uid
+        notiMap["notify"]="đã thích bài viết của bạn"
+        notiMap["postID"]=postId
+        notiMap["type"]="thichbaiviet"
+        notiRef.push().setValue(notiMap)
+    }
     private fun publishInfo(profileImage: CircleImageView, userName: TextView,   publiser: String) {
         val userRef= FirebaseDatabase.getInstance().reference.child("UserInformation").child(publiser)
 

@@ -109,6 +109,7 @@ class zHome : Fragment() {
                    //    val post = Post()
                     post!!.setpost_image(ss.child("post_image").value.toString())
                         post!!.setpostContent(ss.child("post_content").value.toString())
+                        post.setpost_id(ss.child("post_id").value.toString())
                     for (idUser in (followingList as ArrayList<String>)) {
                         if(post!!.getpublisher() == idUser){
                         postList!!.add(post)

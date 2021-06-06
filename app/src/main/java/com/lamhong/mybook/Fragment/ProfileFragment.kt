@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.AccountSettingActivity
 import com.lamhong.mybook.Adapter.ImageProfileAdapter
+import com.lamhong.mybook.Adapter.PostAdapter
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
@@ -51,6 +52,9 @@ class ProfileFragment : Fragment() {
 
     private var postList : List<Post> ?=null
     private var ImageAdapter: ImageProfileAdapter ?=null
+
+    private var imagePostList: List<Post> ?=null
+    private var postAdapter: PostAdapter?=null
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -126,6 +130,8 @@ class ProfileFragment : Fragment() {
         val linearLayoutManager1 = LinearLayoutManager(context)
         recycleview1.layoutManager= linearLayoutManager1
 
+
+
       //  recycleView.suppressLayout(false)
        // recycleview1.suppressLayout(false)
         recycleView.setHasFixedSize(true)
@@ -135,16 +141,48 @@ class ProfileFragment : Fragment() {
         postList= ArrayList()
          ImageAdapter= context?.let{ ImageProfileAdapter(it, postList as ArrayList<Post>)}
         recycleView.adapter=ImageAdapter
-        recycleview1.adapter=ImageAdapter
+
+        imagePostList = ArrayList()
+        postAdapter= context?.let{ PostAdapter(it, imagePostList as ArrayList<Post>) }
+        recycleview1.adapter= postAdapter
+
 
 
         txtSetting
-
+        showImagePost()
         getFriends()
         getPicture()
         getInfor()
         return view;
 
+    }
+    private fun showImagePost() {
+        val postRef= FirebaseDatabase.getInstance().reference.child("Posts")
+        postRef.addValueEventListener(object: ValueEventListener{
+
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                (imagePostList as ArrayList<Post>).clear()
+                for(ss in snapshot.children){
+                    if(ss.exists())
+                    {
+                        val post = ss.getValue(Post::class.java)
+                        //    val post = Post()
+                        post!!.setpost_image(ss.child("post_image").value.toString())
+                        post!!.setpostContent(ss.child("post_content").value.toString())
+                        post.setpost_id(ss.child("post_id").value.toString())
+
+                        if(post!!.getpublisher()==firebaseUser.uid){
+                            (imagePostList as ArrayList<Post>).add(post)
+                        }
+                        postAdapter!!.notifyDataSetChanged()
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
     private fun getPicture(){
         val postRef=FirebaseDatabase.getInstance().reference.child("Posts")
