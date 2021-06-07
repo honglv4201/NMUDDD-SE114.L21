@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -14,11 +15,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Adapter.PostAdapter
 import com.lamhong.mybook.Adapter.UserAdapter
+import com.lamhong.mybook.DetailPostFragment
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_z_home.*
+import kotlinx.android.synthetic.main.fragment_z_home.view.*
 
  // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +73,11 @@ class zHome : Fragment() {
         recycleView?.visibility= View.VISIBLE
         checkFollowing()
         retrievePosts()
+        // search function
+        view.searchbtn.setOnClickListener{
+            (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, HomeFragment()).commit()
+        }
         return view;
     }
 

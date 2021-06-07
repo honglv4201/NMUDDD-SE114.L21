@@ -55,16 +55,16 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
             showImagePost(holder.postImage,notify.gePostID())
             // navigate to post detail
 
-
+            holder.contentNotify.text="Đã thích bài viết của bạn"
         }
         else if (notify.getType()=="binhluan"){
             holder.postImage.visibility=View.VISIBLE
             showImagePost(holder.postImage,notify.gePostID())
-
+            holder.contentNotify.text="Đã bình luận trên bài viết của bạn"
         }
             else if(notify.getType()=="loimoiketban"){
             holder.postImage.visibility=View.GONE
-
+            holder.contentNotify.text="Đã gửi lời mời kết bạn"
         }
         showUserInfor(holder.avatar_image, holder.uname, notify.getUserID())
         holder.itemView.setOnClickListener{
@@ -74,6 +74,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                 pref.apply()
                 (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, ProfileFragment()).commit()
+
             }
             else if(notify.getType()=="thichbaiviet") {
                 val pref = mContext.getSharedPreferences("PREFS",Context.MODE_PRIVATE).edit()
@@ -81,12 +82,16 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                 pref.apply()
                 (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, DetailPostFragment()).commit()
+
+
             }
             else if(notify.getType()=="binhluan"){
                 val commentIntent= Intent(mContext, CommentActivity::class.java)
                 commentIntent.putExtra("postID", notify.gePostID())
                 commentIntent.putExtra("publisher", notify.getUserID())
                 mContext.startActivity(commentIntent)
+
+
             }
         }
 

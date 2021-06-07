@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.lamhong.mybook.Adapter.NotifyAdapter
 import com.lamhong.mybook.Models.Notify
 import com.lamhong.mybook.R
+import kotlinx.android.synthetic.main.fragment_notify.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -64,6 +66,11 @@ class NotifyFragment : Fragment() {
         notifyAdapter= context?.let { NotifyAdapter(it, notifyList as ArrayList<Notify>)}
         recyclerView.adapter= notifyAdapter
         showNotify()
+
+        view.searchbtn_inNotify.setOnClickListener{
+            (context as FragmentActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, HomeFragment()).commit()
+        }
         return view
     }
 
