@@ -22,6 +22,7 @@ import com.lamhong.mybook.AccountSettingActivity
 import com.lamhong.mybook.Adapter.ImageProfileAdapter
 import com.lamhong.mybook.Adapter.PostAdapter
 import com.lamhong.mybook.Models.Post
+import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
@@ -55,6 +56,10 @@ class ProfileFragment : Fragment() {
 
     private var imagePostList: List<Post> ?=null
     private var postAdapter: PostAdapter?=null
+
+    private var shareList: MutableList<SharePost> = ArrayList()
+    private var lstTypeAdapter : List<Int> = ArrayList()
+    private var lstIndex : List<Int> = ArrayList()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -143,7 +148,8 @@ class ProfileFragment : Fragment() {
         recycleView.adapter=ImageAdapter
 
         imagePostList = ArrayList()
-        postAdapter= context?.let{ PostAdapter(it, imagePostList as ArrayList<Post>) }
+        postAdapter= context?.let{ PostAdapter(it, imagePostList as ArrayList<Post> , lstIndex as ArrayList,
+                lstTypeAdapter as ArrayList, shareList as ArrayList) }
         recycleview1.adapter= postAdapter
 
 

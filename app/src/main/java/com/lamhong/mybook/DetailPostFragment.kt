@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Adapter.PostAdapter
 import com.lamhong.mybook.Models.Post
+import com.lamhong.mybook.Models.SharePost
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +32,9 @@ class DetailPostFragment : Fragment() {
     private var postAdapter : PostAdapter?=null
     private var postList: MutableList<Post>?=null
     private var idPost: String = ""
+    private var lstIndex : List<Int> = ArrayList()
+    private var lstType: List<Int> = ArrayList()
+    private var shareList: List<SharePost>  = ArrayList()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -64,7 +68,8 @@ class DetailPostFragment : Fragment() {
 
         postList= ArrayList()
 
-        postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post>) }
+        postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post>,lstIndex as ArrayList
+                , lstType as ArrayList, shareList as ArrayList) }
         recycleview.adapter= postAdapter
 
 
@@ -85,6 +90,8 @@ class DetailPostFragment : Fragment() {
                     post!!.setpostContent(snapshot.child("post_content").value.toString())
                     if (post != null) {
                         postList!!.add(post)
+                        (lstIndex as ArrayList).add(0)
+                        (lstType as ArrayList).add(0)
                     }
 
                 }

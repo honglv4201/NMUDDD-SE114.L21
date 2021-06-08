@@ -13,7 +13,10 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
@@ -27,6 +30,7 @@ class Post_Activity : AppCompatActivity() {
     private var myUrl=""
     private var imageUir : Uri?=null
     private var storagePostRef : StorageReference? = null
+    private var followingList: ArrayList<String> ?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_)
@@ -55,6 +59,24 @@ class Post_Activity : AppCompatActivity() {
             imageUir=result.uri
             image_content.setImageURI(imageUir)
         }
+    }
+    private fun getFollowinglist(){
+        val ref = FirebaseDatabase.getInstance().reference.child("Friends")
+            .child(FirebaseAuth.getInstance().currentUser.uid)
+            .child("friendList")
+        ref.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    followingList!!.clear()
+                    for (s in snapshot.children){
+                        followingList!!.add(s.key.toString())
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
     private fun uploadImage(){
 
@@ -96,7 +118,22 @@ class Post_Activity : AppCompatActivity() {
                         inMap["publisher"]= FirebaseAuth.getInstance().currentUser.uid.toString()
                         inMap["post_content"]= edit_content.text.toString()
 
+
+
+
                         ref.child(nunu).setValue(inMap)
+                        getFollowinglist()
+                        for(user in followingList!!){
+                            val timelineRef= FirebaseDatabase.getInstance().reference
+                                .child("UserTimeLine")
+                                .child(user)
+                            val postMap  = HashMap<String, Any>()
+                            postMap["post_type"]="post"
+                            postMap["id"]=nunu
+                            postMap["active"]=true
+
+                            timelineRef.push().setValue(postMap)
+                        }
 
                         val intent = Intent(this@Post_Activity, zHome::class.java)
                         Toast.makeText(this, "Đã cập nhật thông tin !!", Toast.LENGTH_LONG).show()

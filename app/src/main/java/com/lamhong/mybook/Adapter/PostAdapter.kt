@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -20,23 +21,23 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.lamhong.mybook.CommentActivity
+import com.lamhong.mybook.*
 import com.lamhong.mybook.Fragment.zHome
-import com.lamhong.mybook.MainActivity
 import com.lamhong.mybook.Models.Post
+import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.User
-import com.lamhong.mybook.R
-import com.lamhong.mybook.UserReacted
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_comment.*
 
-class PostAdapter (private val mcontext: Context, private val mPost : List<Post>): RecyclerView.Adapter<PostAdapter.ViewHolder>(){
+class PostAdapter (private val mcontext: Context, private val mPost : List<Post> ,
+            private val mLstIndex: List<Int> , private val mLstType: List<Int>,
+            private val mShare: List<SharePost>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var firebaseUser : FirebaseUser?=null
 
 
-    inner class ViewHolder(@NonNull itemVIew: View): RecyclerView.ViewHolder(itemVIew){
+    inner class ViewHolder0(@NonNull itemVIew: View): RecyclerView.ViewHolder(itemVIew){
 
         var postImage :ImageView
         var profileImage : CircleImageView
@@ -49,6 +50,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var btnLike: CircularProgressButton = itemView.findViewById(R.id.btn_yeuthich)
         var btnComment: CircularProgressButton = itemView.findViewById(R.id.btn_binhluan)
         var tvthich: TextView = itemView.findViewById(R.id.tv_thich)
+        var btnShare : CircularProgressButton= itemView.findViewById(R.id.btn_share)
         init {
             postImage = itemView.findViewById(R.id.post_image_home)
             profileImage = itemView.findViewById(R.id.user_profile_image_search)
@@ -56,62 +58,160 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
             userName = itemView.findViewById(R.id.user_name_search)
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    inner class ViewHolder1(@NonNull itemVIew: View) : RecyclerView.ViewHolder(itemVIew){
+        var postImage: CircleImageView
+        var avatar_sharing : CircleImageView
+        var avatar_shared: CircleImageView
+        var name_sharing : TextView
+        var name_shared: TextView
+        var content_sharing: TextView
+        var content_shared: TextView
+        var numlike: TextView
+        var numComment: TextView
+
+        var btnLike : CircularProgressButton
+        var btnComment: CircularProgressButton
+        var btnShare: CircularProgressButton
+
+        init {
+            postImage= itemView.findViewById(R.id.image_content)
+            avatar_sharing=itemView.findViewById(R.id.user_avata_sharing)
+            avatar_shared= itemView.findViewById(R.id.user_avatar_shared)
+            name_sharing= itemView.findViewById(R.id.user_name_sharing)
+            name_shared= itemView.findViewById(R.id.user_name_shared)
+            content_sharing=itemView.findViewById(R.id.describeShare)
+            content_shared= itemView.findViewById(R.id.content_inshared)
+            numlike=itemView.findViewById(R.id.numlikes)
+            numComment=itemView.findViewById(R.id.comments)
+            btnLike=itemView.findViewById(R.id.btn_yeuthich)
+            btnComment=itemView.findViewById(R.id.btn_binhluan)
+            btnShare=itemView.findViewById(R.id.btn_share)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+       // return super.getItemViewType(position)
+        return mLstType[position]
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+        when(viewType){
+            0 ->{
+                val view = LayoutInflater.from(mcontext).inflate(R.layout.posts_layout, parent, false)
+                return ViewHolder0(view)
+            }
+            1->{
+                val view = LayoutInflater.from(mcontext).inflate(R.layout.post_share_layout, parent, false)
+                return ViewHolder1(view)
+            }
+        }
         val view = LayoutInflater.from(mcontext).inflate(R.layout.posts_layout, parent, false)
-        return ViewHolder(view)
+        return ViewHolder0(view)
 
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holderc: RecyclerView.ViewHolder, position: Int) {
         firebaseUser= FirebaseAuth.getInstance().currentUser
+        when(holderc.getItemViewType()){
+            0->{
+                val holder1 : ViewHolder0 = holderc as ViewHolder0
 
-        val post= mPost[position]
-        Picasso.get().load(post.getpost_image()).into(holder.postImage)
 
-        publishInfo(holder.profileImage, holder.userName,  post.getpublisher())
-        //describe import
-        if(post.getpostContent().equals("")){
-            holder.describe.visibility=View.GONE
-        }else{
-            holder.describe.visibility=View.VISIBLE
-            holder.describe.text=post.getpostContent()
-        }
+                val post= mPost[mLstIndex[position]]
+                Picasso.get().load(post.getpost_image()).into(holder1.postImage)
 
-        checkLikes(post.getpost_id(), holder.btnLike , holder.tvthich)
-        setnumberLike(holder.numlikes,post.getpost_id())
-        setComment(holder.numcomment, post.getpost_id())
-        holder.numlikes.setOnClickListener{
-            val intent = Intent(mcontext, UserReacted::class.java)
-            intent.putExtra("postID", post.getpost_id())
-            mcontext.startActivity(intent)
-        }
-        holder.btnLike.setOnClickListener{
-            if(holder.btnLike.tag=="Like"){
-                addNotifyLike(post.getpublisher(), post.getpost_id())
-                FirebaseDatabase.getInstance().reference
-                    .child("Likes")
-                    .child(post.getpost_id())
-                    .child(firebaseUser!!.uid)
-                    .setValue(true)
-            }else
-            {
-                FirebaseDatabase.getInstance().reference
-                    .child("Likes")
-                    .child(post.getpost_id())
-                    .child(firebaseUser!!.uid)
-                    .removeValue()
+                publishInfo(holder1.profileImage, holder1.userName,  post.getpublisher())
+                //describe import
+                if(post.getpostContent().equals("")){
+                    holder1.describe.visibility=View.GONE
+                }else{
+                    holder1.describe.visibility=View.VISIBLE
+                    holder1.describe.text=post.getpostContent()
+                }
 
-               //  val intent=Intent(mcontext,zHome::class.java)
-               // mcontext.startActivity(intent)
+                checkLikes(post.getpost_id(), holder1.btnLike , holder1.tvthich)
+                setnumberLike(holder1.numlikes,post.getpost_id())
+                setComment(holder1.numcomment, post.getpost_id())
+                holder1.numlikes.setOnClickListener{
+                    val intent = Intent(mcontext, UserReacted::class.java)
+                    intent.putExtra("postID", post.getpost_id())
+                    mcontext.startActivity(intent)
+                }
+                holder1.btnLike.setOnClickListener{
+                    if(holder1.btnLike.tag=="Like"){
+                        addNotifyLike(post.getpublisher(), post.getpost_id())
+                        FirebaseDatabase.getInstance().reference
+                            .child("Likes")
+                            .child(post.getpost_id())
+                            .child(firebaseUser!!.uid)
+                            .setValue(true)
+                    }else
+                    {
+                        FirebaseDatabase.getInstance().reference
+                            .child("Likes")
+                            .child(post.getpost_id())
+                            .child(firebaseUser!!.uid)
+                            .removeValue()
+
+                        //  val intent=Intent(mcontext,zHome::class.java)
+                        // mcontext.startActivity(intent)
+
+                    }
+                }
+                holder1.btnComment.setOnClickListener{
+                    val commentIntent = Intent(mcontext, CommentActivity::class.java)
+                    commentIntent.putExtra("postID", post.getpost_id())
+                    commentIntent.putExtra("publisher", post.getpublisher())
+                    mcontext.startActivity(commentIntent)
+                }
+                holder1.btnShare.setOnClickListener{
+                    val shareIntent = Intent(mcontext, SharePostActivity::class.java)
+                    shareIntent.putExtra("postID", post.getpost_id())
+                    mcontext.startActivity(shareIntent)
+                }
+            }
+            1->{
+                val holder1= holderc as ViewHolder1
+                val sharePost = mShare[mLstIndex[position]]
+
+                //basic
+                holder1.content_sharing.text=sharePost.getContent()
+                publishInfo(holder1.avatar_sharing, holder1.name_sharing,sharePost.getPublisher())
+
+                val postShared= getPost(sharePost.getPostID())
+                Picasso.get().load(postShared.getpost_image()).into(holder1.postImage)
+                publishInfo(holder1.avatar_shared, holder1.name_shared,  postShared.getpublisher())
+                //describe import
+                if(postShared.getpostContent().equals("")){
+                    holder1.content_shared.visibility=View.GONE
+                }else{
+                    holder1.content_shared.visibility=View.VISIBLE
+                    holder1.content_shared.text=postShared.getpostContent()
+                }
+
 
             }
         }
-        holder.btnComment.setOnClickListener{
-            val commentIntent = Intent(mcontext, CommentActivity::class.java)
-            commentIntent.putExtra("postID", post.getpost_id())
-            commentIntent.putExtra("publisher", post.getpublisher())
-            mcontext.startActivity(commentIntent)
-        }
+
+    }
+    private fun getPost(id: String): Post{
+        val postRef= FirebaseDatabase.getInstance().reference.child("Posts").child(id)
+        var post : Post?=null
+        postRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(ss: DataSnapshot) {
+                if(ss.exists()){
+                    val post = ss.getValue(Post::class.java)
+                    post!!.setpost_image(ss.child("post_image").value.toString())
+                    post!!.setpostContent(ss.child("post_content").value.toString())
+                    post.setpost_id(ss.child("post_id").value.toString())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+        return post as Post
     }
 
     private fun setnumberLike(numlikes: TextView, getpostId: String) {
@@ -179,7 +279,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
 
 
     override fun getItemCount(): Int {
-        return mPost.size
+        return mLstType.size
     }
 
     private fun addNotifyLike(publisherID: String, postId: String){
