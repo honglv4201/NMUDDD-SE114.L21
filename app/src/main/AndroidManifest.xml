@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
-        <activity android:name=".SharePostActivity"></activity>
+        <activity android:name=".NewMessageActivity">
+
+        </activity>
+        <activity android:name=".SharePostActivity" />
         <activity android:name=".UserReacted" />
         <activity android:name=".CommentActivity" />
         <activity android:name=".Post_Activity" />
