@@ -30,11 +30,11 @@ class Post_Activity : AppCompatActivity() {
     private var myUrl=""
     private var imageUir : Uri?=null
     private var storagePostRef : StorageReference? = null
-    private var followingList: ArrayList<String> ?=null
+    private var followingList: ArrayList<String> =ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_)
-
+        getFollowinglist()
         storagePostRef = FirebaseStorage.getInstance().reference.child("Posts Images")
 
         btn_publish.setOnClickListener {
@@ -60,6 +60,26 @@ class Post_Activity : AppCompatActivity() {
             image_content.setImageURI(imageUir)
         }
     }
+    private fun checkFollowing() {
+        followingList=ArrayList()
+
+        val followRef = FirebaseDatabase.getInstance().reference
+            .child("Friends").child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .child("friendList")
+        followRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    (followingList as ArrayList<String>).clear()
+                    for (s in snapshot.children){
+                        s.key?.let { (followingList as ArrayList<String>).add(it) }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })}
     private fun getFollowinglist(){
         val ref = FirebaseDatabase.getInstance().reference.child("Friends")
             .child(FirebaseAuth.getInstance().currentUser.uid)
@@ -118,11 +138,18 @@ class Post_Activity : AppCompatActivity() {
                         inMap["publisher"]= FirebaseAuth.getInstance().currentUser.uid.toString()
                         inMap["post_content"]= edit_content.text.toString()
 
-
-
-
                         ref.child(nunu).setValue(inMap)
-                        getFollowinglist()
+
+                        val timelineUser= FirebaseDatabase.getInstance().reference
+                            .child("ProfileTimeLine").child(FirebaseAuth.getInstance().currentUser.uid)
+                        val pMap = HashMap<String, Any>()
+                        pMap["post_type"]="post"
+                        pMap["id"]=nunu
+                        pMap["active"]=true
+                        timelineUser.push().setValue(pMap)
+
+                       // getFollowinglist()
+
                         for(user in followingList!!){
                             val timelineRef= FirebaseDatabase.getInstance().reference
                                 .child("UserTimeLine")

@@ -81,16 +81,7 @@
                             android:scaleType="centerCrop"
                             android:src="@drawable/cty" />
                     </androidx.cardview.widget.CardView>
-                    <ImageButton
-                        android:id="@+id/btnSetting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/homebtn"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="35dp"
-                        />
+
 
                 </RelativeLayout>
                 <RelativeLayout
@@ -147,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/tv_descrip"
-                    android:text="lamhong"
+                    android:text=""
                     android:textSize="20dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="10dp"
@@ -158,11 +149,80 @@
 
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/top_container"
+                android:id="@+id/specific_container">
+                <LinearLayout
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profileEdit_container"
+                    android:orientation="horizontal"
+                    >
+                    <Button
+                        android:layout_width="300dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/btn_chinhsua"
+                        android:text="Sửa trang cá nhân"
+                        android:background="@color/main1color"
+                        android:textColor="@color/white"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/more_btn"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        />
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/friendContainer"
+                    android:orientation="horizontal"
+                    >
+                    <Button
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="25dp"
+                        android:id="@+id/btnAddfriend"
+                        android:text="Kết bạn"
+                        android:background="@color/main1color"
+                        android:textColor="@color/white"
+                        />
+                    <Button
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/btnNhanTin"
+                        android:text="Nhắn tin"
+                        android:background="@color/main1color"
+                        android:textColor="@color/white"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/more_btn"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        />
+
+
+
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/below_container"
+                android:layout_below="@+id/specific_container"
 
                 >
 
