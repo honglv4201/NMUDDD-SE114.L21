@@ -7,20 +7,22 @@
     android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/sontung"
-        android:id="@+id/profile_image_new_message"/>
+        android:id="@+id/profile_image_new_message"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/sontung" />
 
     <TextView
+        android:id="@+id/user_name_new_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="username"
-        android:id="@+id/user_name_new_message"
-        android:layout_toRightOf="@+id/profile_image_new_message"
-        android:layout_toEndOf="@+id/profile_image_new_message"
-        android:layout_marginLeft="20dp"
         android:layout_centerVertical="true"
-        android:textSize="20sp" />
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toEndOf="@+id/profile_image_new_message"
+        android:layout_toRightOf="@+id/profile_image_new_message"
+        android:text="username"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

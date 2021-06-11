@@ -1,5 +1,6 @@
 package com.lamhong.mybook
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -19,6 +20,10 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
+        setSupportActionBar(toolbar_new_message)
+        supportActionBar?.title=""
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         fetchUsers()
     }
 
@@ -35,12 +40,32 @@ class NewMessageActivity : AppCompatActivity() {
                         adapter.add(UserItem(user))
                     }
                 }
+
+                adapter.setOnItemClickListener { item, view ->
+                    val userItem = item as UserItem
+
+                    val intent = Intent(view.context,ChatLogActivity::class.java)
+
+                    intent.putExtra("name",userItem.user.getName())
+                    intent.putExtra("uid",userItem.user.getUid())
+
+                    startActivity(intent)
+
+                    finish()
+                }
+
+
                 rv_search_new_user.adapter = adapter
             }
             override fun onCancelled(error: DatabaseError) {
 
             }
         })
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 }
 
