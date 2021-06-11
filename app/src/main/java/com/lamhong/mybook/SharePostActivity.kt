@@ -52,7 +52,7 @@ class SharePostActivity : AppCompatActivity() {
         })
     }
     fun sharePost(){
-        val shareRef= FirebaseDatabase.getInstance().reference
+        val shareRef= FirebaseDatabase.getInstance().reference.child("Contents")
             .child("Share Posts")
         val shareMap = HashMap<String, Any>()
 
@@ -65,18 +65,18 @@ class SharePostActivity : AppCompatActivity() {
         shareMap["publisher"]=firebaseUser!!.uid
 
 
-        val timelineUser= FirebaseDatabase.getInstance().reference
+        val timelineUser= FirebaseDatabase.getInstance().reference.child("Contents")
             .child("ProfileTimeLine").child(FirebaseAuth.getInstance().currentUser.uid)
         val pMap = HashMap<String, Any>()
         pMap["post_type"]="sharepost"
         pMap["id"]=idref
         pMap["active"]=true
-        timelineUser.push().setValue(pMap)
+
 
         shareRef.child(idref).setValue(shareMap)
-
+        timelineUser.push().setValue(pMap)
         for(user in followingList!!){
-            val timelineRef= FirebaseDatabase.getInstance().reference
+            val timelineRef= FirebaseDatabase.getInstance().reference.child("Contents")
                 .child("UserTimeLine")
                 .child(user)
             val postMap  = HashMap<String, Any>()

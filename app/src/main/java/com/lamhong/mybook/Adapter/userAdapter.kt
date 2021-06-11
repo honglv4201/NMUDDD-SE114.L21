@@ -107,12 +107,14 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         val notiRef= FirebaseDatabase.getInstance().reference
             .child("Notify").child(userNotifyID)
         val notiMap= HashMap<String, String>()
-        notiMap["useirID"]=fireabaseUser!!.uid
-        notiMap["notfy"]="Đã gửi lời mời kết bạn"
+        val idpush : String = notiRef.push().key.toString()
+        notiMap["userID"]=fireabaseUser!!.uid
+        notiMap["notify"]="Đã gửi lời mời kết bạn"
         notiMap["postID"]="active"
         notiMap["type"]="loimoiketban"
+        notiMap["notifyID"]=idpush
 
-        notiRef.push().setValue(notiMap)
+        notiRef.child(idpush).setValue(notiMap)
     }
     private fun checkFriendStatus(uid: String, btnAdd: CircularProgressButton) {
         val friendref= fireabaseUser?.uid.let{it->

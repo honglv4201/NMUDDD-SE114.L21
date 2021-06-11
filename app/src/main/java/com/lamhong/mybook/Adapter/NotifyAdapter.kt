@@ -153,6 +153,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                 }
                 holder.statusConfirm.visibility=View.GONE
                 holder.itemView.btn_chapNhan.setOnClickListener{
+                    setConfirmToNotify(notify.getnotifyID(), "daxacnhan")
                     holder.confirmContainer.visibility=View.GONE
                     holder.statusConfirm.text="Đã xác nhận"
                     holder.statusConfirm.visibility=View.VISIBLE
@@ -179,6 +180,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                     }
                 }
                 holder.itemView.btn_tuChoi.setOnClickListener{
+                    setConfirmToNotify(notify.getnotifyID(), "daxoa")
                     holder.confirmContainer.visibility=View.GONE
                     holder.statusConfirm.text="Đã xóa lời mời"
                     holder.statusConfirm.visibility=View.VISIBLE
@@ -203,12 +205,44 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                             }
                     }
                 }
+                when(notify.gePostID()){
+                    "daxoa"->{
+                        Interactable("daxoa", holder.confirmContainer, holder.statusConfirm)
+                    }
+                    "daxacnhan"->{
+                        Interactable("daxacnhan", holder.confirmContainer, holder.statusConfirm)
 
-                checkStatusFriends(holder.confirmContainer, holder.statusConfirm, notify.gePostID(), notify.getUserID())
+                    }
+                    "active"->{
+                        checkStatusFriends(holder.confirmContainer, holder.statusConfirm, notify.gePostID(), notify.getUserID())
+                    }
+                }
+
+
+
 
             }
         }
 
+
+    }
+    private fun setConfirmToNotify(notifyID : String, confirmValue : String){
+        FirebaseDatabase.getInstance().reference
+            .child("Notify").child(fireabaseUser.uid!!).child(notifyID)
+            .child("postID").setValue(confirmValue)
+    }
+
+    private fun Interactable(status: String,confirmContainer: LinearLayout, statusConfirm: TextView){
+        if(status=="daxoa"){
+            confirmContainer.visibility=View.GONE
+            statusConfirm.visibility=View.VISIBLE
+            statusConfirm.text="Đã từ chối"
+        }
+        else{
+            confirmContainer.visibility=View.GONE
+            statusConfirm.visibility=View.VISIBLE
+            statusConfirm.text="Đã xác nhận"
+        }
 
     }
 
@@ -249,6 +283,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                 if(snapshot.exists()){
                     val user = snapshot.getValue(User::class.java)
                     user!!.setName(snapshot.child("fullname").value.toString())
+                    user!!.setAvatar(snapshot.child("avatar").value.toString())
                     Picasso.get().load(user!!.getAvatar()).placeholder(R.drawable.cty).into(avatar)
                     username.text=user.getName()
 
@@ -260,7 +295,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
         })
     }
     private fun showImagePost(postImage: ImageView, postID: String){
-        val postRef= FirebaseDatabase.getInstance().reference
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
             .child("Posts").child(postID)
         postRef.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {

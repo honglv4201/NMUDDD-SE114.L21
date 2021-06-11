@@ -67,6 +67,8 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var content_shared: TextView
         var numlike: TextView
         var numComment: TextView
+        var tvthich: TextView
+
 
         var btnLike : CircularProgressButton
         var btnComment: CircularProgressButton
@@ -85,6 +87,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
             btnLike=itemView.findViewById(R.id.btn_yeuthich)
             btnComment=itemView.findViewById(R.id.btn_binhluan)
             btnShare=itemView.findViewById(R.id.btn_share)
+            tvthich= itemView.findViewById(R.id.tv_thich)
         }
     }
 
@@ -140,7 +143,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 }
                 holder1.btnLike.setOnClickListener{
                     if(holder1.btnLike.tag=="Like"){
-                        addNotifyLike(post.getpublisher(), post.getpost_id())
+                        addNotifyLike(post.getpublisher(), post.getpost_id() , "thichbaiviet")
                         FirebaseDatabase.getInstance().reference
                             .child("Likes")
                             .child(post.getpost_id())
@@ -183,13 +186,53 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     holder1.content_shared, holder1.name_shared)
 
 
+
+                // like share
+                checkLikes(sharePost.getShareID(), holder1.btnLike , holder1.tvthich)
+                setnumberLike(holder1.numlike, sharePost.getShareID())
+                setComment(holder1.numComment, sharePost.getShareID())
+                holder1.numlike.setOnClickListener{
+                    val intent = Intent(mcontext, UserReacted::class.java)
+                    intent.putExtra("postID", sharePost.getShareID())
+                    mcontext.startActivity(intent)
+                }
+
+                holder1.btnLike.setOnClickListener{
+                    if(holder1.btnLike.tag=="Like"){
+                        addNotifyLike(sharePost.getPublisher(), sharePost.getShareID() , "thichbaishare")
+                        FirebaseDatabase.getInstance().reference
+                            .child("Likes")
+                            .child(sharePost.getShareID())
+                            .child(firebaseUser!!.uid)
+                            .setValue(true)
+                    }else
+                    {
+                        FirebaseDatabase.getInstance().reference
+                            .child("Likes")
+                            .child(sharePost.getShareID())
+                            .child(firebaseUser!!.uid)
+                            .removeValue()
+
+                        //  val intent=Intent(mcontext,zHome::class.java)
+                        // mcontext.startActivity(intent)
+
+                    }
+                }
+                holder1.btnShare.setOnClickListener{
+                    val shareIntent = Intent(mcontext, SharePostActivity::class.java)
+                    shareIntent.putExtra("postID", sharePost.getPostID())
+                    mcontext.startActivity(shareIntent)
+                }
+
+
+
             }
         }
 
     }
     private fun getPost(id: String, postImage: ImageView, avatar_shared: CircleImageView,
             content_shared: TextView , name_shared : TextView){
-        val postRef= FirebaseDatabase.getInstance().reference.child("Posts").child(id)
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("Posts").child(id)
         var post: Post ?=null
         postRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(ss: DataSnapshot) {
@@ -248,9 +291,9 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         likeRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()) {
-                    numlikes.text = snapshot.childrenCount.toString() + " Yêu thích"
+                    numlikes.text = snapshot.childrenCount.toString()
                 }else{
-                    numlikes.text="0 Yêu Thích"
+                    numlikes.text="0"
                 }
             }
 
@@ -268,7 +311,9 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 if(snapshot.exists()){
                     numcomment.text="(" + snapshot.childrenCount.toString() + ")"
                 }
-
+                else {
+                    numcomment.text="(" + 0.toString() + ")"
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -311,15 +356,21 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         return mLstType.size
     }
 
-    private fun addNotifyLike(publisherID: String, postId: String){
+    private fun addNotifyLike(publisherID: String, postId: String, type : String){
         val notiRef= FirebaseDatabase.getInstance().reference
             .child("Notify").child(publisherID)
         val notiMap = HashMap<String, Any>()
         notiMap["userID"]=firebaseUser!!.uid
-        notiMap["notify"]="đã thích bài viết của bạn"
+        val idpush : String = notiRef.push().key.toString()
+        if (type=="thichbaiviet"){
+           notiMap["notify"]="đã thích bài viết của bạn"
+        } else if (type=="thichbaishare"){
+            notiMap["notify"] ="đã thích bài chia sẻ của bạn"
+        }
         notiMap["postID"]=postId
-        notiMap["type"]="thichbaiviet"
-        notiRef.push().setValue(notiMap)
+        notiMap["type"]=type
+        notiMap["notifyID"]=idpush
+        notiRef.child(idpush).setValue(notiMap)
     }
     private fun publishInfo(profileImage: CircleImageView, userName: TextView,   publiser: String) {
         val userRef= FirebaseDatabase.getInstance().reference.child("UserInformation").child(publiser)

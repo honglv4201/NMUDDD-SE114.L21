@@ -83,7 +83,7 @@ class DetailPostFragment : Fragment() {
     }
 
     private fun retrivePost(){
-        val postRef= FirebaseDatabase.getInstance().reference.child("Posts")
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents"). child("Posts")
             .child(idPost)
         postRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {

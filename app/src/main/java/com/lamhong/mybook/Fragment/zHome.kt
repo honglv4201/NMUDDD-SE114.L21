@@ -140,7 +140,7 @@ class zHome : Fragment() {
     }
 
     private fun retrievePosts1(){
-        val postRef= FirebaseDatabase.getInstance().reference
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
         postRef.addValueEventListener(object:  ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }

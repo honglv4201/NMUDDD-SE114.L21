@@ -21,10 +21,12 @@ import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.AccountSettingActivity
 import com.lamhong.mybook.Adapter.ImageProfileAdapter
 import com.lamhong.mybook.Adapter.PostAdapter
+import com.lamhong.mybook.FriendListActivity
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.TimelineContent
 import com.lamhong.mybook.Models.User
+import com.lamhong.mybook.ProfileEditting
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_account_setting.*
@@ -105,8 +107,11 @@ class ProfileFragment : Fragment() {
         }
 
 
-        view.btn_chinhsua.setOnClickListener {
+        view.btn_setting.setOnClickListener {
             startActivity(Intent(context, AccountSettingActivity::class.java))
+        }
+        view.btn_chinhsua.setOnClickListener{
+            startActivity(Intent(context, ProfileEditting::class.java))
         }
         view.btnAddfriend.setOnClickListener{
             when(statusFriend){
@@ -127,15 +132,21 @@ class ProfileFragment : Fragment() {
                         FirebaseDatabase.getInstance().reference
                             .child("Friends").child(it1.toString())
                             .child("friendList").child(profileId)
-                            .setValue(true)
+                            .setValue("pendinginvite")
                     }
                     FirebaseDatabase.getInstance().reference
                         .child("Friends").child(profileId)
                         .child("friendList").child(firebaseUser.uid)
-                        .setValue(true)
+                        .setValue("pendingconfirm")
                 }
             }
 
+
+        }
+        view.btn_friendList.setOnClickListener{
+            val friendListIntent= Intent(context, FriendListActivity::class.java)
+            friendListIntent.putExtra("userID", profileId)
+            context?.startActivity(friendListIntent)
 
         }
 
@@ -181,7 +192,7 @@ class ProfileFragment : Fragment() {
 
     }
     private fun ShowImagePost1(){
-        val postRef= FirebaseDatabase.getInstance().reference
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
         postRef.addValueEventListener(object:  ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
@@ -260,7 +271,7 @@ class ProfileFragment : Fragment() {
                     for (s in snapshot.children){
                         val post= s.getValue(Post::class.java)
                         post!!.setpost_id(s.child("post_id").value.toString())
-                       // if((postList as ArrayList<Post>).size<4)
+                        if((postList as ArrayList<Post>).size<4)
                         (postList as ArrayList<Post>).add(post!!)
 
                         //Collections.reverse(postList)
