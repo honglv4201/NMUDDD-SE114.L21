@@ -48,6 +48,7 @@ class NewMessageActivity : AppCompatActivity() {
 
                     intent.putExtra("name",userItem.user.getName())
                     intent.putExtra("uid",userItem.user.getUid())
+                    intent.putExtra("image",userItem.user.getAvatar())
 
                     startActivity(intent)
 

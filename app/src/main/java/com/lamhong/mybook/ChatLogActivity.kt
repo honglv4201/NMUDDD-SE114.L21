@@ -34,6 +34,8 @@ class ChatLogActivity : AppCompatActivity() {
         var name:String? = intent.getStringExtra("name")
         var receiverUid:String?= intent.getStringExtra("uid")
 
+
+
         setSupportActionBar(toolbar_chatlog)
         supportActionBar?.title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
