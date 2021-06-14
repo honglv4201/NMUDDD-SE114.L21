@@ -79,6 +79,14 @@ class ChatLogActivity : AppCompatActivity() {
 
             messagebox.text.clear()
 
+            val lastMess = hashMapOf<String, Any?>()
+
+            lastMess.put("lastMess",message.getMessage())
+            lastMess.put("lastTime",date.time)
+
+            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+            FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+
             FirebaseDatabase.getInstance().reference
                 .child("chats")
                 .child(senderRoom.toString())
@@ -93,6 +101,15 @@ class ChatLogActivity : AppCompatActivity() {
                         .setValue(message).addOnSuccessListener {
 
                         }
+
+                        val lastMess = hashMapOf<String, Any?>()
+
+                        lastMess.put("lastMess",message.getMessage())
+                        lastMess.put("lastTime",date.time)
+
+                        FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                        FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+
                 }
         }
 

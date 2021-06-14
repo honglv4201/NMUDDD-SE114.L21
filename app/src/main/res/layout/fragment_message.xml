@@ -42,10 +42,7 @@
         android:id="@+id/rv_message_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
-        android:layout_below="@id/appbar_layout_message" />
+        android:layout_below="@id/appbar_layout_message"/>
 
 
 </RelativeLayout>

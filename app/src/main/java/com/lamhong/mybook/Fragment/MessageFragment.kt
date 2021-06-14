@@ -6,8 +6,16 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.lamhong.mybook.Adapter.MessageUsersAdapter
+import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewMessageActivity
 import com.lamhong.mybook.R
+import kotlinx.android.synthetic.main.fragment_message.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +48,34 @@ class MessageFragment : Fragment() {
        val view = inflater.inflate(R.layout.fragment_message, container,false)
         val mToolbar : Toolbar = view.findViewById<Toolbar>(R.id.toolbar_message)
         (requireActivity() as AppCompatActivity).setSupportActionBar(mToolbar)
+
+        val users = ArrayList<User>()
+
+        val adapter = MessageUsersAdapter(users)
+
+        view.rv_message_users.layoutManager = LinearLayoutManager(activity)
+
+        view.rv_message_users.adapter = adapter
+
+        FirebaseDatabase.getInstance().reference.child("/UserInformation").addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                users.clear()
+                for (ss in snapshot.children) {
+                    val user = ss.getValue(User::class.java)
+                    user!!.setName(ss.child("fullname").value.toString())
+                    if (user != null) {
+                        users.add(user)
+                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+        })
+
+
         return view
     }
 
