@@ -39,36 +39,18 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="14dp"
                 />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="50dp"
-                    >
-                    <TextView
-                        android:id="@+id/tv_typePost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="đã cập nhật ảnh bìa"
-                        android:textSize="15sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="14dp"
-                        />
-                </RelativeLayout>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/more_btn"
-                    />
-            </RelativeLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/more_btn"
 
-
+                />
 
         </LinearLayout>
 
@@ -82,7 +64,6 @@
             android:layout_marginLeft="10dp"
             android:textSize="17dp"
             android:id="@+id/describe"/>
-
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -98,8 +79,6 @@
                 android:scaleType="centerCrop"
                 />
         </androidx.cardview.widget.CardView>
-
-
 
 
         <RelativeLayout

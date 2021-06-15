@@ -115,12 +115,23 @@ class ChangeAvatarActivity : AppCompatActivity() {
                             postMap["active"]=true
 
                             timelineRef.child(key).setValue(postMap)
-
-                            Toast.makeText(this, "Đã cập nhật ảnh đại diện", Toast.LENGTH_SHORT).show()
-                            finish()
-                            processDiaglog.dismiss()
+                        }
+                        // notify to close user
+                        for(user in followingList!!){ // we will custom followinglist later
+                            val notifyRef= FirebaseDatabase.getInstance().reference.child("Notify")
+                                .child(user)
+                            val notifyMap = HashMap<String, Any>()
+                            val key1 = notifyRef.push().key.toString()
+                            notifyMap["postID"]= key
+                            notifyMap["type"]="changeavatar"
+                            notifyMap["notifyID"]=key1
+                            notifyRef.child(key1).setValue(notifyMap)
 
                         }
+
+                        Toast.makeText(this, "Đã cập nhật ảnh đại diện", Toast.LENGTH_SHORT).show()
+                        finish()
+                        processDiaglog.dismiss()
                     }
                     else{
                         processDiaglog.dismiss()

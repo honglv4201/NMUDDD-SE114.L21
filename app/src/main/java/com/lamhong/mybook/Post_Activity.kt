@@ -105,7 +105,6 @@ class Post_Activity : AppCompatActivity() {
             return
             }
 
-
         val progressDialog =ProgressDialog(this)
         progressDialog.setTitle("Tạo bài viết")
         progressDialog.setMessage("Đang tạo bài viết, chờ chút ...")

@@ -52,7 +52,7 @@
                         android:id="@+id/tv_typePost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="đã cập nhật ảnh bìa"
+                        android:text="đã cập ảnh đại diện"
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="14dp"
@@ -68,8 +68,6 @@
                     />
             </RelativeLayout>
 
-
-
         </LinearLayout>
 
 
@@ -83,23 +81,20 @@
             android:textSize="17dp"
             android:id="@+id/describe"/>
 
-
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp">
-            <ImageView
-                android:id="@+id/post_image_home"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar_item"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:src="@drawable/cty"
-                android:scaleType="centerCrop"
+                android:layout_centerHorizontal="true"
                 />
-        </androidx.cardview.widget.CardView>
-
-
+        </RelativeLayout>
 
 
         <RelativeLayout

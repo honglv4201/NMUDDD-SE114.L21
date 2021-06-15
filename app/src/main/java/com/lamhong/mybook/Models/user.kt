@@ -1,4 +1,4 @@
-package com.lamhong.mybook.Models
+    package com.lamhong.mybook.Models
 
 class User {
     private var fullname : String=""

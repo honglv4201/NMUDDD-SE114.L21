@@ -35,6 +35,8 @@ class DetailPostFragment : Fragment() {
     private var lstIndex : List<Int> = ArrayList()
     private var lstType: List<Int> = ArrayList()
     private var shareList: List<SharePost>  = ArrayList()
+    private var avatarList : ArrayList<Post> = ArrayList()
+    private var coverImageList : ArrayList<Post> = ArrayList()
 
     private var postListID : List<String> = ArrayList()
     private var shareListID : List<String> = ArrayList()
@@ -73,7 +75,8 @@ class DetailPostFragment : Fragment() {
         postList= ArrayList()
 
         postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post>,lstIndex as ArrayList
-                , lstType as ArrayList, shareList as ArrayList ) }
+                , lstType as ArrayList, shareList as ArrayList , avatarList as ArrayList,
+            coverImageList as ArrayList ) }
         recycleview.adapter= postAdapter
 
 

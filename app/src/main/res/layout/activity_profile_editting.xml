@@ -114,13 +114,13 @@
                         android:layout_marginBottom="10dp"
                         app:cardCornerRadius="30dp"
                         >
+
                         <ImageView
                             android:id="@+id/anhbia"
-                            android:layout_width="350dp"
+                            android:layout_width="320dp"
                             android:layout_height="180dp"
-                            android:src="@drawable/cty"
                             android:scaleType="centerCrop"
-                            />
+                            android:src="@drawable/cty" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -156,6 +156,7 @@
                         android:textStyle="bold"
                         />
                     <EditText
+                        android:id="@+id/edit_bio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/editmotanhap"
@@ -172,6 +173,7 @@
                         android:background="@color/white"
                         >
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_saveBio"
                             android:textColor="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
@@ -225,6 +227,7 @@
                             android:src="@drawable/icon_education_light"
                             />
                         <TextView
+                            android:id="@+id/tv_education"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -243,6 +246,7 @@
                             android:src="@drawable/icon_home_dart"
                             />
                         <TextView
+                            android:id="@+id/tv_home"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -262,6 +266,7 @@
                             android:src="@drawable/icon_hometown_dart"
                             />
                         <TextView
+                            android:id="@+id/tv_hometown"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -281,6 +286,7 @@
                             android:src="@drawable/icon_relationship_dart"
                             />
                         <TextView
+                            android:id="@+id/tv_relationship"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -300,6 +306,7 @@
                             android:src="@drawable/icon_job"
                             />
                         <TextView
+                            android:id="@+id/tv_job"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -319,14 +326,33 @@
                             android:src="@drawable/icon_workplace_dart"
                             />
                         <TextView
+                            android:id="@+id/tv_workplace"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:text="@string/workplace"
                             />
                     </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/white"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="2dp">
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/change_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="#00B0D1"
+                        android:text="@string/change"
+                        android:textColor="@color/white" />
 
+                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

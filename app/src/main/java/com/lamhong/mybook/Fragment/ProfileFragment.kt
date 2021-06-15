@@ -67,6 +67,8 @@ class ProfileFragment : Fragment() {
     private var lstIndex : List<Int> = ArrayList()
 
 
+    private var avatarList : ArrayList<Post> = ArrayList()
+    private var coverImageList : ArrayList<Post> = ArrayList()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -178,7 +180,8 @@ class ProfileFragment : Fragment() {
 
         imagePostList = ArrayList()
         postAdapter= context?.let{ PostAdapter(it, imagePostList as ArrayList<Post> , lstIndex as ArrayList,
-                lstTypeAdapter as ArrayList, shareList as ArrayList) }
+                lstTypeAdapter as ArrayList, shareList as ArrayList , avatarList as ArrayList,
+            coverImageList as ArrayList) }
         recycleview1.adapter= postAdapter
 
 

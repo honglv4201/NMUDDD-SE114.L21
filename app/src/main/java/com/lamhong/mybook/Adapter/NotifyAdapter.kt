@@ -29,6 +29,7 @@ import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.notification_add_friend_item.view.*
 
@@ -36,7 +37,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     lateinit var fireabaseUser: FirebaseUser
     inner class ViewHolder0(@NonNull itemView: View): RecyclerView.ViewHolder(itemView){
-        var avatar_image: ImageView
+        var avatar_image: CircleImageView
         var contentNotify: TextView
         var uname: TextView
         var postImage: ImageView
@@ -48,7 +49,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
         }
     }
     inner class ViewHolder1(@NonNull itemView: View): RecyclerView.ViewHolder(itemView){
-        var avatar_image: ImageView
+        var avatar_image: CircleImageView
         var uname: TextView
         var btnChapNhan: Button
         var btnXoa: Button
@@ -63,10 +64,25 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
             statusConfirm = itemView.findViewById(R.id.statusConfirm)
         }
     }
+    inner class ViewHolder2(@NonNull itemView: View): RecyclerView.ViewHolder(itemView){
+        var avatar_image: CircleImageView
+        var contentNotify: TextView
+        var uname: TextView
+        var avatarNotify: CircleImageView
+        init {
+            avatar_image= itemView.findViewById(R.id.avatar_innotifi)
+            contentNotify= itemView.findViewById(R.id.content_innotifi)
+            uname=itemView.findViewById(R.id.userName_innotifi)
+            avatarNotify= itemView.findViewById(R.id.post_imageview)
+        }
+    }
 
     override fun getItemViewType(position: Int): Int {
         if(mLstNotify[position].getType()=="loimoiketban"){
             return 1
+        }
+        else if(mLstNotify[position].getType()=="changeavatar"){
+            return 2
         }
         else return 0
     }
@@ -79,6 +95,10 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
             1->{
                 val view = LayoutInflater.from(mContext).inflate(R.layout.notification_add_friend_item, parent, false)
                 return ViewHolder1(view)
+            }
+            2->{
+                val view = LayoutInflater.from(mContext).inflate(R.layout.notification_changeavatar_item, parent, false)
+                return ViewHolder2(view)
             }
         }
         val view = LayoutInflater.from(mContext).inflate(R.layout.notification_item,parent, false)
@@ -222,6 +242,21 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
 
 
             }
+            2->{
+                val holder: ViewHolder2= holderx as ViewHolder2
+                val notify  = mLstNotify[position]
+                showAvatar(holder.avatar_image,notify.gePostID())
+
+                showUserInfor(holder.avatar_image, holder.uname, notify.getUserID())
+                holder.itemView.setOnClickListener{
+                    val pref = mContext.getSharedPreferences("PREFS",Context.MODE_PRIVATE).edit()
+                    pref.putString("postID",notify.gePostID())
+                    pref.apply()
+                    (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, DetailPostFragment()).commit()
+
+                }
+            }
         }
 
 
@@ -275,7 +310,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
 
     }
 
-    private fun showUserInfor(avatar: ImageView, username: TextView, publisher: String){
+    private fun showUserInfor(avatar: CircleImageView, username: TextView, publisher: String){
         val userRef= FirebaseDatabase.getInstance().reference
             .child("UserInformation").child(publisher)
         userRef.addValueEventListener(object: ValueEventListener{
@@ -294,7 +329,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
             }
         })
     }
-    private fun showImagePost(postImage: ImageView, postID: String){
+    private fun showImagePost(postImage: ImageView, postID: String  ){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
             .child("Posts").child(postID)
         postRef.addValueEventListener(object: ValueEventListener{
@@ -308,6 +343,22 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
                     Picasso.get().load(post!!.getpost_image()).placeholder(R.drawable.duongtu).into(postImage)
 
                 }
+            }
+        })
+    }
+    private fun showAvatar(avatar : CircleImageView, postID: String){
+        val avatarRef = FirebaseDatabase.getInstance().reference
+            .child("Contents").child("AvatarPost")
+            .child(postID)
+        avatarRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val imageUri = snapshot.child("post_image").getValue().toString()
+                    Picasso.get().load(imageUri).into(avatar)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
             }
         })
     }
