@@ -7,13 +7,15 @@ class Message {
     private var timestamp : Long = 0
     private var feeling : Int = 0
     private var imageUrl : String = ""
+    private var isSeen : Boolean = false
 
 
 
-    constructor(message: String, senderID: String, timestamp: Long) {
+    constructor(message: String, senderID: String, timestamp: Long, isSeen: Boolean) {
         this.message = message
         this.senderID = senderID
         this.timestamp = timestamp
+        this.isSeen = isSeen
     }
 
     constructor()
@@ -66,5 +68,13 @@ class Message {
 
     fun setImageUrl(imageUrl:String) {
         this.imageUrl=imageUrl
+    }
+
+    fun isSeen() : Boolean {
+        return isSeen
+    }
+
+    fun setisSeen(isSeen: Boolean) {
+        this.isSeen = isSeen
     }
 }

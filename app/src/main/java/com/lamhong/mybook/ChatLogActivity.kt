@@ -10,10 +10,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.lamhong.mybook.Adapter.MessageAdapter
 import com.lamhong.mybook.Models.Message
@@ -27,6 +24,9 @@ class ChatLogActivity : AppCompatActivity() {
 
     private var senderRoom:String ?= null
     private var receiveRoom:String ?= null
+
+    var seenListener: ValueEventListener? = null
+    var userRefForSeen: DatabaseReference? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +75,7 @@ class ChatLogActivity : AppCompatActivity() {
                     messages.clear()
                     for(ss in snapshot.children) {
                         val message = ss.getValue(Message::class.java)
+                        message!!.setisSeen(ss.child("seen").value as Boolean)
                         if (message != null) {
                             messages.add(message)
                         }
@@ -93,7 +94,7 @@ class ChatLogActivity : AppCompatActivity() {
             val messageTxt:String = messagebox.text.toString()
 
             val message:com.lamhong.mybook.Models.Message = com.lamhong.mybook.Models.Message(messageTxt,
-                senderUid.toString(),date.time)
+                senderUid.toString(),date.time,false)
 
             messagebox.text.clear()
 
@@ -140,7 +141,47 @@ class ChatLogActivity : AppCompatActivity() {
             startActivityForResult(intent,25)
         }
 
+        //Seen messgae
 
+
+
+        userRefForSeen = FirebaseDatabase.getInstance().reference
+                .child("chats")
+                .child(receiveRoom.toString())
+                .child("message")
+
+        seenListener = userRefForSeen!!.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (ss in snapshot.children) {
+                    val chat = ss.getValue(Message::class.java)
+
+                    if (chat!=null) {
+                        val seen = hashMapOf<String, Any?>()
+                        seen.put("seen",true)
+                        ss.ref.updateChildren(seen)
+                    }
+
+                }
+            }
+
+        })
+
+
+
+    }
+
+    override fun onStart() {
+
+        super.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        seenListener?.let { userRefForSeen?.removeEventListener(it) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -169,7 +210,7 @@ class ChatLogActivity : AppCompatActivity() {
                                 val messageTxt:String = messagebox.text.toString()
 
                                 val message:com.lamhong.mybook.Models.Message = com.lamhong.mybook.Models.Message(messageTxt,
-                                        senderUid.toString(),date.time)
+                                        senderUid.toString(),date.time,false)
 
                                 message.setMessage("photo")
 

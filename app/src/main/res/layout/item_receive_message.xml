@@ -10,6 +10,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/message"
+        app:layout_constraintStart_toEndOf="@+id/message"
+        app:layout_constraintTop_toTopOf="@+id/message">
+
+        <TextView
+            android:id="@+id/time_chat_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:24 PM"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginLeft="70dp"
         android:orientation="vertical"
@@ -23,6 +41,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/sontung" />
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

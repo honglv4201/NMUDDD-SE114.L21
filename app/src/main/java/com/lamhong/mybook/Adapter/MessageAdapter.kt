@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_receive_message.view.*
 import kotlinx.android.synthetic.main.item_sent_message.view.*
 import kotlinx.android.synthetic.main.item_sent_message.view.message
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder> () {
@@ -79,10 +81,17 @@ class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView
     private inner class SentViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView){
         var message = itemView.message
         var image = itemView.image_chat_sent
+        var timestamp = itemView.time_chat_sent
+        var seen = itemView.isSeen
+
 
 
         fun bind(position: Int){
             val recyclerViewModel = messageList[position]
+
+            var dateFormat= SimpleDateFormat("hh:mm a")
+            val date = Date(recyclerViewModel.getTimestamp() as Long)
+
 
             if (recyclerViewModel.getMessage().equals("photo")) {
                 image.visibility = View.VISIBLE
@@ -91,6 +100,22 @@ class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView
             }
 
             message.text= recyclerViewModel.getMessage()
+
+            timestamp.text = dateFormat.format(date)
+
+
+            if (position==(messageList.size-1)) {
+                if (recyclerViewModel.isSeen()) {
+                    seen.text  = "Seen"
+                }
+                else {
+                    seen.text = "Delivered"
+                }
+            }
+            else {
+                seen.visibility = View.GONE
+            }
+
         }
 
     }
@@ -99,6 +124,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView
         var message = itemView.message
         var image = itemView.image_chatlog
         var image_chat = itemView.image_chat_receive
+        var timestamp = itemView.time_chat_receive
         //var intent = Intent(itemView.context,NewMessageActivity::class.java)
 
 
@@ -110,6 +136,10 @@ class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView
         fun bind(position: Int){
             val recyclerViewModel = messageList[position]
 
+            var dateFormat= SimpleDateFormat("hh:mm a")
+            val date = Date(recyclerViewModel.getTimestamp() as Long)
+
+
             if (recyclerViewModel.getMessage().equals("photo")) {
                 image_chat.visibility = View.VISIBLE
                 message.visibility = View.GONE
@@ -119,6 +149,8 @@ class MessageAdapter(private val messageList: ArrayList<Message>) : RecyclerView
             message.text= recyclerViewModel.getMessage()
 
             Picasso.get().load(uri).into(image)
+
+            timestamp.text = dateFormat.format(date)
         }
     }
 
