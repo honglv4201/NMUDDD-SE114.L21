@@ -268,7 +268,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 val holder1 : ViewHolder2 = holderc as ViewHolder2
 
                 holder1.tv_typePost.visibility= View.GONE
-                val post= mPost[mLstIndex[position]]
+                val post= mAvatarList[mLstIndex[position]]
 
                 Picasso.get().load(post.getpost_image()).into(holder1.avatarImage)
 
@@ -326,7 +326,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 val holder1 : ViewHolder0 = holderc as ViewHolder0
 
                 holder1.tv_typePost.visibility= View.VISIBLE
-                val post= mAvatarList[mLstIndex[position]]
+                val post= mCoverImageList[mLstIndex[position]]
 
                 Picasso.get().load(post.getpost_image()).into(holder1.postImage)
 

@@ -3,24 +3,28 @@
     android:layout_width="match_parent"
     android:layout_margin="10dp"
     android:layout_height="wrap_content">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
         >
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="10dp"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:src="@drawable/cty"
             android:id="@+id/image_avatar_friendlayout"
+            android:layout_centerHorizontal="true"
             />
         <TextView
+            android:layout_below="@+id/image_avatar_friendlayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Name"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
             android:textSize="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
             android:id="@+id/tv_username"/>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,9 +33,9 @@
             android:layout_marginLeft="15dp"
             >
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:id="@+id/btn_Function"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:src="@drawable/more_btn"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
@@ -40,7 +44,7 @@
         </RelativeLayout>
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendListActivity">
+    tools:context=".NewSearchActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/btn_return_fromFriendList"
+                android:id="@+id/btn_return_newsearch"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/icon_return_blue" />
@@ -30,7 +30,7 @@
                 android:layout_marginLeft="40dp"
                 android:textStyle="bold"
                 android:textColor="#00BCD4"
-                android:text="User Name"
+                android:text="Tìm kiếm"
                 android:textSize="20sp" />
 
             <RelativeLayout
@@ -48,13 +48,19 @@
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <HorizontalScrollView
         android:id="@+id/containerMenu"
         android:layout_below="@+id/appbar_layout_friendList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
         >
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -150,11 +156,60 @@
                     />
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
 
+                >
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_dagui_friendlist1"
+                    android:textColor="#989898"
+                    android:layout_width="match_parent"
+                    android:textSize="11dp"
+                    android:layout_height="35dp"
+                    android:text="Đã gửi"
+                    android:background="#FFFFFF"
+                    android:paddingBottom="4dp"
+                    />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+
+                >
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_dagui_friendlist2"
+                    android:textColor="#989898"
+                    android:layout_width="match_parent"
+                    android:textSize="11dp"
+                    android:layout_height="35dp"
+                    android:text="Đã gửi"
+                    android:background="#FFFFFF"
+                    android:paddingBottom="4dp"
+                    />
+            </androidx.cardview.widget.CardView>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </LinearLayout>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -185,45 +240,28 @@
                     android:layout_marginLeft="17dp"
                     />
                 <EditText
+                    android:id="@+id/edit_newSearch"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="#F1F1F1"
                     android:hint="Tìm kiếm ..."
                     android:paddingLeft="15dp"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.cardview.widget.CardView>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView_friendList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:layout_below="@+id/container_search"
-        />
-    <RelativeLayout
+        android:id="@+id/recycleView_newSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="10dp"
         android:layout_below="@+id/container_search"
-        android:layout_marginTop="5dp"
-        >
+        />
 
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-            </RelativeLayout>
-
-
-        </ScrollView>
-    </RelativeLayout>
 
 
 

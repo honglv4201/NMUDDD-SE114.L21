@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +19,7 @@ import com.lamhong.mybook.Models.UserInfor
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_profile_editting.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileEditting : AppCompatActivity() {
     lateinit var firebaseUser: FirebaseUser
@@ -27,7 +29,7 @@ class ProfileEditting : AppCompatActivity() {
 
         //init firebase
         firebaseUser= FirebaseAuth.getInstance().currentUser
-
+        getUserDetailInfor()
         btn_return.setOnClickListener{
             finish()
         }
@@ -59,22 +61,22 @@ class ProfileEditting : AppCompatActivity() {
         change_detail.setOnClickListener{
             startActivity(Intent(this, DetailEditGeneralActivity::class.java))
         }
-        tv_education.setOnClickListener{
+        tv_education_edit1.setOnClickListener{
             activityToDetail("education")
         }
-        tv_job.setOnClickListener{
+        tv_job_edit.setOnClickListener{
             activityToDetail("job")
         }
-        tv_home.setOnClickListener{
+        tv_home_edit1.setOnClickListener{
             activityToDetail("home")
         }
-        tv_hometown.setOnClickListener{
+        tv_hometown_edit.setOnClickListener{
             activityToDetail("homeTown")
         }
-        tv_relationship.setOnClickListener{
+        tv_relationship_edit.setOnClickListener{
             activityToDetail("relationship")
         }
-        tv_workplace.setOnClickListener{
+        tv_workplace_edit.setOnClickListener{
             activityToDetail("workPlace")
         }
     }
@@ -89,6 +91,113 @@ class ProfileEditting : AppCompatActivity() {
             .child("UserDetails").child(firebaseUser.uid!!)
             .child("bio").setValue(edit_bio.text.toString())
 
+    }
+    private fun getUserDetailInfor(){
+        val userDetailRef = FirebaseDatabase.getInstance().reference
+            .child("UserDetails").child(firebaseUser.uid!!)
+        userDetailRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+
+                    val userInfor : UserInfor = UserInfor()
+                    userInfor!!.setEducation(snapshot.child("education").child("value").value.toString())
+                    userInfor!!.setHome(snapshot.child("home").value.toString())
+                    userInfor!!.setHomeTown(snapshot.child("homeTown").value.toString())
+                    userInfor!!.setJob(snapshot.child("job").value.toString())
+                    userInfor!!.setRelationship(snapshot.child("relationship").value.toString())
+                    userInfor!!.setWorkPlace(snapshot.child("workPlace").value.toString())
+
+                    // education info
+                    if(userInfor.getEducation()!="null"){
+                        if(snapshot.child("education").child("status").value.toString()!="dahoc"){
+                            tv_education_edit1.text= userInfor.getEducation()
+                        }
+                        else{
+                            tv_education_edit1.text= userInfor.getEducation()
+                        }
+                        ic_education_edit1.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_edit1.setImageResource(R.drawable.icon_home_light)
+                    }
+
+
+                    if(snapshot.child("education1").child("value").value.toString()!="null"){
+                        if(snapshot.child("education1").child("status").value.toString()!="dahoc"){
+                            tv_education_edit2.text=snapshot.child("education1").child("value").value.toString()
+                        }
+                        else{
+                            tv_education_edit2.text=snapshot.child("education1").child("value").value.toString()
+                        }
+                        ic_education_edit2.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_edit2.setImageResource(R.drawable.icon_home_light)
+                        container_edit2.visibility= View.GONE
+                    }
+                    if(snapshot.child("education2").child("value").value.toString()!="null"){
+                        if(snapshot.child("education2").child("status").value.toString()!="dahoc"){
+                            tv_education_edit3.text=snapshot.child("education2").child("value").value.toString()
+                        }
+                        else{
+                            tv_education_edit3.text=snapshot.child("education2").child("value").value.toString()
+                        }
+                        ic_education_edit3.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_edit3.setImageResource(R.drawable.icon_home_light)
+                        container_edit2.visibility= View.GONE
+                        container_edit3.visibility= View.GONE
+
+                    }
+                    // another info
+                    if(userInfor.getHome()!="null"){
+                        tv_home_edit1.text=userInfor.getHome()
+                        ic_home_edit.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_home_edit.setImageResource(R.drawable.icon_home_light)
+                    }
+                    if(userInfor.getHomeTown()!="null"){
+                        tv_hometown_edit.text=userInfor.getHomeTown()
+                        ic_hometown_edit.setImageResource(R.drawable.icon_hometown_dart)
+
+                    }
+                    else{
+                        ic_hometown_edit.setImageResource(R.drawable.icon_hometown_light)
+                    }
+                    if(userInfor.getRelationship().toString()!="null"){
+                        tv_relationship_edit.text=userInfor.getRelationship().toString()
+                        ic_relationship_edit.setImageResource(R.drawable.icon_relationship_dart)
+                    }
+                    else{
+                        ic_relationship_edit.setImageResource(R.drawable.icon_relationship_light)
+                    }
+                    if(userInfor.getJob().toString()!="null"){
+                        tv_job_edit.text=userInfor.getJob()
+                        ic_job_edit.setImageResource(R.drawable.icon_job)
+                    }
+                    else{
+                        ic_job_edit.setImageResource(R.drawable.icon_job_light)
+                    }
+                    if(userInfor.getWorkPlace()!="null"){
+                        tv_workplace_edit.text=userInfor.getWorkPlace()
+                        ic_workplace_edit.setImageResource(R.drawable.icon_workplace_dart)
+                    }
+                    else{
+                        ic_workplace_edit.setImageResource(R.drawable.icon_wordplace_light)
+                    }
+
+
+                    //education
+
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     fun setAccountInfor(){
@@ -111,7 +220,7 @@ class ProfileEditting : AppCompatActivity() {
         userInforRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    val user = snapshot.getValue(UserInfor::class.java)
+                    val user : UserInfor= UserInfor()
                     user!!.setBio(snapshot.child("bio").value.toString())
 
                     Picasso.get().load(snapshot.child("coverImage").value.toString()).placeholder(R.drawable.cty)

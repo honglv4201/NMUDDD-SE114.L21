@@ -1,6 +1,7 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,6 +95,7 @@ class FriendAdapter (private val mContext: Context, private val mLstFriend : Lis
                    }
                    "pendinginvite"->{
                        holder0.btnKetBan.text="Đã gửi lời mời"
+                       holder0.btnKetBan.setBackgroundColor(Color.parseColor("#C3B2B7"))
                    }
                    else ->{
                    }

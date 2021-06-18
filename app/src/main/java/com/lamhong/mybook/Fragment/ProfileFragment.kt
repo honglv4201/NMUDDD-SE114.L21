@@ -3,6 +3,7 @@ package com.lamhong.mybook.Fragment
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,18 +19,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.lamhong.mybook.AccountSettingActivity
+import com.lamhong.mybook.*
 import com.lamhong.mybook.Adapter.ImageProfileAdapter
 import com.lamhong.mybook.Adapter.PostAdapter
-import com.lamhong.mybook.FriendListActivity
-import com.lamhong.mybook.Models.Post
-import com.lamhong.mybook.Models.SharePost
-import com.lamhong.mybook.Models.TimelineContent
-import com.lamhong.mybook.Models.User
-import com.lamhong.mybook.ProfileEditting
-import com.lamhong.mybook.R
+import com.lamhong.mybook.Models.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_account_setting.*
+import kotlinx.android.synthetic.main.activity_detail_edit_general.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -151,7 +147,11 @@ class ProfileFragment : Fragment() {
             context?.startActivity(friendListIntent)
 
         }
+        view.btnxemthem.setOnClickListener{
+            val moreIntent: Intent = Intent(context, PictureActivity::class.java)
+            startActivity(moreIntent)
 
+        }
 
 
        // ShowImagePost()
@@ -168,6 +168,7 @@ class ProfileFragment : Fragment() {
 
 
         ShowImagePost1()
+        getUserDetailInfor()
       //  recycleView.suppressLayout(false)
        // recycleview1.suppressLayout(false)
         recycleView.setHasFixedSize(true)
@@ -175,7 +176,7 @@ class ProfileFragment : Fragment() {
         recycleView.layoutManager= linearLayoutManager
 
         postList= ArrayList()
-         ImageAdapter= context?.let{ ImageProfileAdapter(it, postList as ArrayList<Post>)}
+         ImageAdapter= context?.let{ ImageProfileAdapter(it, postList as ArrayList<Post> , 300)}
         recycleView.adapter=ImageAdapter
 
         imagePostList = ArrayList()
@@ -191,8 +192,133 @@ class ProfileFragment : Fragment() {
         getFriends()
         getPicture()
         getInfor()
+
+
+        // some func
+
         return view;
 
+    }
+    private fun getUserDetailInfor(){
+        val userDetailRef = FirebaseDatabase.getInstance().reference
+            .child("UserDetails").child(firebaseUser.uid!!)
+        userDetailRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+
+                    val userInfor : UserInfor = UserInfor()
+                    userInfor!!.setEducation(snapshot.child("education").child("value").value.toString())
+                    userInfor!!.setBio(snapshot.child("bio").value.toString())
+                    userInfor!!.setHome(snapshot.child("home").value.toString())
+                    userInfor!!.setHomeTown(snapshot.child("homeTown").value.toString())
+                    userInfor!!.setJob(snapshot.child("job").value.toString())
+                    userInfor!!.setRelationship(snapshot.child("relationship").value.toString())
+                    userInfor!!.setWorkPlace(snapshot.child("workPlace").value.toString())
+
+                    //bio
+                    if(userInfor.getBio()!="null"){
+                        tv_descrip.text=userInfor.getBio()
+                    }
+                    else{
+                        if(profileId==firebaseUser.uid){
+                            tv_descrip.text="Thêm giới thiệu cá nhân"
+                        }
+                        else{
+                            tv_descrip.visibility=View.GONE
+                        }
+                    }
+
+                    // education info
+                    if(userInfor.getEducation()!="null"){
+                        if(snapshot.child("education").child("status").value.toString()!="dahoc"){
+                            tv_education_profile1.text="Đã học tại " + userInfor.getEducation()
+                        }
+                        else{
+                            tv_education_profile1.text="Đang học tại " + userInfor.getEducation()
+                        }
+                        ic_education_profile1.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_profile1.setImageResource(R.drawable.icon_home_light)
+                    }
+
+
+                    if(snapshot.child("education1").child("value").value.toString()!="null"){
+                        if(snapshot.child("education1").child("status").value.toString()!="dahoc"){
+                            tv_education_profile2.text="Đã học tại " + snapshot.child("education1").child("value").value.toString()
+                        }
+                        else{
+                            tv_education_profile2.text="Đang học tại " + snapshot.child("education1").child("value").value.toString()
+                        }
+                        ic_education_profile2.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_profile2.setImageResource(R.drawable.icon_home_light)
+                        container_2f.visibility=View.GONE
+                    }
+                    if(snapshot.child("education2").child("value").value.toString()!="null"){
+                        if(snapshot.child("education2").child("status").value.toString()!="dahoc"){
+                            tv_education_profile3.text="Đã học tại " + snapshot.child("education2").child("value").value.toString()
+                        }
+                        else{
+                            tv_education_profile3.text="Đang học tại " + snapshot.child("education2").child("value").value.toString()
+                        }
+                        ic_education_profile3.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_education_profile3.setImageResource(R.drawable.icon_home_light)
+                        container_2f.visibility=View.GONE
+                        container_3f.visibility=View.GONE
+
+                    }
+                    // another info
+                    if(userInfor.getHome()!="null"){
+                        tv_home_profile.text=userInfor.getHome()
+                        ic_home_profile.setImageResource(R.drawable.icon_home_dart)
+                    }
+                    else{
+                        ic_home_profile.setImageResource(R.drawable.icon_home_light)
+                    }
+                    if(userInfor.getHomeTown()!="null"){
+                        tv_hometown_profile.text=userInfor.getHomeTown()
+                        ic_hometown_profile.setImageResource(R.drawable.icon_hometown_dart)
+
+                    }
+                    else{
+                        ic_hometown_profile.setImageResource(R.drawable.icon_hometown_light)
+                    }
+                    if(userInfor.getRelationship().toString()!="null"){
+                        tv_relationship_profile.text=userInfor.getRelationship().toString()
+                        ic_relationship_profile.setImageResource(R.drawable.icon_relationship_dart)
+                    }
+                    else{
+                        ic_relationship_profile.setImageResource(R.drawable.icon_relationship_light)
+                    }
+                    if(userInfor.getJob().toString()!="null"){
+                        tv_job_profile.text=userInfor.getJob()
+                        ic_job_profile.setImageResource(R.drawable.icon_job)
+                    }
+                    else{
+                        ic_job_profile.setImageResource(R.drawable.icon_job_light)
+                    }
+                    if(userInfor.getWorkPlace()!="null"){
+                        tv_workplace_profile.text=userInfor.getWorkPlace()
+                        ic_workplace_profile.setImageResource(R.drawable.icon_workplace_dart)
+                    }
+                    else{
+                        ic_workplace_profile.setImageResource(R.drawable.icon_wordplace_light)
+                    }
+
+
+                    //education
+
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
     private fun ShowImagePost1(){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
@@ -300,7 +426,6 @@ class ProfileFragment : Fragment() {
                 user?.setEmail(snapshot.child("email").value.toString())
                 user?.setName(snapshot.child("fullname").value.toString())
                 txt_name_avatar.text=user?.getName()
-                tv_descrip.text=user?.getEmail()
                 Picasso.get().load(user?.getAvatar()).placeholder(R.drawable.duongtu1).into(avatar)
             }
             override fun onCancelled(error: DatabaseError) {

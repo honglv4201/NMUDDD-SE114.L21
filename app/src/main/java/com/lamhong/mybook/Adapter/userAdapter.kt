@@ -1,12 +1,14 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.renderscript.Script
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
@@ -57,7 +59,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         })
 
         holder.btn_add.setOnClickListener {
-            if(holder.btn_add.text.toString()=="Thêm bạn bè"){
+            if(holder.btn_add.text.toString()=="Kết bạn"){
 
                 fireabaseUser?.uid.let { it1 ->
                     FirebaseDatabase.getInstance().reference
@@ -116,7 +118,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
 
         notiRef.child(idpush).setValue(notiMap)
     }
-    private fun checkFriendStatus(uid: String, btnAdd: CircularProgressButton) {
+    private fun checkFriendStatus(uid: String, btnAdd: AppCompatButton) {
         val friendref= fireabaseUser?.uid.let{it->
             FirebaseDatabase.getInstance().reference
                     .child("Friends").child(it.toString())
@@ -125,9 +127,25 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         friendref.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.child(uid).exists()){
-                    btnAdd.text="Bạn bè"
+                    if(snapshot.child(uid).value=="friend"){
+                        btnAdd.text="Bạn bè"
+                        btnAdd.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                        btnAdd.setTextColor(Color.parseColor("#00BCD4"))
+
+                    }
+                    else if(snapshot.child(uid).value=="pendingconfirm"){
+                        btnAdd.text="Xác nhận"
+                        btnAdd.setBackgroundColor(Color.parseColor("#42C648"))
+                    }
+                    else if(snapshot.child(uid).value=="pendinginvite"){
+                        btnAdd.text="Đã gửi lời mời"
+                        btnAdd.setBackgroundColor(Color.parseColor("#C3B2B7"))
+                    }
+
                 }else{
-                    btnAdd.text="Thêm bạn bè"
+                    btnAdd.text="Kết bạn"
+                    btnAdd.setBackgroundColor(Color.parseColor("#00BCD4"))
+                    btnAdd.setTextColor(Color.parseColor("#FFFFFF"))
                 }
             }
 
@@ -143,7 +161,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         var tv_name: TextView = itemview.findViewById(R.id.tv_name)
         var tv_descript : TextView = itemview.findViewById(R.id.tv_shortInfor_user)
         var userImage : CircleImageView = itemview.findViewById(R.id.image_avatar)
-         var btn_add: CircularProgressButton = itemview.findViewById(R.id.btn_addFriend)
+         var btn_add: AppCompatButton = itemview.findViewById(R.id.btn_addFriend)
     }
 
 

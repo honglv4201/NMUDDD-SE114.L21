@@ -1,5 +1,7 @@
  package com.lamhong.mybook.Fragment
 
+
+import android.content.Intent
 import android.os.Bundle
 import android.renderscript.Sampler
 import androidx.fragment.app.Fragment
@@ -22,6 +24,7 @@ import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.TimelineContent
 import com.lamhong.mybook.Models.User
+import com.lamhong.mybook.NewSearchActivity
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_z_home.*
@@ -103,8 +106,11 @@ class zHome : Fragment() {
 
         // search function
         view.searchbtn.setOnClickListener{
-            (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, HomeFragment()).commit()
+//            (context as FragmentActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.frameLayout, HomeFragment()).commit()
+            val intent = Intent(context, NewSearchActivity::class.java)
+            startActivity(intent)
+
         }
         return view;
     }
