@@ -4,14 +4,14 @@ class Message {
     private var messageID : String = ""
     private var message : String = ""
     private var senderID : String = ""
-    private var timestamp : Long = 0
+    private var timestamp : String = ""
     private var feeling : Int = 0
     private var imageUrl : String = ""
     private var isSeen : Boolean = false
 
 
 
-    constructor(message: String, senderID: String, timestamp: Long, isSeen: Boolean) {
+    constructor(message: String, senderID: String, timestamp: String, isSeen: Boolean) {
         this.message = message
         this.senderID = senderID
         this.timestamp = timestamp
@@ -46,11 +46,11 @@ class Message {
     }
 
 
-    fun getTimestamp() : Long {
+    fun getTimestamp() : String {
         return timestamp
     }
 
-    fun setTimestamp(timestamp:Long){
+    fun setTimestamp(timestamp:String){
         this.timestamp=timestamp
     }
 

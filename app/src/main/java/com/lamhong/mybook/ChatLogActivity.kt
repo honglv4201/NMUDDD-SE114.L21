@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -34,19 +35,9 @@ class ChatLogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat_log)
 
 
-
-        val messages = ArrayList<Message>()
-
-        val adater:MessageAdapter = MessageAdapter(messages)
-
-        rv_chat_log.layoutManager = LinearLayoutManager(this)
-        rv_chat_log.adapter = adater
-
         var name:String? = intent.getStringExtra("name")
         var image:String? = intent.getStringExtra("image")
         var receiverUid:String?= intent.getStringExtra("uid")
-
-
 
         setSupportActionBar(toolbar_chatlog)
 
@@ -61,6 +52,13 @@ class ChatLogActivity : AppCompatActivity() {
 
         senderRoom = senderUid + receiverUid
         receiveRoom = receiverUid + senderUid
+
+        val messages = ArrayList<Message>()
+
+        val adater:MessageAdapter = MessageAdapter(messages, senderRoom!!, receiveRoom!!)
+
+        rv_chat_log.layoutManager = LinearLayoutManager(this)
+        rv_chat_log.adapter = adater
 
         FirebaseDatabase.getInstance().reference
             .child("chats")
@@ -90,48 +88,54 @@ class ChatLogActivity : AppCompatActivity() {
 
         btn_send_message.setOnClickListener {
 
-            val date = Date()
-            val messageTxt:String = messagebox.text.toString()
+            val messageTxt: String = messagebox.text.toString()
 
-            val message:com.lamhong.mybook.Models.Message = com.lamhong.mybook.Models.Message(messageTxt,
-                senderUid.toString(),date.time,false)
+            if (!TextUtils.isEmpty(messageTxt)) {
 
-            messagebox.text.clear()
 
-            val lastMess = hashMapOf<String, Any?>()
+                val date = Date()
 
-            lastMess.put("lastMess",message.getMessage())
-            lastMess.put("lastTime",date.time)
 
-            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
-            FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                val message: com.lamhong.mybook.Models.Message = com.lamhong.mybook.Models.Message(messageTxt,
+                        senderUid.toString(), date.time.toString(), false)
 
-            FirebaseDatabase.getInstance().reference
-                .child("chats")
-                .child(senderRoom.toString())
-                .child("message")
-                .push()
-                .setValue(message).addOnSuccessListener {
-                    FirebaseDatabase.getInstance().reference
+                messagebox.text.clear()
+
+                val lastMess = hashMapOf<String, Any?>()
+
+                lastMess.put("lastMess", message.getMessage())
+                lastMess.put("lastTime", date.time)
+
+                FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+
+                FirebaseDatabase.getInstance().reference
                         .child("chats")
-                        .child(receiveRoom.toString())
+                        .child(senderRoom.toString())
                         .child("message")
                         .push()
                         .setValue(message).addOnSuccessListener {
+                            FirebaseDatabase.getInstance().reference
+                                    .child("chats")
+                                    .child(receiveRoom.toString())
+                                    .child("message")
+                                    .push()
+                                    .setValue(message).addOnSuccessListener {
+
+                                    }
+
+                            val lastMess = hashMapOf<String, Any?>()
+
+                            lastMess.put("lastMess", message.getMessage())
+                            lastMess.put("lastTime", date.time)
+
+                            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                            FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+
+                            //rv_chat_log.smoothScrollToPosition(adater.itemCount)
 
                         }
-
-                        val lastMess = hashMapOf<String, Any?>()
-
-                        lastMess.put("lastMess",message.getMessage())
-                        lastMess.put("lastTime",date.time)
-
-                        FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
-                        FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
-
-                        //rv_chat_log.smoothScrollToPosition(adater.itemCount)
-
-                }
+            }
         }
 
         attachment.setOnClickListener {
@@ -170,13 +174,47 @@ class ChatLogActivity : AppCompatActivity() {
         })
 
 
+/*        FirebaseDatabase.getInstance().reference.child("presence").child(receiveRoom.toString()).addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val status = snapshot.getValue(String::class.java)
+                    if (status != null) {
+                        if (!status.isEmpty()) {
+                            status_chat.text = status
+                            status_chat.visibility = View.VISIBLE
+
+                        }
+                    }
+                }
+            }
+
+        })*/
+
+
+
+
+
+
 
     }
 
-    override fun onStart() {
+/*    override fun onResume() {
+        super.onResume()
+        val currentuid = FirebaseAuth.getInstance().uid
+        FirebaseDatabase.getInstance().reference.child("presence").child(currentuid.toString()).setValue("Online")
 
-        super.onStart()
     }
+
+    override fun onStop() {
+
+        val currentuid = FirebaseAuth.getInstance().uid
+        FirebaseDatabase.getInstance().reference.child("presence").child(currentuid.toString()).setValue("Offline")
+        super.onStop()
+    }*/
 
     override fun onPause() {
         super.onPause()
@@ -210,9 +248,9 @@ class ChatLogActivity : AppCompatActivity() {
                                 val messageTxt:String = messagebox.text.toString()
 
                                 val message:com.lamhong.mybook.Models.Message = com.lamhong.mybook.Models.Message(messageTxt,
-                                        senderUid.toString(),date.time,false)
+                                        senderUid.toString(),date.time.toString(),false)
 
-                                message.setMessage("photo")
+                                message.setMessage("[Photo]")
 
                                 message.setImageUrl(filePath)
 
