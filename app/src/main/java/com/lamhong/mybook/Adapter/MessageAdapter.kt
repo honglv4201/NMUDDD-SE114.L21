@@ -106,8 +106,10 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
             val date = Date(recyclerViewModel.getTimestamp().toLong())
             val date2 = Date(currenttime)
 
+            val type = recyclerViewModel.getType()
 
-            if (recyclerViewModel.getMessage() == "[Photo]") {
+
+            if (type == "image") {
                 image.visibility = View.VISIBLE
                 message.visibility = View.GONE
                 seen.visibility = View.GONE
@@ -115,14 +117,31 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                 seenimage.visibility = View.VISIBLE
                 timestampimage.visibility = View.VISIBLE
 
-                Picasso.get().load(recyclerViewModel.getImageUrl()).placeholder(R.drawable.loading_image).into(image)
+                Picasso.get().load(recyclerViewModel.getMessage()).placeholder(R.drawable.loading_image).into(image)
             }
+            else if (type == "text") {
+                message.text= recyclerViewModel.getMessage()
+            }
+
+//            if (recyclerViewModel.getMessage() == "[Photo]") {
+//                image.visibility = View.VISIBLE
+//                message.visibility = View.GONE
+//                seen.visibility = View.GONE
+//                timestamp.visibility = View.GONE
+//                seenimage.visibility = View.VISIBLE
+//                timestampimage.visibility = View.VISIBLE
+//
+//
+//                Picasso.get().load(recyclerViewModel.getImageUrl()).placeholder(R.drawable.loading_image).into(image)
+//            }
+
+
 
 //            if (recyclerViewModel.getMessage() == "You unsent a message" || recyclerViewModel.getMessage() == "You deleted a message") {
 //                message.setTypeface(null,Typeface.ITALIC)
 //            }
 
-            message.text= recyclerViewModel.getMessage()
+
 
             if (date.day!=date2.day) {
                 timestamp.text = dateFormat.format(date)
@@ -148,6 +167,8 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                 seen.visibility = View.GONE
                 seenimage.visibility = View.GONE
             }
+//            message.isLongClickable = false
+//            message.isClickable = false
 
             message.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
@@ -167,6 +188,16 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
 
                     return true
 
+                }
+
+            })
+
+            image.setOnLongClickListener(object : View.OnLongClickListener{
+                override fun onLongClick(v: View?): Boolean {
+                    v?.let { openDialog(Gravity.BOTTOM, it, position) }
+
+
+                    return true
                 }
 
             })
@@ -222,6 +253,8 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
     private fun deleteMessage1(position: Int) {
         val msgTimeStamp = messageList[position].getTimestamp()
 
+        val myUid = FirebaseAuth.getInstance().uid
+
 
         val query = FirebaseDatabase.getInstance().reference
                 .child("chats")
@@ -257,18 +290,26 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
 
 
 
-                    //ss.ref.removeValue()
-                    val hashMap = hashMapOf<String, Any?>()
-                    hashMap["message"] = "You unsent a message"
-                    ss.ref.updateChildren(hashMap)
+                    if (ss.child("senderID").getValue(String::class.java).equals(myUid)) {
 
-                    val lastMess = hashMapOf<String, Any?>()
 
-                    lastMess["lastMess"] = "You unsent a message"
-                    //lastMess.put("lastTime", date.time)
+                        //ss.ref.removeValue()
+                        val hashMap = hashMapOf<String, Any?>()
+                        hashMap["message"] = "You unsent a message"
+                        hashMap["type"] = "text"
+                        ss.ref.updateChildren(hashMap)
 
-                    FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
-                    //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                        val lastMess = hashMapOf<String, Any?>()
+
+                        if (position==(messageList.size-1)) {
+
+                            lastMess["lastMess"] = "You unsent a message"
+                            //lastMess.put("lastTime", date.time)
+
+                            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                            //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                        }
+                    }
 
 
                 }
@@ -310,19 +351,25 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                     }*/
 
 
+                    if (ss.child("senderID").getValue(String::class.java).equals(myUid)) {
 
-                    //ss.ref.removeValue()
-                    val hashMap = hashMapOf<String, Any?>()
-                    hashMap["message"] = "This message has been unsent"
-                    ss.ref.updateChildren(hashMap)
+                        //ss.ref.removeValue()
+                        val hashMap = hashMapOf<String, Any?>()
+                        hashMap["message"] = "This message has been unsent"
+                        hashMap["type"] = "text"
+                        ss.ref.updateChildren(hashMap)
 
-                    val lastMess = hashMapOf<String, Any?>()
+                        if (position==(messageList.size-1)) {
 
-                    lastMess["lastMess"] = "This message has been unsent"
-                    //lastMess.put("lastTime", date.time)
+                            val lastMess = hashMapOf<String, Any?>()
 
-                    FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
-                    //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                            lastMess["lastMess"] = "This message has been unsent"
+                            //lastMess.put("lastTime", date.time)
+
+                            FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                            //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                        }
+                    }
 
 
                 }
@@ -337,6 +384,8 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
         //val myUid = FirebaseAuth.getInstance().uid
 
         val msgTimeStamp = messageList[position].getTimestamp()
+
+        val myUid = FirebaseAuth.getInstance().uid
 
         Log.e("msgTimeStamp",msgTimeStamp.toString())
 
@@ -372,26 +421,54 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                         //Toast.makeText(View.context, "message", Toast.LENGTH_SHORT).show()
                     }*/
 
+                    if (ss.child("senderID").getValue(String::class.java).equals(myUid)) {
+
+                        //ss.ref.removeValue()
+                        val hashMap = hashMapOf<String, Any?>()
+                        hashMap["message"] = "You deleted a message"
+                        hashMap["type"] = "text"
+                        ss.ref.updateChildren(hashMap)
+
+                        if (position==(messageList.size-1)) {
+
+                            val lastMess = hashMapOf<String, Any?>()
+
+                            lastMess["lastMess"] = "You deleted a message"
+                            //lastMess.put("lastTime", date.time)
+
+                            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                            //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                        }
+                    }
+
+                    else {
+                        //ss.ref.removeValue()
+                        val hashMap = hashMapOf<String, Any?>()
+                        hashMap["message"] = "This message has been deleted"
+                        ss.ref.updateChildren(hashMap)
+
+                        if (position==(messageList.size-1)) {
+
+                            val lastMess = hashMapOf<String, Any?>()
+
+                            lastMess["lastMess"] = "This message has been deleted"
+                            //lastMess.put("lastTime", date.time)
+
+                            FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
+                            //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
+                        }
+                    }
 
 
-                    //ss.ref.removeValue()
-                    val hashMap = hashMapOf<String, Any?>()
-                    hashMap["message"] = "You deleted a message"
-                    ss.ref.updateChildren(hashMap)
-
-                    val lastMess = hashMapOf<String, Any?>()
-
-                    lastMess["lastMess"] = "You deleted a message"
-                    //lastMess.put("lastTime", date.time)
-
-                    FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
-                    //FirebaseDatabase.getInstance().reference.child("chats").child(receiveRoom.toString()).updateChildren(lastMess)
 
 
                 }
             }
 
         })
+
+
+
 
     }
 
@@ -401,6 +478,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
         var image_chat = itemView.image_chat_receive
         var timestamp = itemView.time_chat_receive
         var timestamp2 = itemView.time_chat_receive2
+        var imageimage = itemView.image_chatlog2
         //var intent = Intent(itemView.context,NewMessageActivity::class.java)
 
 
@@ -419,23 +497,43 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
 
             val date2 = Date(currenttime)
 
+            val type = recyclerViewModel.getType()
 
-            if (recyclerViewModel.getMessage() == "[Photo]") {
+
+            if (type == "image") {
                 image_chat.visibility = View.VISIBLE
                 message.visibility = View.GONE
                 timestamp.visibility = View.GONE
                 timestamp2.visibility = View.VISIBLE
+                image.visibility = View.GONE
+                imageimage.visibility = View.VISIBLE
 
-                Picasso.get().load(recyclerViewModel.getImageUrl()).placeholder(R.drawable.loading_image).into(image_chat)
+                Picasso.get().load(recyclerViewModel.getMessage()).placeholder(R.drawable.loading_image).into(image_chat)
+                Picasso.get().load(uri).into(imageimage)
             }
+            else if (type == "text") {
+                message.text= recyclerViewModel.getMessage()
+                Picasso.get().load(uri).into(image)
+            }
+
+
+//            if (recyclerViewModel.getMessage() == "[Photo]") {
+//                image_chat.visibility = View.VISIBLE
+//                message.visibility = View.GONE
+//                timestamp.visibility = View.GONE
+//                timestamp2.visibility = View.VISIBLE
+//                image.visibility = View.GONE
+//                imageimage.visibility = View.VISIBLE
+//
+//                Picasso.get().load(recyclerViewModel.getImageUrl()).placeholder(R.drawable.loading_image).into(image_chat)
+//                Picasso.get().load(uri).into(imageimage)
+//            }
+
+
 
 //            if (recyclerViewModel.getMessage() == "This message has been unsent") {
 //                message.setTypeface(null,Typeface.ITALIC)
 //            }
-
-            message.text= recyclerViewModel.getMessage()
-
-            Picasso.get().load(uri).into(image)
 
             if (date.day!=date2.day) {
 
@@ -446,7 +544,35 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                 timestamp.text = dateFormat2.format(date)
                 timestamp2.text = dateFormat2.format(date)
             }
+
+
+            message.setOnLongClickListener(object : View.OnLongClickListener {
+                override fun onLongClick(v: View?): Boolean {
+//                    val builder = AlertDialog.Builder(v?.context)
+//
+//                    builder.setTitle("Delete")
+//                    builder.setMessage("Are you sure to delete this message")
+//                    builder.setPositiveButton("Delete") { dialog, which -> deleteMessage(position) }
+//
+//                    builder.setNegativeButton("Cancel") { dialog, which -> dialog?.dismiss() }
+//
+//                    builder.create().show()
+
+
+                    v?.let { openDialog(Gravity.BOTTOM, it, position) }
+
+
+                    return true
+
+                }
+
+            })
+
         }
+
+
+
+
     }
 
 

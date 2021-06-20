@@ -50,8 +50,9 @@ class MessageUsersAdapter(private val messageUsersList: ArrayList<User>) : Recyc
                             val lastMess = snapshot.child("lastMess").value
                             val time = snapshot.child("lastTime").value
 
+
                             var dateFormat=SimpleDateFormat("EEE hh:mm a")
-                            val date = Date(time as Long)
+                            val date = Date(time.toString().toLong())
 
 
 
