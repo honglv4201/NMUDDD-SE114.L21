@@ -97,6 +97,7 @@ class zHome : Fragment() {
         linearLayoutManager.reverseLayout=true
         linearLayoutManager.stackFromEnd=true
         recycleView.layoutManager= linearLayoutManager
+
         postAdapter= context?.let { PostAdapter(it, postList as ArrayList<Post> , lstIndex as ArrayList,
             lstTypeAdapter as ArrayList, shareList as ArrayList , avatarList as ArrayList,
             coverImageList as ArrayList) }

@@ -107,13 +107,16 @@
                 android:id="@+id/framlayout_yeuthich"
                 android:layout_height="wrap_content">
 
-                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                <ImageButton
                     android:layout_width="110dp"
                     android:layout_height="60dp"
-                    android:theme="@style/likeButton"
                     android:id="@+id/btn_yeuthich"
+                    android:src="@drawable/custombtn_like"
+                    android:scaleType="centerCrop"
+                    android:background="@color/white"
+                    android:translationZ="1dp"
                     >
-                </br.com.simplepass.loadingbutton.customViews.CircularProgressButton>
+                </ImageButton>
                 <TextView
                     android:id="@+id/tv_thich"
                     android:layout_width="wrap_content"
@@ -134,13 +137,15 @@
                 android:layout_toRightOf="@+id/framlayout_yeuthich"
                 android:layout_height="wrap_content">
 
-                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                <ImageButton
                     android:layout_width="130dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/shadow_binhluan2"
+                    android:background="@color/white"
                     android:id="@+id/btn_binhluan"
+                    android:src="@drawable/custombtn_comment"
+                    android:scaleType="centerCrop"
                     >
-                </br.com.simplepass.loadingbutton.customViews.CircularProgressButton>
+                </ImageButton>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -182,13 +187,16 @@
                 android:layout_toRightOf="@+id/framlayout_binhluan"
                 android:layout_height="wrap_content">
 
-                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                <ImageButton
                     android:layout_width="130dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/shadow_share2"
+                    android:background="@color/white"
                     android:id="@+id/btn_share"
+                    android:src="@drawable/shadow_share2"
+                    android:scaleType="centerCrop"
+
                     >
-                </br.com.simplepass.loadingbutton.customViews.CircularProgressButton>
+                </ImageButton>
                 <TextView
                     android:id="@+id/tv_share"
                     android:layout_width="wrap_content"

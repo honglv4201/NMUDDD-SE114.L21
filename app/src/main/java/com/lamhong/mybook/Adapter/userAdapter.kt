@@ -1,6 +1,7 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.renderscript.Script
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.lamhong.mybook.Fragment.ProfileFragment
 import com.lamhong.mybook.Models.User
+import com.lamhong.mybook.ProfileActivity
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -43,20 +45,26 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
 
         var user = _user[position]
         print(user.getName())
-      holder.tv_name.text=user.getName()
+       holder.tv_name.text=user.getName()
         Picasso.get().load(user?.getAvatar()).placeholder(R.drawable.duongtu).into(holder.userImage)
     //    holder.tv_descript.text=user.getEmail()
 //        Picasso.get().load(user.getImageurl()).placeholder(R.drawable.duongtu1).into(holder.userImage)
         checkFriendStatus(user.getUid(), holder.btn_add)
 
         holder.itemView.setOnClickListener(View.OnClickListener {
-            val pref= _context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-            pref.putString("profileId", user.getUid())
-            pref.apply()
-            (_context as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameLayout, ProfileFragment()).commit()
+//            val pref= _context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+//            pref.putString("profileId", user.getUid())
+//            pref.apply()
+//            (_context as FragmentActivity).supportFragmentManager.beginTransaction()
+//                    .replace(R.id.frameLayout, ProfileFragment()).commit()
+
+            // new abstract
+            val userIntent = Intent(_context, ProfileActivity::class.java)
+            userIntent.putExtra("profileID", user.getUid())
+            _context.startActivity(userIntent)
 
         })
+
 
         holder.btn_add.setOnClickListener {
             if(holder.btn_add.text.toString()=="Kết bạn"){
@@ -162,6 +170,7 @@ class UserAdapter(private var _context : Context,private var _user :List<User>,p
         var tv_descript : TextView = itemview.findViewById(R.id.tv_shortInfor_user)
         var userImage : CircleImageView = itemview.findViewById(R.id.image_avatar)
          var btn_add: AppCompatButton = itemview.findViewById(R.id.btn_addFriend)
+
     }
 
 
