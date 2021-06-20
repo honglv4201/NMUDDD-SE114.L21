@@ -1,5 +1,6 @@
 package com.lamhong.mybook
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Debug
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +38,11 @@ class  CommentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment)
+        btn_close.setOnClickListener{
+            this.finish()
+        }
+
+
         val intent = intent
         postID= intent.getStringExtra("postID").toString()
         publisher= intent.getStringExtra("publisher").toString()
@@ -54,7 +61,7 @@ class  CommentActivity : AppCompatActivity() {
         val recyclerView : RecyclerView
         recyclerView= findViewById(R.id.recycleview_comment)
         val linearLayoutManager : LinearLayoutManager= LinearLayoutManager(this)
-        linearLayoutManager.reverseLayout=true
+        //linearLayoutManager.reverseLayout=true
         recyclerView.layoutManager= linearLayoutManager
 
 
@@ -78,6 +85,7 @@ class  CommentActivity : AppCompatActivity() {
                         comment.setOwner(snap.child("ownerComment").value.toString())
                         commentList!!.add(comment)
                     }
+                   // (commentList as ArrayList).reverse()
                     commentAdapter!!.notifyDataSetChanged()
                 }
             }
@@ -90,12 +98,16 @@ class  CommentActivity : AppCompatActivity() {
         val commentRef= FirebaseDatabase.getInstance().reference
             .child("Comments").child(postID)
         val commentMap =HashMap<String, Any>()
+        val key : String = commentRef.push().key.toString()
         commentMap["content"]=edit_add_comment.text.toString()
         commentMap["ownerComment"]=firebaseUser!!.uid
-        commentRef.push().setValue(commentMap)
+        commentMap["idComment"]=key
+        commentRef.child(key).setValue(commentMap)
 
         edit_add_comment.text.clear()
         addNotify()
+        val imm = this?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.toggleSoftInput(InputMethodManager.RESULT_HIDDEN, 0)
     }
     private fun addNotify(){
         val notiRef= FirebaseDatabase.getInstance().reference.child("Notify")
@@ -144,7 +156,7 @@ class  CommentActivity : AppCompatActivity() {
 
     }
     private fun getImage(){
-        val postRef= FirebaseDatabase.getInstance().reference.child("Posts")
+        val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("Posts")
             .child(postID).child("post_image")
 
         postRef.addValueEventListener(object: ValueEventListener{

@@ -13,12 +13,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.lamhong.mybook.FriendListActivity
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.Models.UserInfor
 import com.lamhong.mybook.ProfileActivity
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_profile_editting.*
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 
@@ -103,14 +105,72 @@ class SettingFragment : Fragment() {
                     userName.text=curUser!!.getName()
                     Picasso.get().load(curUser!!.getAvatar()).into(avatar)
 
-                    coverBlur.setImageResource(R.drawable.duongtu1 )
-                    coverBlur.setBlur(2)
 
                 }
 
             }
 
             override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        val userInforRef= FirebaseDatabase.getInstance().reference
+            .child("UserDetails")
+            .child(firebaseUser.uid!!)
+        userInforRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val user : UserInfor= UserInfor()
+                    user!!.setBio(snapshot.child("bio").value.toString())
+
+                    Picasso.get().load(snapshot.child("coverImage").value.toString()).placeholder(R.drawable.cty)
+                        .into(coverBlur)
+                    coverBlur.setBlur(2)
+
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        setNumberProfile()
+    }
+
+    private fun setNumberProfile() {
+        val ref= FirebaseDatabase.getInstance().reference
+            .child("Friends").child(firebaseUser.uid).child("friendList")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    NumFriends.text=snapshot.childrenCount.toString()
+                }
+                else{
+                    NumFriends.text="0"
+                }
+            }
+        })
+        val postRef= FirebaseDatabase.getInstance().reference
+            .child("Contents").child("ProfileTimeLine")
+            .child(firebaseUser.uid)
+        postRef.addValueEventListener(object  : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var ss: Int=0
+                if(snapshot.exists()){
+                    for(s in snapshot.children)
+                    {
+                        ss+=1
+//                        if(s.child("post_type").value.toString()=="post"){
+//                            ss+=1
+//                        }
+                    }
+                }
+                numPost.text=ss.toString()
             }
         })
     }

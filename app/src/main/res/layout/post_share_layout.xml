@@ -143,6 +143,8 @@
             android:orientation="vertical"
             >
             <LinearLayout
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -160,6 +162,7 @@
 
                 </FrameLayout>
                 <LinearLayout
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -184,6 +187,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
@@ -202,14 +206,35 @@
                         />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 chia sẻ"
+                        android:id="@+id/numshare"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:translationZ="5dp"
+
+                        />
+
+                </LinearLayout>
             </LinearLayout>
-            <RelativeLayout
+            <LinearLayout
                 android:translationZ="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="32dp">
                 <FrameLayout
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:id="@+id/framlayout_yeuthich"
                     android:layout_height="wrap_content">
@@ -239,6 +264,7 @@
                         />
                 </FrameLayout>
                 <FrameLayout
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:id="@+id/framlayout_binhluan"
                     android:layout_toRightOf="@+id/framlayout_yeuthich"
@@ -289,6 +315,7 @@
 
                 </FrameLayout>
                 <FrameLayout
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:id="@+id/framlayout_share"
                     android:layout_toRightOf="@+id/framlayout_binhluan"
@@ -320,7 +347,7 @@
 
 
 
-            </RelativeLayout>
+            </LinearLayout>
         </FrameLayout>
 
 

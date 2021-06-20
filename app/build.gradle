@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
+
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.xwray:groupie:2.1.0'

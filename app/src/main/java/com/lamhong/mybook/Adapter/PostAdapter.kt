@@ -44,7 +44,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
-        val numcomment: TextView= itemView.findViewById(R.id.comments)
+        val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
@@ -102,7 +102,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
-        val numcomment: TextView= itemView.findViewById(R.id.comments)
+        val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
@@ -223,6 +223,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 holder1.btnShare.setOnClickListener{
                     val shareIntent = Intent(mcontext, SharePostActivity::class.java)
                     shareIntent.putExtra("postID", post.getpost_id())
+                    shareIntent.putExtra("publisher", post.getpublisher())
                     mcontext.startActivity(shareIntent)
                 }
             }
@@ -489,10 +490,10 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    numcomment.text="(" + snapshot.childrenCount.toString() + ")"
+                    numcomment.text=snapshot.childrenCount.toString() + " bình luận"
                 }
                 else {
-                    numcomment.text="(" + 0.toString() + ")"
+                    numcomment.visibility=View.GONE
                 }
             }
 
@@ -537,20 +538,39 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     }
 
     private fun addNotifyLike(publisherID: String, postId: String, type : String){
-        val notiRef= FirebaseDatabase.getInstance().reference
-            .child("Notify").child(publisherID)
-        val notiMap = HashMap<String, Any>()
-        notiMap["userID"]=firebaseUser!!.uid
-        val idpush : String = notiRef.push().key.toString()
-        if (type=="thichbaiviet"){
-           notiMap["notify"]="đã thích bài viết của bạn"
-        } else if (type=="thichbaishare"){
-            notiMap["notify"] ="đã thích bài chia sẻ của bạn"
-        }
-        notiMap["postID"]=postId
-        notiMap["type"]=type
-        notiMap["notifyID"]=idpush
-        notiRef.child(idpush).setValue(notiMap)
+
+        val ref= FirebaseDatabase.getInstance().reference.child("Notify").child(publisherID)
+        ref.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var check : Boolean=false
+                for(s in snapshot.children){
+                    if(s.child("postID").value.toString()==postId){
+                        check=true
+                    }
+                }
+                if(!check){
+                    val notiRef= FirebaseDatabase.getInstance().reference
+                        .child("Notify").child(publisherID)
+                    val notiMap = HashMap<String, Any>()
+                    notiMap["userID"]=firebaseUser!!.uid
+                    val idpush : String = notiRef.push().key.toString()
+                    if (type=="thichbaiviet"){
+                        notiMap["notify"]="đã thích bài viết của bạn"
+                    } else if (type=="thichbaishare"){
+                        notiMap["notify"] ="đã thích bài chia sẻ của bạn"
+                    }
+                    notiMap["postID"]=postId
+                    notiMap["type"]=type
+                    notiMap["notifyID"]=idpush
+                    notiRef.child(idpush).setValue(notiMap)
+                }
+            }
+        })
+
+
     }
     private fun publishInfo(profileImage: CircleImageView, userName: TextView,   publiser: String) {
         val userRef= FirebaseDatabase.getInstance().reference.child("UserInformation").child(publiser)

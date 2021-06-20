@@ -55,10 +55,11 @@ class FriendListActivity : AppCompatActivity() {
         lst_confirmFriendAdapter= this?.let { FriendAdapter(it, lst_confirmFriend as ArrayList, lst_confirmFriends as ArrayList,idUser  ) }
 
        // recyclerView.layoutManager=gridLayoutManager
-         recyclerView.adapter= lst_trueFriendAdapter
+        recyclerView.adapter= lst_trueFriendAdapter
+
        // recyclerView1.visibility= View.VISIBLE
        // recyclerView1.layoutManager= linearLayoutManager
-      //  recyclerView1.adapter= lst_waittingFriendAdapter
+       // recyclerView1.adapter= lst_waittingFriendAdapter
 
 
         btn_return_fromFriendList.setOnClickListener{
@@ -111,6 +112,15 @@ class FriendListActivity : AppCompatActivity() {
 
         }
 
+        // friend or this
+        if(idUser==firebaseUser.uid!!){
+
+        }
+        else{
+            btn_dangcho_friendlist.visibility=View.GONE
+            btn_dagui_friendlist.visibility=View.GONE
+        }
+
 
     }
     fun setBtnAppearanceNonSelected(btn : AppCompatButton){
@@ -136,10 +146,16 @@ class FriendListActivity : AppCompatActivity() {
             }
         })
     }
+    fun setstatustoFriend(){
+        (lstStatus as ArrayList).clear()
+        for (i in lstFriendList!!){
+            (lstStatus as ArrayList).add("friend")
+        }
+    }
 
     fun getStatusFriendList() {
         val ref= FirebaseDatabase.getInstance().reference.child("Friends")
-            .child(firebaseUser.uid!!).child("friendList")
+            .child(idUser).child("friendList")
         ref.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){

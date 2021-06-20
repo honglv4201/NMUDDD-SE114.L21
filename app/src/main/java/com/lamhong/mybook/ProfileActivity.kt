@@ -163,7 +163,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun getUserDetailInfor(){
         val userDetailRef = FirebaseDatabase.getInstance().reference
-                .child("UserDetails").child(firebaseUser.uid!!)
+                .child("UserDetails").child(profileId)
         userDetailRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
@@ -296,7 +296,7 @@ class ProfileActivity : AppCompatActivity() {
                     var ind1 = 0
                     var ind2 = 0
                     for (s in snapshot.child("ProfileTimeLine")
-                            .child(firebaseUser.uid).children) {
+                            .child(profileId).children) {
                         val tl = s.getValue(TimelineContent::class.java)
                         tl!!.setPostType(s.child("post_type").value.toString())
                         if (tl!!.getPostType() == "sharepost") {
