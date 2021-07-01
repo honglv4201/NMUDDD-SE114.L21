@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Adapter.MessageUsersAdapter
+import com.lamhong.mybook.GroupChatsActivity
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewMessageActivity
 import com.lamhong.mybook.R
@@ -119,9 +120,14 @@ class MessageFragment : Fragment() {
 /*            R.id.search_message -> {
 
             }*/
+
+            R.id.group_message -> {
+                startActivity(Intent(context, GroupChatsActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_menu_message, menu)

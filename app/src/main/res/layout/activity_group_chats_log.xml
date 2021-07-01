@@ -2,14 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".ChatLogActivity">
+    tools:context=".GroupChatsLogActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_chatlog"
+        android:id="@+id/appbar_layout_chat_log_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_chatlog"
+            android:id="@+id/toolbar_chat_log_group"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/white">
@@ -29,7 +27,7 @@
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image_chat"
+                    android:id="@+id/image_chat_group"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:src="@drawable/sontung" />
@@ -44,27 +42,26 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/user_name_chat"
+                        android:id="@+id/title_chat_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="User Name"
+                        android:text="Group Title"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@id/status_chat"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/status_chat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Online"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/user_name_chat"
-                        app:layout_constraintTop_toBottomOf="@id/user_name_chat" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/status_chat"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Online"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="@id/user_name_chat"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/user_name_chat"/>-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -88,8 +85,8 @@
         app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_send_message"
-        app:layout_constraintStart_toEndOf="@+id/btn_icon_chat">
+        app:layout_constraintEnd_toStartOf="@id/btn_send_message_group"
+        app:layout_constraintStart_toEndOf="@+id/btn_icon_chat_group">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,13 +95,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/messagebox"
-            android:id="@+id/linearLayoutEmoji">
+            app:layout_constraintBottom_toTopOf="@id/messagebox_group"
+            android:id="@+id/linearLayoutEmoji_group">
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/messagelayout"
+            android:id="@+id/messagelayout_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ECECEC"
@@ -112,7 +109,7 @@
             android:orientation="horizontal">
 
             <com.devlomi.record_view.RecordView
-                android:id="@+id/record_view"
+                android:id="@+id/record_view_group"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1.8"
@@ -123,7 +120,7 @@
                 app:counter_time_color="#ff0000"/>
 
             <EditText
-                android:id="@+id/messagebox"
+                android:id="@+id/messagebox_group"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
@@ -138,7 +135,7 @@
                 android:visibility="visible"/>
 
             <ImageView
-                android:id="@+id/attachment"
+                android:id="@+id/attachment_group"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="12dp"
@@ -147,7 +144,7 @@
                 android:visibility="visible"/>
 
             <ImageView
-                android:id="@+id/camera"
+                android:id="@+id/camera_group"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="12dp"
@@ -156,7 +153,7 @@
                 android:visibility="visible"/>
 
             <com.devlomi.record_view.RecordButton
-                android:id="@+id/btn_record"
+                android:id="@+id/btn_record_group"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="12dp"
@@ -171,23 +168,22 @@
     </androidx.cardview.widget.CardView>
 
 
-
-
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_chat_log"
+        android:id="@+id/rv_chat_log_group"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/cardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar_layout_chatlog"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar_layout_chat_log_group"
+        app:layout_constraintVertical_bias="0.0"
+        app:stackFromEnd="true" />
 
     <ImageView
-        android:id="@+id/btn_send_message"
+        android:id="@+id/btn_send_message_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -199,7 +195,7 @@
         android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/btn_icon_chat"
+        android:id="@+id/btn_icon_chat_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -208,10 +204,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/cardView2"
         app:srcCompat="@drawable/ic_icon" />
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
