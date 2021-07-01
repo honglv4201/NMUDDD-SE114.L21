@@ -4,14 +4,21 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <VideoView
-        android:translationZ="1dp"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
-        android:id="@+id/videoView"
+        >
+        <VideoView
+            android:translationZ="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/videoView"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
 
-        />
+            />
+    </RelativeLayout>
     <ProgressBar
         android:translationZ="3dp"
         android:id="@+id/videoProgressBar"

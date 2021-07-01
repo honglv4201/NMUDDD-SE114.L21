@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".AddShotVideoActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="23dip"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        app:cardElevation="5dp"
+        >
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_upVideo"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:text="thêm video"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:background="@drawable/custom_btn_whi_blue"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="23dip"
+        android:layout_marginLeft="15dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        app:cardElevation="5dp"
+        >
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSelectVideo"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:text="thêm video"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:background="@drawable/custom_btn_whi_blue"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/video_view"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/image_thumb"
+        />
+</LinearLayout>

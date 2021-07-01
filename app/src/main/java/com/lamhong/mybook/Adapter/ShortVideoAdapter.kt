@@ -19,9 +19,9 @@ class ShortVideoAdapter(options: FirebaseRecyclerOptions<ShortVideo?>)
 {
     inner class ViewHolder(itemview : View): RecyclerView.ViewHolder(itemview){
         fun setData(obj : ShortVideo){
-            videoView.setVideoPath(obj.url)
-            title.text=obj.title
-            content.text=obj.content
+            videoView.setVideoPath(obj.getVideo())
+           // title.text=obj.title
+            content.text=obj.getContent().toString()
             videoView.setOnPreparedListener { 
                 mp: MediaPlayer? ->  
                 progressBar.visibility=View.GONE

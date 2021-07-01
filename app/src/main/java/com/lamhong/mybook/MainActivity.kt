@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_add_post -> {
                 //item.isChecked=false
                // startActivity(Intent(this, Post_Activity::class.java))
-                moveFragment(ShortVideoFragment())
+              //  moveFragment(ShortVideoFragment())
+                moveFragment(VideoFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_notifications -> {
