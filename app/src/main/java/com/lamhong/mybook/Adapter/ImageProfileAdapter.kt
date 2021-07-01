@@ -15,7 +15,7 @@ import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.image_bio_item_layout.view.*
 
-class ImageProfileAdapter (private val mContext:Context, private val mPost: List<Post>)
+class ImageProfileAdapter (private val mContext:Context, private val mPost: List<Post> , private val mWidth : Int)
     : RecyclerView.Adapter<ImageProfileAdapter.ViewHolder>(){
 
 
@@ -32,6 +32,7 @@ class ImageProfileAdapter (private val mContext:Context, private val mPost: List
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
         val post: Post= mPost[position]
         Picasso.get().load(post.getpost_image()).placeholder(R.drawable.cty).into(holder.image_bio)
+        holder.image_bio.layoutParams.height=mWidth
         holder.image_bio.setOnClickListener{
             val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
             pref.putString("postID",post.getpost_id())

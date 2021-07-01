@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.lamhong.mybook.Fragment.SettingFragment
 import com.lamhong.mybook.Fragment.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_profile -> {
-                moveFragment(ProfileFragment())
+                moveFragment(SettingFragment())
                 return@OnNavigationItemSelectedListener true
             }
 

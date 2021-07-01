@@ -22,6 +22,12 @@
         <activity android:name=".GroupChatsLogActivity"></activity>
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
+        <activity android:name=".ReplayCommentActivity"></activity>
+        <activity android:name=".FollowingListActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".NewSearchActivity" />
+        <activity android:name=".PictureActivity" />
+        <activity android:name=".SchoolEditingActivity" />
         <activity android:name=".DetailEditGeneralActivity" />
         <activity android:name=".DetailUserInforChangeActivity" />
         <activity android:name=".ChangeCoverImageActivity" />

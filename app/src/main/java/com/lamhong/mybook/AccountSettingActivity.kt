@@ -44,8 +44,9 @@ class AccountSettingActivity : AppCompatActivity() {
 
             val intent= Intent(this, LoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+
             finish()
+            startActivity(intent)
         }
         firebaseUser=FirebaseAuth.getInstance().currentUser
         storageAvatarRef =FirebaseStorage.getInstance().reference.child("Avatar")
@@ -57,7 +58,6 @@ class AccountSettingActivity : AppCompatActivity() {
             }
             else{
                 updateUserInfor()
-
             }
         }
 

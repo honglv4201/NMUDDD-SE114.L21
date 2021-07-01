@@ -1,6 +1,7 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,9 @@ class FriendAdapter (private val mContext: Context, private val mLstFriend : Lis
 
     override fun getItemViewType(position: Int): Int {
         val status : String= mLstStatus[position]  //
+        if(userID !=fireBaseUser.uid!!){
+            return 1
+        }
         when(status){
             "pendingconfirm"->{
                return 0
@@ -82,7 +86,14 @@ class FriendAdapter (private val mContext: Context, private val mLstFriend : Lis
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val status : String= mLstStatus[position]
+        var status : String=""
+        if(userID == fireBaseUser.uid!!){
+            status = mLstStatus[position]
+        }
+        else{
+            status="friend"
+        }
+
         when(holder.itemViewType){
            0->{
                val holder0 : ViewHolder0= holder as ViewHolder0
@@ -94,6 +105,7 @@ class FriendAdapter (private val mContext: Context, private val mLstFriend : Lis
                    }
                    "pendinginvite"->{
                        holder0.btnKetBan.text="Đã gửi lời mời"
+                       holder0.btnKetBan.setBackgroundColor(Color.parseColor("#C3B2B7"))
                    }
                    else ->{
                    }

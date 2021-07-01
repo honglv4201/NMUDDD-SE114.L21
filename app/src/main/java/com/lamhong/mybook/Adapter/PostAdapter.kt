@@ -8,6 +8,7 @@ import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
@@ -43,15 +44,15 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
-        val numcomment: TextView= itemView.findViewById(R.id.comments)
+        val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
         //new
-        var btnLike: CircularProgressButton = itemView.findViewById(R.id.btn_yeuthich)
-        var btnComment: CircularProgressButton = itemView.findViewById(R.id.btn_binhluan)
+        var btnLike: ImageButton = itemView.findViewById(R.id.btn_yeuthich)
+        var btnComment: ImageButton = itemView.findViewById(R.id.btn_binhluan)
         var tvthich: TextView = itemView.findViewById(R.id.tv_thich)
-        var btnShare : CircularProgressButton= itemView.findViewById(R.id.btn_share)
+        var btnShare : ImageButton= itemView.findViewById(R.id.btn_share)
         var tv_typePost: TextView = itemView.findViewById(R.id.tv_typePost)
         init {
             postImage = itemView.findViewById(R.id.post_image_home)
@@ -74,9 +75,9 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var tvthich: TextView
 
 
-        var btnLike : CircularProgressButton
-        var btnComment: CircularProgressButton
-        var btnShare: CircularProgressButton
+        var btnLike : ImageButton
+        var btnComment: ImageButton
+        var btnShare: ImageButton
 
         init {
             postImage= itemView.findViewById(R.id.image_content)
@@ -101,15 +102,15 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
-        val numcomment: TextView= itemView.findViewById(R.id.comments)
+        val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
         //new
-        var btnLike: CircularProgressButton = itemView.findViewById(R.id.btn_yeuthich)
-        var btnComment: CircularProgressButton = itemView.findViewById(R.id.btn_binhluan)
+        var btnLike: ImageButton = itemView.findViewById(R.id.btn_yeuthich)
+        var btnComment: ImageButton = itemView.findViewById(R.id.btn_binhluan)
         var tvthich: TextView = itemView.findViewById(R.id.tv_thich)
-        var btnShare : CircularProgressButton= itemView.findViewById(R.id.btn_share)
+        var btnShare : ImageButton= itemView.findViewById(R.id.btn_share)
         var tv_typePost: TextView = itemView.findViewById(R.id.tv_typePost)
         init {
             avatarImage = itemView.findViewById(R.id.avatar_item)
@@ -156,8 +157,22 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
             0->{
                 val holder1 : ViewHolder0 = holderc as ViewHolder0
 
+
+
                 holder1.tv_typePost.visibility= View.GONE
                 val post= mPost[mLstIndex[position]]
+                //navigator to user
+
+                holder1.profileImage.setOnClickListener{
+                    val userIntent = Intent(mcontext, ProfileActivity::class.java)
+                    userIntent.putExtra("profileID", post.getpublisher())
+                    mcontext.startActivity(userIntent)
+                }
+                holder1.userName.setOnClickListener{
+                    val userIntent = Intent(mcontext, ProfileActivity::class.java)
+                    userIntent.putExtra("profileID", post.getpublisher())
+                    mcontext.startActivity(userIntent)
+                }
 
                 Picasso.get().load(post.getpost_image()).into(holder1.postImage)
 
@@ -208,12 +223,25 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 holder1.btnShare.setOnClickListener{
                     val shareIntent = Intent(mcontext, SharePostActivity::class.java)
                     shareIntent.putExtra("postID", post.getpost_id())
+                    shareIntent.putExtra("publisher", post.getpublisher())
                     mcontext.startActivity(shareIntent)
                 }
             }
             1->{
                 val holder1= holderc as ViewHolder1
                 val sharePost = mShare[mLstIndex[position]]
+
+                //navigator to
+                holder1.avatar_sharing.setOnClickListener{
+                    val userIntent = Intent(mcontext, ProfileActivity::class.java)
+                    userIntent.putExtra("profileID", sharePost.getPublisher())
+                     mcontext.startActivity(userIntent)
+                }
+                holder1.name_sharing.setOnClickListener {
+                    val userIntent = Intent(mcontext, ProfileActivity::class.java)
+                    userIntent.putExtra("profileID", sharePost.getPublisher())
+                    mcontext.startActivity(userIntent)
+                }
 
                 //basic
                 holder1.content_sharing.text=sharePost.getContent()
@@ -268,7 +296,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 val holder1 : ViewHolder2 = holderc as ViewHolder2
 
                 holder1.tv_typePost.visibility= View.GONE
-                val post= mPost[mLstIndex[position]]
+                val post= mAvatarList[mLstIndex[position]]
 
                 Picasso.get().load(post.getpost_image()).into(holder1.avatarImage)
 
@@ -326,7 +354,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 val holder1 : ViewHolder0 = holderc as ViewHolder0
 
                 holder1.tv_typePost.visibility= View.VISIBLE
-                val post= mAvatarList[mLstIndex[position]]
+                val post= mCoverImageList[mLstIndex[position]]
 
                 Picasso.get().load(post.getpost_image()).into(holder1.postImage)
 
@@ -462,10 +490,10 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    numcomment.text="(" + snapshot.childrenCount.toString() + ")"
+                    numcomment.text=snapshot.childrenCount.toString() + " bình luận"
                 }
                 else {
-                    numcomment.text="(" + 0.toString() + ")"
+                    numcomment.visibility=View.GONE
                 }
             }
 
@@ -473,7 +501,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
             }
         })
     }
-    private fun checkLikes(postId: String, likeButton: CircularProgressButton, tvThich: TextView) {
+    private fun checkLikes(postId: String, likeButton: ImageButton, tvThich: TextView) {
         val currentUser= FirebaseAuth.getInstance().currentUser
 
         val likeRef= FirebaseDatabase.getInstance().reference
@@ -484,14 +512,14 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 if(snapshot.child(currentUser!!.uid).exists()){
                     likeButton.tag="Liked"
                     //likeButton.setTextAppearance(mcontext, R.style.likeButtonClicked) // image like
-                    likeButton.setBackgroundResource(R.drawable.custombtn_liked)
+                    likeButton.setImageResource(R.drawable.custombtn_liked)
                     tvThich.setTextColor(Color.parseColor("#FFFFFF"))
 
                 }
                 else{
                    likeButton.tag="Like"
                  //  likeButton.setTextAppearance(mcontext, R.style.likeButton) //image not like
-                   likeButton.setBackgroundResource(R.drawable.custombtn_like)
+                   likeButton.setImageResource(R.drawable.custombtn_like)
                     tvThich.setTextColor(Color.parseColor("#2FBBF0"))
                 }
 
@@ -510,20 +538,39 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     }
 
     private fun addNotifyLike(publisherID: String, postId: String, type : String){
-        val notiRef= FirebaseDatabase.getInstance().reference
-            .child("Notify").child(publisherID)
-        val notiMap = HashMap<String, Any>()
-        notiMap["userID"]=firebaseUser!!.uid
-        val idpush : String = notiRef.push().key.toString()
-        if (type=="thichbaiviet"){
-           notiMap["notify"]="đã thích bài viết của bạn"
-        } else if (type=="thichbaishare"){
-            notiMap["notify"] ="đã thích bài chia sẻ của bạn"
-        }
-        notiMap["postID"]=postId
-        notiMap["type"]=type
-        notiMap["notifyID"]=idpush
-        notiRef.child(idpush).setValue(notiMap)
+
+        val ref= FirebaseDatabase.getInstance().reference.child("Notify").child(publisherID)
+        ref.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var check : Boolean=false
+                for(s in snapshot.children){
+                    if(s.child("postID").value.toString()==postId){
+                        check=true
+                    }
+                }
+                if(!check){
+                    val notiRef= FirebaseDatabase.getInstance().reference
+                        .child("Notify").child(publisherID)
+                    val notiMap = HashMap<String, Any>()
+                    notiMap["userID"]=firebaseUser!!.uid
+                    val idpush : String = notiRef.push().key.toString()
+                    if (type=="thichbaiviet"){
+                        notiMap["notify"]="đã thích bài viết của bạn"
+                    } else if (type=="thichbaishare"){
+                        notiMap["notify"] ="đã thích bài chia sẻ của bạn"
+                    }
+                    notiMap["postID"]=postId
+                    notiMap["type"]=type
+                    notiMap["notifyID"]=idpush
+                    notiRef.child(idpush).setValue(notiMap)
+                }
+            }
+        })
+
+
     }
     private fun publishInfo(profileImage: CircleImageView, userName: TextView,   publiser: String) {
         val userRef= FirebaseDatabase.getInstance().reference.child("UserInformation").child(publiser)
