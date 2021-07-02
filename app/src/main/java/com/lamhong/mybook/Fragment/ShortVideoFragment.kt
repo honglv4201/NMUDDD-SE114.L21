@@ -51,7 +51,7 @@ class ShortVideoFragment : Fragment() {
         val options = FirebaseRecyclerOptions.Builder<ShortVideo>()
             .setQuery(mDatabase,ShortVideo::class.java).build()
 
-        adapter= ShortVideoAdapter(options)
+       // adapter= context?.let { ShortVideoAdapter(it,options) }
         view.vpaper.adapter=adapter
         // set full
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

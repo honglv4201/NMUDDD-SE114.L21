@@ -67,7 +67,7 @@
                    <ImageButton
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:src="@drawable/icon_add"
+                   android:src="@drawable/more_btn"
                    android:backgroundTint="#03A9F4"
                        android:layout_marginRight="20dp"
                        android:layout_gravity="center_vertical"
@@ -89,6 +89,7 @@
                        android:textColor="@color/white"
                        android:textSize="12dp"/>
                     <TextView
+                        android:id="@+id/user_name_shotprofile"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -131,6 +132,7 @@
                               android:translationZ="2dp"
                               >
                               <ImageView
+                                  android:id="@+id/avatar_shotprofile"
                                   android:layout_width="80dp"
                                   android:layout_height="80dp"
                                   android:src="@drawable/cty"
@@ -238,6 +240,7 @@
                            android:layout_height="match_parent"
                            android:orientation="vertical">
                            <TextView
+                               android:id="@+id/numvideo_shotprofile"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:text="32"
@@ -278,6 +281,7 @@
                            android:layout_height="match_parent"
                            android:orientation="vertical">
                            <TextView
+                               android:id="@+id/numFollower_shotprofile"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:text="32"
@@ -318,6 +322,7 @@
                            android:layout_height="match_parent"
                            android:orientation="vertical">
                            <TextView
+                               android:id="@+id/numFollowinng_shotprofile"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:text="32"
@@ -379,6 +384,7 @@
                            android:layout_weight="1"
                            />
                        <androidx.appcompat.widget.AppCompatButton
+                           android:id="@+id/btn_videoFollow"
                            android:layout_marginLeft="10dp"
                            android:layout_marginRight="10dp"
                            android:layout_marginTop="10dp"

@@ -7,13 +7,13 @@
     <androidx.cardview.widget.CardView
         android:translationZ="1dp"
         android:layout_margin="10dp"
-        android:layout_width="130dp"
+        android:layout_width="120dp"
         android:layout_height="200dp"
         app:cardCornerRadius="10dp"
 
         >
         <ImageView
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="200dp"
             android:src="@color/black"
             android:id="@+id/image_thumb"
@@ -21,7 +21,7 @@
             />
     </androidx.cardview.widget.CardView>
    <RelativeLayout
-       android:layout_width="150dp"
+       android:layout_width="140dp"
        android:layout_height="220dp"
        android:translationZ="10dp"
        >

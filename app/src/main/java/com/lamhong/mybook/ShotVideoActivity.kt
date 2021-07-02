@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.google.firebase.database.FirebaseDatabase
@@ -21,11 +22,18 @@ class ShotVideoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shot_video)
 
         val mDatabase = FirebaseDatabase.getInstance().reference.child("ShotVideos")
+                .orderByChild("views").limitToLast(5)
+
+
         val options = FirebaseRecyclerOptions.Builder<ShortVideo>()
             .setQuery(mDatabase, ShortVideo::class.java).build()
 
-        adapter= ShortVideoAdapter(options)
+        adapter= ShortVideoAdapter(this,options)
+
+
+
         vpaper.adapter=adapter
+        vpaper.setCurrentItem(3,false)
         // set full
 //        window.setFlags(
 //            WindowManager.LayoutParams.FLAG_FULLSCREEN,
