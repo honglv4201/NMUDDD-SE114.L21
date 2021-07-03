@@ -16,12 +16,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.lamhong.mybook.Models.GroupChat
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_group_create.*
+import kotlinx.android.synthetic.main.activity_group_edit.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class GroupCreateActivity : AppCompatActivity() {
+class GroupEditActivity : AppCompatActivity() {
+
+    private var groupID:String?=null
 
     private val CAMERA_REQUEST_CODE = 100
     private val STORAGE_REQUEST_CODE = 200
@@ -38,54 +46,110 @@ class GroupCreateActivity : AppCompatActivity() {
 
     private val currentUid = FirebaseAuth.getInstance().uid
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_create)
+        setContentView(R.layout.activity_group_edit)
 
-        setSupportActionBar(toolbar_create_group)
+        setSupportActionBar(toolbar_edit_group)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        groupID = intent.getStringExtra("groupID")
+
+
 
         cameraPermissions = arrayOf(android.Manifest.permission.CAMERA,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         storagePermissions = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+        loadGroupInfo()
 
-
-        groupIconIv.setOnClickListener{
+        groupIconIv_edit.setOnClickListener{
             showImagePickDialog()
         }
 
-
-
-        createGroupBtn.setOnClickListener{
-            startCreatingGroup()
+        updateGroupBtn.setOnClickListener {
+            startUpdateGroup()
         }
     }
 
-    private fun startCreatingGroup() {
+    private fun loadGroupInfo() {
+        FirebaseDatabase.getInstance().reference.child("groups")
+            .orderByChild("groupID").equalTo(groupID)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                }
 
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (ss in snapshot.children) {
+                        val groupID = "" + ss.child("groupID").value
+                        val groupTitle = "" + ss.child("groupTitle").value
+                        val groupDescription = "" + ss.child("groupDescription").value
+                        val groupIcon = "" + ss.child("groupIcon").value
+                        val timestamp = "" + ss.child("timestamp").value
+                        val createBy = "" + ss.child("createBy").value
+
+
+                        var dateFormat= SimpleDateFormat("dd/mm/yyyy hh:mm a")
+                        val date = Date(timestamp.toLong())
+                        val dateTime = dateFormat.format(date)
+
+                        groupTitleEt_edit.setText(groupTitle)
+                        groupDescriptionEt_edit.setText(groupDescription)
+
+                        try {
+                            Picasso.get().load(groupIcon).into(groupIconIv)
+                        }
+                        catch (e:Exception) {
+                            groupIconIv_edit.setImageResource(R.drawable.sontung)
+                        }
+                    }
+
+                }
+
+            })
+    }
+
+
+    private fun startUpdateGroup() {
         val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Creating Group")
+        progressDialog.setTitle("Please wait..")
+        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.setMessage("Updating Group Info..")
+        progressDialog.show()
 
-        val groupTitle = groupTitleEt.text.toString().trim()
-        val groupDescription = groupDescriptionEt.text.toString().trim()
+
+        val groupTitle = groupTitleEt_edit.text.toString().trim()
+        val groupDescription = groupDescriptionEt_edit.text.toString().trim()
+
 
         if (TextUtils.isEmpty(groupTitle)) {
-            Toast.makeText(this,"Please Enter Group Title",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Group title is required",Toast.LENGTH_SHORT).show()
             return
         }
 
-        progressDialog.show()
-
-        val g_timestamp = "" + System.currentTimeMillis()
 
         if (imageUri == null) {
-            createGroup(""+ g_timestamp,"" + groupTitle,"" + groupDescription,"",progressDialog)
+            val hashMap = hashMapOf<String,Any?>()
+
+            hashMap["groupTitle"] = groupTitle
+            hashMap["groupDescription"] = groupDescription
+
+            FirebaseDatabase.getInstance().reference.child("groups")
+                .child(groupID.toString())
+                .updateChildren(hashMap)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(this,"Group info Updated",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this,""+ it.message,Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                }
         }
         else {
-            val fileNameAndPath = "Group_Imgs/" + "image" + g_timestamp
+
+            val timestamp = "" + System.currentTimeMillis()
+            val fileNameAndPath = "Group_Imgs/" + "image" + timestamp
 
             val storageReference = FirebaseStorage.getInstance().reference.child(fileNameAndPath)
             storageReference.putFile(imageUri!!)
@@ -96,7 +160,23 @@ class GroupCreateActivity : AppCompatActivity() {
                     val p_downloadUri = p_uriTask.result
 
                     if (p_uriTask.isSuccessful) {
-                        createGroup(""+ g_timestamp,"" + groupTitle,"" + groupDescription,"" + p_downloadUri,progressDialog)
+                        val hashMap = hashMapOf<String,Any?>()
+
+                        hashMap["groupTitle"] = groupTitle
+                        hashMap["groupDescription"] = groupDescription
+                        hashMap["groupIcon"] = "" + p_downloadUri
+
+                        FirebaseDatabase.getInstance().reference.child("groups")
+                            .child(groupID.toString())
+                            .updateChildren(hashMap)
+                            .addOnSuccessListener {
+                                progressDialog.dismiss()
+                                Toast.makeText(this,"Group info Updated",Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this,""+ it.message,Toast.LENGTH_SHORT).show()
+                                progressDialog.dismiss()
+                            }
                     }
                 }
                 .addOnFailureListener{
@@ -104,49 +184,6 @@ class GroupCreateActivity : AppCompatActivity() {
                     Toast.makeText(this,""+it.message,Toast.LENGTH_LONG).show()
                 }
         }
-
-    }
-
-    private fun createGroup(g_timestamp:String,groupTitle:String,groupDescription:String,groupIcon:String,progressDialog:ProgressDialog) {
-
-
-        val groupChat = GroupChat(g_timestamp,groupTitle,groupDescription,groupIcon,g_timestamp,currentUid.toString())
-
-        FirebaseDatabase.getInstance().reference.child("groups")
-            .child(g_timestamp)
-            .setValue(groupChat)
-            .addOnSuccessListener {
-
-
-                val hashMap = hashMapOf<String,String>()
-                hashMap["uid"] = currentUid.toString()
-                hashMap["role"] = "creator"
-                hashMap["timestamp"] = g_timestamp
-
-                FirebaseDatabase.getInstance().reference.child("groups")
-                    .child(g_timestamp)
-                    .child("members")
-                    .child(currentUid.toString())
-                    .setValue(hashMap)
-                    .addOnSuccessListener {
-                        progressDialog.dismiss()
-                        Toast.makeText(this,"Group created successfully",Toast.LENGTH_LONG).show()
-//                        val intent = Intent(this,GroupChatsLogActivity::class.java)
-//                        intent.putExtra("groupID",g_timestamp)
-//                        startActivity(intent)
-                    }
-                    .addOnFailureListener {
-                        progressDialog.dismiss()
-                        Toast.makeText(this,"" + it.message,Toast.LENGTH_LONG).show()
-                    }
-
-
-            }
-            .addOnFailureListener {
-                progressDialog.dismiss()
-                Toast.makeText(this,""+it.message,Toast.LENGTH_LONG).show()
-            }
-
     }
 
     private fun showImagePickDialog() {
@@ -241,7 +278,7 @@ class GroupCreateActivity : AppCompatActivity() {
                         pickFromCamera()
                     }
                     else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Permission Denied", Toast.LENGTH_LONG).show()
                     }
                 }
                 else {
@@ -255,7 +292,7 @@ class GroupCreateActivity : AppCompatActivity() {
                         pickFromGallery()
                     }
                     else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Permission Denied", Toast.LENGTH_LONG).show()
                     }
                 }
                 else {
@@ -270,10 +307,10 @@ class GroupCreateActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 imageUri = data?.data
-                groupIconIv.setImageURI(imageUri)
+                groupIconIv_edit.setImageURI(imageUri)
             }
             else if (requestCode == IMAGE_PICK_CAMERA_CODE) {
-                groupIconIv.setImageURI(imageUri)
+                groupIconIv_edit.setImageURI(imageUri)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

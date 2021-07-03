@@ -20,6 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
+        <activity android:name=".GroupEditActivity"></activity>
+        <activity android:name=".GroupInfoActivity" />
+        <activity android:name=".GroupAddMemberActivity" />
         <activity android:name=".SettingActivity"></activity>
         <activity android:name=".MyShotVideoActivity" />
         <activity android:name=".ShotVideoActivity" />
