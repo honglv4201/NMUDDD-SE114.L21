@@ -43,7 +43,7 @@ class PostProfileAdapter (private val mcontext: Context, private val mPost : Lis
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
-        val numcomment: TextView= itemView.findViewById(R.id.comments)
+        val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
@@ -87,7 +87,7 @@ class PostProfileAdapter (private val mcontext: Context, private val mPost : Lis
             content_sharing=itemView.findViewById(R.id.describeShare)
             content_shared= itemView.findViewById(R.id.content_inshared)
             numlike=itemView.findViewById(R.id.numlikes)
-            numComment=itemView.findViewById(R.id.comments)
+            numComment=itemView.findViewById(R.id.numbinhluan)
             btnLike=itemView.findViewById(R.id.btn_yeuthich)
             btnComment=itemView.findViewById(R.id.btn_binhluan)
             btnShare=itemView.findViewById(R.id.btn_share)
@@ -314,15 +314,27 @@ class PostProfileAdapter (private val mcontext: Context, private val mPost : Lis
     }
 
     private fun setComment(numcomment: TextView, postId: String){
-        val commentRef= FirebaseDatabase.getInstance().reference
-            .child("Comments").child(postId)
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
+        // .child("Comments").child(postId)
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 if(snapshot.exists()){
-                    numcomment.text="(" + snapshot.childrenCount.toString() + ")"
+                    var ss: Int = 0
+                    for(s in snapshot.child("Comments").child(postId).children){
+                        ss+=snapshot.child("CommentReplays").child(s.key.toString()).childrenCount.toString().toInt()
+                    }
+                    ss+=snapshot.child("Comments").child(postId).childrenCount.toString().toInt()
+                    if(ss>0){
+                        numcomment.text=ss.toString() + " bình luận"
+                        numcomment.visibility=View.VISIBLE
+                    }
+                    else{
+                        numcomment.visibility=View.GONE
+                    }
                 }
                 else {
-                    numcomment.text="(" + 0.toString() + ")"
+                    numcomment.visibility=View.GONE
                 }
             }
 

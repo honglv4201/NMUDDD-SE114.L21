@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
-        <activity android:name=".ReplayCommentActivity"></activity>
+        <activity android:name=".UserPrivacyActivity"></activity>
+        <activity android:name=".UserSystemSettingActivity" />
+        <activity android:name=".UserActiviesActivity" />
+        <activity android:name=".UserSavePostActivity" />
+        <activity android:name=".ReplayCommentActivity" />
         <activity android:name=".FollowingListActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NewSearchActivity" />

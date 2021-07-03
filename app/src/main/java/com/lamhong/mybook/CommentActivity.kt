@@ -74,7 +74,7 @@ class  CommentActivity : AppCompatActivity() {
 
     }
     private fun viewComment(){
-        val commentRef= FirebaseDatabase.getInstance().reference
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
             .child("Comments").child(postID)
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -95,7 +95,7 @@ class  CommentActivity : AppCompatActivity() {
         })
     }
     private fun addComment(){
-        val commentRef= FirebaseDatabase.getInstance().reference
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
             .child("Comments").child(postID)
         val commentMap =HashMap<String, Any>()
         val key : String = commentRef.push().key.toString()

@@ -1,12 +1,16 @@
 package com.lamhong.mybook.Fragment
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -14,15 +18,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.lamhong.mybook.FriendListActivity
+import com.lamhong.mybook.*
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.Models.UserInfor
-import com.lamhong.mybook.ProfileActivity
-import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile_editting.*
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
+import kotlinx.coroutines.Dispatchers.Main
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,6 +63,14 @@ class SettingFragment : Fragment() {
         view.btn_movetoFriendList.setOnClickListener{
             startActivity(Intent(context, FriendListActivity::class.java))
         }
+
+
+        view.btn_movetoUserActivity.setOnClickListener{
+            startActivity(Intent(context, UserActiviesActivity::class.java))
+        }
+        view.btn_movetoSavePost.setOnClickListener{
+            startActivity(Intent(context, UserSavePostActivity::class.java))
+        }
         view.btn_movetoProfile.setOnClickListener{
 //            (context as FragmentActivity).supportFragmentManager.beginTransaction()
 //                    .replace(R.id.frameLayout, ProfileFragment()).commit()
@@ -76,6 +87,9 @@ class SettingFragment : Fragment() {
 
         return view
     }
+
+
+
     private fun showInforDetail(){
         val userDetailRef = FirebaseDatabase.getInstance().reference
                 .child("UserDetails").child(firebaseUser.uid!!)
@@ -155,7 +169,7 @@ class SettingFragment : Fragment() {
         val postRef= FirebaseDatabase.getInstance().reference
             .child("Contents").child("ProfileTimeLine")
             .child(firebaseUser.uid)
-        postRef.addValueEventListener(object  : ValueEventListener{
+        postRef.addListenerForSingleValueEvent(object  : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
 

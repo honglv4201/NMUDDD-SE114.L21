@@ -1,11 +1,13 @@
 package com.lamhong.mybook
 
 import android.app.Activity
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,11 +71,42 @@ class ReplayCommentActivity : AppCompatActivity() {
             }
         }
 
+        // set function to btn in top bar
+        btn_thich_repcmt.setOnClickListener{
+            if(btn_thich_repcmt.tag=="Like"){
+                FirebaseDatabase.getInstance().reference.child("LikeComment")
+                    .child(idComment).child(firebaseUser.uid).setValue(true)
+            }
+            else{
+                FirebaseDatabase.getInstance().reference.child("LikeComment")
+                    .child(idComment).child(firebaseUser.uid).removeValue()
+            }
+        }
 
 
     }
+
+    private fun checkLike(btnThich: TextView, idComment: String) {
+        val ref= FirebaseDatabase.getInstance().reference
+            .child("LikeComment").child(idComment).child(firebaseUser.uid)
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    btnThich.tag="Liked"
+                    btnThich.setTextColor((Color.parseColor("#FF77ED")))
+                }
+                else{
+                    btnThich.tag="Like"
+                    btnThich.setTextColor((Color.parseColor("#9F9F9F")))
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
     private fun viewComment(){
-        val commentRef= FirebaseDatabase.getInstance().reference
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
             .child("CommentReplays").child(idComment)
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -95,7 +128,7 @@ class ReplayCommentActivity : AppCompatActivity() {
     }
 
     private fun addComment() {
-        val commentRef= FirebaseDatabase.getInstance().reference
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
             .child("CommentReplays").child(idComment)
         val commentMap =HashMap<String, Any>()
         val key : String = commentRef.push().key.toString()
