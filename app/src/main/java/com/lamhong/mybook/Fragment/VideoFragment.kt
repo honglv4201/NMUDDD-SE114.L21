@@ -83,10 +83,10 @@ class VideoFragment : Fragment() {
                 if(snapshot.exists()){
                     val curUser = snapshot.getValue(User::class.java)
                     curUser!!.setName(snapshot.child("fullname").value.toString())
-                    user_name_shotprofile.text=curUser!!.getName()
-                    Picasso.get().load(curUser!!.getAvatar()).into(avatar_shotprofile)
-
-
+                    if(user_name_shotprofile!=null && avatar_shotprofile!=null){
+                        user_name_shotprofile.text=curUser!!.getName()
+                        Picasso.get().load(curUser!!.getAvatar()).into(avatar_shotprofile)
+                    }
                 }
 
             }
@@ -129,7 +129,7 @@ class VideoFragment : Fragment() {
         })
         val postRef= FirebaseDatabase.getInstance().reference
             .child("ShotVideos")
-        postRef.addValueEventListener(object  : ValueEventListener {
+        postRef.addListenerForSingleValueEvent(object  : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
 
@@ -143,7 +143,10 @@ class VideoFragment : Fragment() {
                         }
                     }
                 }
-                numvideo_shotprofile.text=ss.toString()
+                if(numvideo_shotprofile!=null){
+                    numvideo_shotprofile.text=ss.toString()
+
+                }
             }
         })
     }
