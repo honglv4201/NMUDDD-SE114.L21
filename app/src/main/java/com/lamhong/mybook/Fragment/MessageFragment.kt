@@ -2,20 +2,26 @@ package com.lamhong.mybook.Fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Adapter.MessageUsersAdapter
+import com.lamhong.mybook.GroupChatsActivity
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewMessageActivity
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_message.view.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,22 +63,26 @@ class MessageFragment : Fragment() {
 
         view.rv_message_users.adapter = adapter
 
-        val users_mess = ArrayList<String>()
+        val usersmess = ArrayList<String>()
 
-/*        FirebaseDatabase.getInstance().reference.child("/chats").addValueEventListener(object : ValueEventListener{
+        var senderUid: String? = FirebaseAuth.getInstance().uid
+
+        FirebaseDatabase.getInstance().reference.child("chats").addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                usersmess.clear()
                 for (ss in snapshot.children) {
-                    users_mess.add(ss.value.toString())
+                    val usermess = ss.key.toString()
+                    usersmess.add(usermess)
                 }
             }
-        })*/
+        })
 
 
 
-        FirebaseDatabase.getInstance().reference.child("/UserInformation").addValueEventListener(object : ValueEventListener{
+        FirebaseDatabase.getInstance().reference.child("UserInformation").addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
 
             }
@@ -82,8 +92,12 @@ class MessageFragment : Fragment() {
                 for (ss in snapshot.children) {
                     val user = ss.getValue(User::class.java)
                     user!!.setName(ss.child("fullname").value.toString())
-                        if (user != null) {
+                    user!!.setUid(ss.child("uid").value.toString())
+                    for (i in usersmess) {
+                        if (user != null && (senderUid+user.getUid())==i) {
                             users.add(user)
+                        }
+                        //Toast.makeText(activity,i, Toast.LENGTH_SHORT).show()
                     }
                 }
                 adapter.notifyDataSetChanged()
@@ -96,19 +110,199 @@ class MessageFragment : Fragment() {
 
 
 
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
-            R.id.new_message -> startActivity(Intent(context, NewMessageActivity::class.java))
-            R.id.search_message -> {
+            R.id.new_message -> {
+                startActivity(Intent(context, NewMessageActivity::class.java))
+            }
+/*            R.id.search_message -> {
 
+            }*/
+
+            R.id.group_message -> {
+                startActivity(Intent(context, GroupChatsActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_menu_message, menu)
+
+
+       /* val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.search_message).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo())
+        }*/
+
+        val item = menu.findItem(R.id.search_message)
+        val searchView: SearchView = MenuItemCompat.getActionView(item) as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(s: String): Boolean {
+
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchUsers(s)
+                }
+                else {
+
+                    val users = ArrayList<User>()
+
+                    val adapter = MessageUsersAdapter(users)
+
+                    val usersmess = ArrayList<String>()
+
+                    var senderUid: String? = FirebaseAuth.getInstance().uid
+
+                    view?.rv_message_users?.layoutManager = LinearLayoutManager(activity)
+
+                    view?.rv_message_users?.adapter = adapter
+
+                    FirebaseDatabase.getInstance().reference.child("chats").addValueEventListener(object : ValueEventListener{
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            usersmess.clear()
+                            for (ss in snapshot.children) {
+                                val usermess = ss.key.toString()
+                                usersmess.add(usermess)
+                            }
+                        }
+                    })
+
+
+
+                    FirebaseDatabase.getInstance().reference.child("UserInformation").addValueEventListener(object : ValueEventListener{
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            users.clear()
+                            for (ss in snapshot.children) {
+                                val user = ss.getValue(User::class.java)
+                                user!!.setName(ss.child("fullname").value.toString())
+                                user!!.setUid(ss.child("uid").value.toString())
+                                for (i in usersmess) {
+                                    if (user != null && (senderUid+user.getUid())==i) {
+                                        users.add(user)
+                                    }
+                                    //Toast.makeText(activity,i, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            adapter.notifyDataSetChanged()
+                        }
+                    })
+
+                }
+
+                return true
+            }
+
+            override fun onQueryTextSubmit(s: String): Boolean {
+
+               if (!TextUtils.isEmpty(s.trim())) {
+                   searchUsers(s)
+               }
+                else {
+
+                   val users = ArrayList<User>()
+
+                   val adapter = MessageUsersAdapter(users)
+
+                   val usersmess = ArrayList<String>()
+
+                   var senderUid: String? = FirebaseAuth.getInstance().uid
+
+                   view?.rv_message_users?.layoutManager = LinearLayoutManager(activity)
+
+                   view?.rv_message_users?.adapter = adapter
+
+                   FirebaseDatabase.getInstance().reference.child("chats").addValueEventListener(object : ValueEventListener{
+                       override fun onCancelled(error: DatabaseError) {
+                       }
+
+                       override fun onDataChange(snapshot: DataSnapshot) {
+                           usersmess.clear()
+                           for (ss in snapshot.children) {
+                               val usermess = ss.key.toString()
+                               usersmess.add(usermess)
+                           }
+                       }
+                   })
+
+
+
+                   FirebaseDatabase.getInstance().reference.child("UserInformation").addValueEventListener(object : ValueEventListener{
+                       override fun onCancelled(error: DatabaseError) {
+
+                       }
+
+                       override fun onDataChange(snapshot: DataSnapshot) {
+                           users.clear()
+                           for (ss in snapshot.children) {
+                               val user = ss.getValue(User::class.java)
+                               user!!.setName(ss.child("fullname").value.toString())
+                               user!!.setUid(ss.child("uid").value.toString())
+                               for (i in usersmess) {
+                                   if (user != null && (senderUid+user.getUid())==i) {
+                                       users.add(user)
+                                   }
+                                   //Toast.makeText(activity,i, Toast.LENGTH_SHORT).show()
+                               }
+                           }
+                           adapter.notifyDataSetChanged()
+                       }
+                   })
+
+               }
+
+                return true
+            }
+        })
+
+
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun searchUsers(s: String) {
+
+        val users = ArrayList<User>()
+
+        val adapter = MessageUsersAdapter(users)
+
+        var senderUid: String? = FirebaseAuth.getInstance().uid
+
+        view?.rv_message_users?.layoutManager = LinearLayoutManager(activity)
+
+        view?.rv_message_users?.adapter = adapter
+
+        FirebaseDatabase.getInstance().reference.child("UserInformation").addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                users.clear()
+                for (ss in snapshot.children) {
+                    val user = ss.getValue(User::class.java)
+                    user!!.setName(ss.child("fullname").value.toString())
+                    if (user != null && user.getUid()!=senderUid) {
+
+                        if (user.getName().toLowerCase().contains(s.toLowerCase())) {
+                            users.add(user)
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+        })
+
+
     }
 
     companion object {

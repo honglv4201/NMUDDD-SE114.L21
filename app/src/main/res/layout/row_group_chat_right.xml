@@ -16,10 +16,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-<!--        <pl.droidsonroids.gif.GifImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/example"/>-->
+        <!--        <pl.droidsonroids.gif.GifImageView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:src="@drawable/example"/>-->
 
         <ImageView
             android:id="@+id/image_chat_sent"
@@ -48,7 +48,7 @@
             android:text="Delivered"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -121,23 +121,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_marginRight="20dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:layout_marginRight="20dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
 
-<!--        <pl.droidsonroids.gif.GifImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/example"/>-->
+    <!--        <pl.droidsonroids.gif.GifImageView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:src="@drawable/example"/>-->
 
 
 
-<!--    </LinearLayout>-->
+    <!--    </LinearLayout>-->
 
     <!-- <ImageView
          android:id="@+id/feeling"
