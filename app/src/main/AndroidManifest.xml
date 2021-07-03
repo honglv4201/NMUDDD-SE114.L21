@@ -19,10 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
-        <activity android:name=".GroupChatsLogActivity"></activity>
+        <activity android:name=".GroupEditActivity"></activity>
+        <activity android:name=".GroupInfoActivity" />
+        <activity android:name=".GroupAddMemberActivity" />
+        <activity android:name=".GroupChatsLogActivity" />
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
-        <activity android:name=".ReplayCommentActivity"></activity>
+        <activity android:name=".ReplayCommentActivity" />
         <activity android:name=".FollowingListActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NewSearchActivity" />

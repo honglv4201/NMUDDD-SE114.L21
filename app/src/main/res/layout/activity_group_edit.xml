@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".GroupCreateActivity">
+    tools:context=".GroupEditActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/appbar_layout_create_group"
+        android:id="@+id/appbar_layout_edit_group"
         android:layout_marginBottom="5dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:id="@+id/toolbar_create_group"
+            android:id="@+id/toolbar_edit_group"
             android:background="@color/white">
 
             <TextView
@@ -35,40 +35,42 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/groupIconIv"
+        android:id="@+id/groupIconIv_edit"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/appbar_layout_create_group"
+        android:layout_below="@id/appbar_layout_edit_group"
         android:layout_centerHorizontal="true"
         android:src="@drawable/sontung" />
 
     <EditText
-        android:id="@+id/groupTitleEt"
+        android:id="@+id/groupTitleEt_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupIconIv"
-        android:background="#eee"
+        android:layout_below="@id/groupIconIv_edit"
         android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:hint="Group Title"/>
+        android:background="#eee"
+        android:editable="true"
+        android:hint="Group Title"
+        android:padding="10dp" />
 
     <EditText
-        android:id="@+id/groupDescriptionEt"
-        android:minHeight="100dp"
-        android:gravity="top"
-        android:inputType="textImeMultiLine|textCapSentences"
+        android:id="@+id/groupDescriptionEt_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupTitleEt"
-        android:background="#eee"
+        android:layout_below="@id/groupTitleEt_edit"
         android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:hint="Group Description"/>
+        android:background="#eee"
+        android:editable="true"
+        android:gravity="top"
+        android:hint="Group Description"
+        android:inputType="textImeMultiLine|textCapSentences"
+        android:minHeight="100dp"
+        android:padding="10dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/createGroupBtn"
+        android:id="@+id/updateGroupBtn"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_done_group"/>

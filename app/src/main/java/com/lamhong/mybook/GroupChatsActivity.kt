@@ -44,7 +44,7 @@ class GroupChatsActivity : AppCompatActivity() {
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    groupchatsList.size
+                    groupchatsList.clear()
                     for (ds in snapshot.children) {
                         if (ds.child("members").child(currentUid.toString()).exists()) {
                             val model = ds.getValue(GroupChat::class.java)
