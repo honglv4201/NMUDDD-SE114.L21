@@ -19,7 +19,16 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyBook">
+
+        android:theme="@style/Theme.MyBook"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+      
+        <activity android:name=".OutgoingInvitationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".IncomingInvitationActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".GroupEditActivity"></activity>
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupAddMemberActivity" />
@@ -33,6 +42,7 @@
         <activity android:name=".UserActiviesActivity" />
         <activity android:name=".UserSavePostActivity" />
         <activity android:name=".ReplayCommentActivity" />
+
         <activity android:name=".GroupChatsLogActivity" />
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
@@ -86,6 +96,25 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+
+        <service
+            android:name=".Network.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
     </application>
+
+
 
 </manifest>
