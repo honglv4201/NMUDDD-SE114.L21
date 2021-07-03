@@ -71,6 +71,10 @@ class SettingFragment : Fragment() {
         view.btn_movetoSavePost.setOnClickListener{
             startActivity(Intent(context, UserSavePostActivity::class.java))
         }
+
+        view.btn_movetoSetting.setOnClickListener{
+            startActivity(Intent(context, SettingActivity::class.java))
+        }
         view.btn_movetoProfile.setOnClickListener{
 //            (context as FragmentActivity).supportFragmentManager.beginTransaction()
 //                    .replace(R.id.frameLayout, ProfileFragment()).commit()
