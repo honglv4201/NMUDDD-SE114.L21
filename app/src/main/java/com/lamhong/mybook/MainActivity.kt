@@ -4,13 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.lamhong.mybook.Fragment.SettingFragment
 import com.lamhong.mybook.Fragment.*
+import com.lamhong.mybook.Utilities.Constants
 
 class MainActivity : AppCompatActivity() {
 //    private lateinit var textview: TextView
  //   internal var selectedFragment: Fragment ?=null
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_home -> {
@@ -39,21 +48,39 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+
         false
     }
 
+    var meUid : String? = FirebaseAuth.getInstance().uid
+    private fun sendFCMTokenToDatabase(token : String){
+        FirebaseDatabase.getInstance().reference.child("UserInformation")
+            .child(meUid.toString())
+            .child(Constants.KEY_FCM_TOKEN)
+            .setValue(token)
 
-
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Firebase.messaging.isAutoInitEnabled = true
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         moveFragment(zHome())
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if(it.isComplete){
+                val fbToken = it.result.toString()
+                // DO your thing with your firebase token
+                sendFCMTokenToDatabase(fbToken)
+            }
+        }
     }
+
 
     private fun moveFragment(fragment :Fragment){
         val fragmentselect = supportFragmentManager.beginTransaction()
