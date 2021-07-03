@@ -26,7 +26,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.activity_post_.*
 
-class Post_Activity : AppCompatActivity() {
+class   Post_Activity : AppCompatActivity() {
     private var myUrl=""
     private var imageUir : Uri?=null
     private var storagePostRef : StorageReference? = null

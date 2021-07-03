@@ -73,7 +73,7 @@ class NotifyAdapter (private val mContext : Context, private val mLstNotify: Lis
             avatar_image= itemView.findViewById(R.id.avatar_innotifi)
             contentNotify= itemView.findViewById(R.id.content_innotifi)
             uname=itemView.findViewById(R.id.userName_innotifi)
-            avatarNotify= itemView.findViewById(R.id.post_imageview)
+            avatarNotify= itemView.findViewById(R.id.avatar_noti)
         }
     }
 

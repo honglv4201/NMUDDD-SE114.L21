@@ -295,13 +295,13 @@ class ChatLogActivity : AppCompatActivity() {
         }
 
         camera.setOnClickListener{
-//            if (!checkCameraPermission()) {
-//                requestCameraPermission()
-//            }
-//            else {
-//                pickFromCamera()
-//            }
-            pickFromCamera()
+            if (!checkCameraPermission()) {
+                requestCameraPermission()
+            }
+            else {
+                pickFromCamera()
+            }
+            //pickFromCamera()
         }
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -689,7 +689,7 @@ class ChatLogActivity : AppCompatActivity() {
         progressDialog.show()
 
         val timestamp = "" + System.currentTimeMillis()
-        val fileNameAndPath = "ChatImages/" + "mess_" + timestamp
+        val fileNameAndPath = "ChatImages/mess_$timestamp"
 
 
         val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
