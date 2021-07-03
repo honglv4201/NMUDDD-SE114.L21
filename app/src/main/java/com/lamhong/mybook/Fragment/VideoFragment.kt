@@ -57,10 +57,19 @@ class VideoFragment : Fragment() {
             startActivity(Intent(context, AddShotVideoActivity::class.java))
         }
         view.btn_videoHot.setOnClickListener{
-            startActivity(Intent(context, ShotVideoActivity::class.java))
+            val intent = Intent(context, ShotVideoActivity::class.java)
+            intent.putExtra("type", "videohot")
+            startActivity(intent)
+        }
+        view.btn_videoFollow.setOnClickListener{
+            val intent = Intent(context, ShotVideoActivity::class.java)
+            intent.putExtra("type", "videofollow")
+            startActivity(intent)
         }
         view.btn_videocuatoi.setOnClickListener{
-            startActivity(Intent(context, MyShotVideoActivity::class.java))
+            val intent = (Intent(context, MyShotVideoActivity::class.java))
+            intent.putExtra("id", firebaseUser.uid)
+            startActivity(intent)
         }
         showInfor()
         return view
@@ -113,7 +122,8 @@ class VideoFragment : Fragment() {
                     }
                 }
                 else{
-
+                    numFollowinng_shotprofile.text="0"
+                    numFollower_shotprofile.text="0"
                 }
             }
         })

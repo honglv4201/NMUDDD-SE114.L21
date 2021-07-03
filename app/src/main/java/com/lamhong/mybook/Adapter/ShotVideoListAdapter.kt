@@ -1,6 +1,7 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.lamhong.mybook.Models.ShortVideo
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
 import androidx.annotation.NonNull
+import com.lamhong.mybook.ShotVideoActivity
 
 class ShotVideoListAdapter (private val mContext : Context, private val mListShotVideo : List<ShortVideo>)
     :RecyclerView.Adapter<ShotVideoListAdapter.ViewHolder>(){
@@ -35,6 +37,13 @@ class ShotVideoListAdapter (private val mContext : Context, private val mListSho
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val shotVideo = mListShotVideo[position]
         Picasso.get().load(shotVideo.getThumb()).placeholder(R.color.black).into(holder.image_thumb)
-        holder.views.text= shotVideo.getViews().toString()
+        holder.views.text= shotVideo.getViews().toString() + " lượt xem"
+
+        holder.image_thumb.setOnClickListener{
+            val intent = Intent(mContext, ShotVideoActivity::class.java)
+            intent.putExtra("type", shotVideo.getID())
+            mContext.startActivity(intent)
+
+        }
     }
 }
