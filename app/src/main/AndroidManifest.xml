@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lamhong.mybook">
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
+        android:name=".EmojiApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
+
         <activity android:name=".MyShotVideoActivity"></activity>
         <activity android:name=".ShotVideoActivity" />
         <activity android:name=".AddShotVideoActivity" />
         <activity android:name=".ReplayCommentActivity" />
+
+        <activity android:name=".UserPrivacyActivity"></activity>
+      
+        <activity android:name=".UserSystemSettingActivity" />
+        <activity android:name=".UserActiviesActivity" />
+        <activity android:name=".UserSavePostActivity" />
+        <activity android:name=".ReplayCommentActivity" />
+        <activity android:name=".GroupChatsLogActivity"></activity>
+        <activity android:name=".GroupChatsActivity" />
+        <activity android:name=".GroupCreateActivity" />
+        <activity android:name=".ReplayCommentActivity"></activity>
+      
+
         <activity android:name=".FollowingListActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NewSearchActivity" />
@@ -29,7 +49,11 @@
         <activity android:name=".ChangeAvatarActivity" />
         <activity android:name=".ProfileEditting" />
         <activity android:name=".FriendListActivity" />
-        <activity android:name=".ChatLogActivity" />
+        <activity
+            android:name=".ChatLogActivity"
+            tools:ignore="ExtraText">
+            android:windowSoftInputMode="adjustResize">
+        </activity>
         <activity android:name=".NewMessageActivity" />
         <activity android:name=".SharePostActivity" />
         <activity android:name=".UserReacted" />

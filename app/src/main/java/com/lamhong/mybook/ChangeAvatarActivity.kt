@@ -36,7 +36,8 @@ class ChangeAvatarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_avatar)
-
+       // val bottomSheetFragment= BottomSheetFragment()
+        //bottomSheetFragment.show(supportFragmentManager, "")
         // initial firebase
         firebaseUser= FirebaseAuth.getInstance().currentUser
         storageRef= FirebaseStorage.getInstance().reference.child("Posts Images")
