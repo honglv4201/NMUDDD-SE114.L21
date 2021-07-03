@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import br.com.simplepass.loadingbutton.customViews.ProgressButton
@@ -39,12 +41,13 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     private var firebaseUser : FirebaseUser?=null
 
     inner class ViewHolder0(@NonNull itemVIew: View): RecyclerView.ViewHolder(itemVIew){
-
+        var btn_option : ImageView = itemView.findViewById(R.id.btn_option)
         var postImage :ImageView
         var profileImage : CircleImageView
         var userName: TextView
         var numlikes: TextView= itemView.findViewById(R.id.numlikes)
         val numcomment: TextView= itemView.findViewById(R.id.numbinhluan)
+        val numshare: TextView= itemView.findViewById(R.id.numshare)
         var describe: TextView = itemView.findViewById(R.id.describe)
 
 
@@ -63,6 +66,8 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     }
 
     inner class ViewHolder1(@NonNull itemVIew: View) : RecyclerView.ViewHolder(itemVIew){
+        val numshare: TextView= itemView.findViewById(R.id.numshare)
+        val btn_option : ImageView = itemView.findViewById(R.id.btn_option)
         var postImage: ImageView
         var avatar_sharing : CircleImageView
         var avatar_shared: CircleImageView
@@ -97,7 +102,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     }
 
     inner class ViewHolder2(@NonNull itemVIew: View): RecyclerView.ViewHolder(itemVIew){
-
+        val numshare: TextView= itemView.findViewById(R.id.numshare)
         var avatarImage :CircleImageView
         var profileImage : CircleImageView
         var userName: TextView
@@ -152,6 +157,8 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
 
     override fun onBindViewHolder(holderc: RecyclerView.ViewHolder, position: Int) {
         firebaseUser= FirebaseAuth.getInstance().currentUser
+
+
         //getPostAndShare()
         when(holderc.getItemViewType()){
             0->{
@@ -173,7 +180,10 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     userIntent.putExtra("profileID", post.getpublisher())
                     mcontext.startActivity(userIntent)
                 }
-
+                holder1.btn_option.setOnClickListener{
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"post", post.getpost_id())
+                    bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
+                }
                 Picasso.get().load(post.getpost_image()).into(holder1.postImage)
 
                 publishInfo(holder1.profileImage, holder1.userName,  post.getpublisher())
@@ -188,12 +198,16 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 checkLikes(post.getpost_id(), holder1.btnLike , holder1.tvthich)
                 setnumberLike(holder1.numlikes,post.getpost_id())
                 setComment(holder1.numcomment, post.getpost_id())
+                setShareNumber(holder1.numshare, post.getpost_id())
                 holder1.numlikes.setOnClickListener{
                     val intent = Intent(mcontext, UserReacted::class.java)
                     intent.putExtra("postID", post.getpost_id())
                     mcontext.startActivity(intent)
                 }
                 holder1.btnLike.setOnClickListener{
+                    Toast.makeText(mcontext, "honghong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mcontext.applicationContext, "Đã lưu bài viết" , Toast.LENGTH_LONG).show()
+
                     if(holder1.btnLike.tag=="Like"){
                         addNotifyLike(post.getpublisher(), post.getpost_id() , "thichbaiviet")
                         FirebaseDatabase.getInstance().reference
@@ -241,6 +255,10 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     val userIntent = Intent(mcontext, ProfileActivity::class.java)
                     userIntent.putExtra("profileID", sharePost.getPublisher())
                     mcontext.startActivity(userIntent)
+                }
+                holder1.btn_option.setOnClickListener{
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"share", sharePost.getShareID())
+                    bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
                 }
 
                 //basic
@@ -411,6 +429,36 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
         }
 
     }
+
+    private fun setShareNumber(numshare: TextView, getpostId: String) {
+         val ref= FirebaseDatabase.getInstance().reference.child("Contents").child("Share Posts")
+        ref.addValueEventListener(object  : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    var xx=0
+                    for (s in snapshot.children){
+                        if(s.child("postID").value.toString()== getpostId){
+                            xx+=1
+                        }
+                    }
+                    if(xx>0){
+                        numshare.text=xx.toString()+ " chia sẻ"
+                        numshare.visibility= View.VISIBLE
+                    }
+                    else{
+                        numshare.visibility= View.GONE
+                    }
+                }
+                else {
+                    numshare.visibility= View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
     private fun getPost(id: String, postImage: ImageView, avatar_shared: CircleImageView,
             content_shared: TextView , name_shared : TextView){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("Posts").child(id)
@@ -485,12 +533,24 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
     }
 
     private fun setComment(numcomment: TextView, postId: String){
-        val commentRef= FirebaseDatabase.getInstance().reference
-            .child("Comments").child(postId)
+        val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
+           // .child("Comments").child(postId)
         commentRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 if(snapshot.exists()){
-                    numcomment.text=snapshot.childrenCount.toString() + " bình luận"
+                    var ss: Int = 0
+                    for(s in snapshot.child("Comments").child(postId).children){
+                        ss+=snapshot.child("CommentReplays").child(s.key.toString()).childrenCount.toString().toInt()
+                    }
+                    ss+=snapshot.child("Comments").child(postId).childrenCount.toString().toInt()
+                    if(ss>0){
+                        numcomment.text=ss.toString() + " bình luận"
+                        numcomment.visibility=View.VISIBLE
+                    }
+                    else{
+                        numcomment.visibility=View.GONE
+                    }
                 }
                 else {
                     numcomment.visibility=View.GONE

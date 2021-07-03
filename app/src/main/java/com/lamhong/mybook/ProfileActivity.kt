@@ -2,6 +2,7 @@ package com.lamhong.mybook
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -52,6 +53,7 @@ class ProfileActivity : AppCompatActivity() {
             this.finish()
         }
 
+
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
         //get prifile ID
@@ -89,6 +91,7 @@ class ProfileActivity : AppCompatActivity() {
                             .child("Friends").child(profileId)
                             .child("friendList").child(firebaseUser.uid)
                             .removeValue()
+
                 }
                 "nofriend" -> {
                     firebaseUser?.uid.let { it1 ->
@@ -407,8 +410,25 @@ class ProfileActivity : AppCompatActivity() {
             friendref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.child(profileId).exists()){
-                        btnAddfriend.text="Bạn bè"
-                        statusFriend="friend"
+                        if(snapshot.child(profileId).value=="friend")
+                        {
+                            btnAddfriend.text="Bạn bè"
+                            statusFriend="friend"
+                            btnAddfriend.setTextColor(Color.parseColor("#00BCD4"))
+
+                        }
+                        else if(snapshot.child(profileId).value=="pendingconfirm"){
+                            btnAddfriend.text="Xác nhận"
+                            statusFriend="xacnhan"
+                            btnAddfriend.setTextColor(Color.parseColor("#00BCD4"))
+
+                        }
+                        else if(snapshot.child(profileId).value=="pendinginvite"){
+                            btnAddfriend.text="Đang chờ"
+                            btnAddfriend.setTextColor(Color.parseColor("#858585"))
+                            statusFriend="dangcho"
+                        }
+
                     }
                     else{
                         btnAddfriend.text="Kết bạn"

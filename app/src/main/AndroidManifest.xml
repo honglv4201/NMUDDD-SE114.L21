@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -22,6 +23,16 @@
         <activity android:name=".GroupEditActivity"></activity>
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupAddMemberActivity" />
+        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".MyShotVideoActivity" />
+        <activity android:name=".ShotVideoActivity" />
+        <activity android:name=".AddShotVideoActivity" />
+        <activity android:name=".ReplayCommentActivity" />
+        <activity android:name=".UserPrivacyActivity" />
+        <activity android:name=".UserSystemSettingActivity" />
+        <activity android:name=".UserActiviesActivity" />
+        <activity android:name=".UserSavePostActivity" />
+        <activity android:name=".ReplayCommentActivity" />
         <activity android:name=".GroupChatsLogActivity" />
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
