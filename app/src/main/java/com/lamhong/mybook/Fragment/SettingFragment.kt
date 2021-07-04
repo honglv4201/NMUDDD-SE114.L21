@@ -63,7 +63,10 @@ class SettingFragment : Fragment() {
         view.btn_movetoFriendList.setOnClickListener{
             startActivity(Intent(context, FriendListActivity::class.java))
         }
-
+        view.btn_logout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(context, LoginActivity::class.java))
+        }
         view.btn_Private.setOnClickListener{
             startActivity(Intent(context, PrivateActivity::class.java))
         }

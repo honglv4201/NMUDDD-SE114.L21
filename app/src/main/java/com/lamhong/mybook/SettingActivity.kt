@@ -15,7 +15,7 @@ class SettingActivity : AppCompatActivity() {
         btn_return_fromsetting.setOnClickListener{
             this.finish()
         }
-        tv_changePassword.setOnClickListener {
+        btnPassword.setOnClickListener {
             val user : FirebaseUser = FirebaseAuth.getInstance().currentUser
                 FirebaseAuth.getInstance().sendPasswordResetEmail(user.email)
                     .addOnCompleteListener { task ->
