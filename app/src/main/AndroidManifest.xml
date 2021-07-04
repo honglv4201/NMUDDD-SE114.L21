@@ -21,6 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
 
+        <activity android:name=".FullScreenPictureActivity"></activity>
+        <activity android:name=".CommentShareActivity" />
+
+
         android:theme="@style/Theme.MyBook" >
         <activity android:name=".PrivateActivity" >
         </activity>
@@ -28,6 +32,7 @@
 
 
         <activity android:name=".ForgotPasswordActivity"></activity>
+
 
         <activity android:name=".SettingActivity" />
 

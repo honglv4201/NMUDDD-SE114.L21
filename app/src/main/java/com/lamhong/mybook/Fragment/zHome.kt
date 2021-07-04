@@ -25,6 +25,7 @@ import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.TimelineContent
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewSearchActivity
+import com.lamhong.mybook.Post_Activity
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_z_home.*
@@ -81,7 +82,9 @@ class zHome : Fragment() {
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_z_home, container, false)
         currentUser=FirebaseAuth.getInstance().currentUser
-
+        view.btn_addPost.setOnClickListener{
+            startActivity(Intent(context, Post_Activity::class.java))
+        }
 
 
         checkFollowing()

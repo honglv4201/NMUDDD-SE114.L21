@@ -1,6 +1,7 @@
 package com.lamhong.mybook.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.lamhong.mybook.DetailPostFragment
+import com.lamhong.mybook.FullScreenPictureActivity
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
@@ -34,11 +36,16 @@ class ImageProfileAdapter (private val mContext:Context, private val mPost: List
         Picasso.get().load(post.getpost_image()).placeholder(R.drawable.cty).into(holder.image_bio)
         holder.image_bio.layoutParams.height=mWidth
         holder.image_bio.setOnClickListener{
-            val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+          /*  val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
             pref.putString("postID",post.getpost_id())
             pref.apply()
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayout, DetailPostFragment()).commit()
+
+           */
+            val intentFull= Intent(mContext, FullScreenPictureActivity::class.java)
+            intentFull.putExtra("imageuri", post.getpost_image())
+            mContext.startActivity(intentFull)
         }
     }
 
