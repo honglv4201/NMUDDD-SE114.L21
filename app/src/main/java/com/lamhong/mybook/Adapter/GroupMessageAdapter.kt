@@ -1,5 +1,6 @@
 package com.lamhong.mybook.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.row_group_chat_left.view.*
 import kotlinx.android.synthetic.main.row_group_chat_right.view.*
 import kotlinx.android.synthetic.main.row_group_chat_right.view.message
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>) :RecyclerView.Adapter<RecyclerView.ViewHolder> () {
@@ -81,6 +83,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
             val currenttime = System.currentTimeMillis()
             val date2 = Date(currenttime)
 
+
             val senderID = recyclerViewModel.getsenderIDG()
 
             if (recyclerViewModel.getTypeG()=="text") {
@@ -96,11 +99,18 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
             }
 
             if (date.day!=date2.day) {
-
-                timestamp.text = dateFormat.format(date)
+                if (date.date==(date2.date-1)) {
+                    timestamp.text = "Hôm qua"
+                    timestampimage.text = "Hôm qua"
+                }
+                else {
+                    timestamp.text = dateFormat.format(date)
+                    timestampimage.text = dateFormat.format(date)
+                }
             }
             else {
                 timestamp.text = dateFormat2.format(date)
+                timestampimage.text = dateFormat2.format(date)
             }
 
 
@@ -146,10 +156,19 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
             if (date.day!=date2.day) {
 
-                timestamp.text = dateFormat.format(date)
+                if (date.date==(date2.date-1)) {
+                    timestamp.text = "Hôm qua"
+                    timestamp2.text = "Hôm qua"
+                }
+                else {
+                    timestamp.text = dateFormat.format(date)
+                    timestamp2.text = dateFormat.format(date)
+                }
             }
+
             else {
                 timestamp.text = dateFormat2.format(date)
+                timestamp2.text = dateFormat2.format(date)
             }
 
             FirebaseDatabase.getInstance().reference.child("UserInformation")

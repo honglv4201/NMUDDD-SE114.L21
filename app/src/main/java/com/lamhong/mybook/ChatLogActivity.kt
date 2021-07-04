@@ -7,6 +7,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
@@ -24,13 +25,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devlomi.record_view.OnBasketAnimationEnd
 import com.devlomi.record_view.OnRecordListener
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.installations.FirebaseInstallations
-import com.google.firebase.internal.InternalTokenProvider
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.lamhong.mybook.Adapter.MessageAdapter
 import com.lamhong.mybook.Listeners.UsersListener
@@ -41,9 +37,7 @@ import com.squareup.picasso.Picasso
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.EmojiTextView
 import kotlinx.android.synthetic.main.activity_chat_log.*
-import kotlinx.android.synthetic.main.activity_incoming_invitation.*
-import kotlinx.android.synthetic.main.activity_outgoing_invitation.*
-import kotlinx.android.synthetic.main.activity_outgoing_invitation.userNametxt
+import petrov.kristiyan.colorpicker.ColorPicker
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -361,7 +355,87 @@ class ChatLogActivity : AppCompatActivity() {
         })*/
 
 
+        loadColor(senderRoom.toString())
 
+
+    }
+
+    private fun loadColor(senderRoom:String) {
+        FirebaseDatabase.getInstance().reference.child("chats")
+            .child(senderRoom)
+            .child("color")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot!=null) {
+                        if (snapshot.value.toString() == "#eb3a2a" || snapshot.value.toString() == "#EB3A2A") {
+                            camera.setColorFilter(resources.getColor(R.color.eb3a2a))
+                            attachment.setColorFilter(resources.getColor(R.color.eb3a2a))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.eb3a2a))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.eb3a2a))
+                        }
+                        else if (snapshot.value.toString() == "#a598eb" || snapshot.value.toString() == "#A598EB") {
+                            camera.setColorFilter(resources.getColor(R.color.a598eb))
+                            attachment.setColorFilter(resources.getColor(R.color.a598eb))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.a598eb))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.a598eb))
+                        }
+                        else if (snapshot.value.toString() == "#e84fcf" || snapshot.value.toString() == "#E84FCF") {
+                            camera.setColorFilter(resources.getColor(R.color.e84fcf))
+                            attachment.setColorFilter(resources.getColor(R.color.e84fcf))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.e84fcf))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.e84fcf))
+                        }
+                        else if (snapshot.value.toString() == "#0e92eb" || snapshot.value.toString() == "#0E92EB") {
+                            camera.setColorFilter(resources.getColor(R.color.a0e92eb))
+                            attachment.setColorFilter(resources.getColor(R.color.a0e92eb))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.a0e92eb))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.a0e92eb))
+                        }
+                        else if (snapshot.value.toString() == "#b53f3f" || snapshot.value.toString() == "#B53F3F") {
+                            camera.setColorFilter(resources.getColor(R.color.b53f3f))
+                            attachment.setColorFilter(resources.getColor(R.color.b53f3f))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.b53f3f))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.b53f3f))
+                        }
+                        else if (snapshot.value.toString() == "#de625b" || snapshot.value.toString() == "#DE625B") {
+                            camera.setColorFilter(resources.getColor(R.color.de625b))
+                            attachment.setColorFilter(resources.getColor(R.color.de625b))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.de625b))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.de625b))
+                        }
+                        else if (snapshot.value.toString() == "#e6a50e" || snapshot.value.toString() == "#E6A50E") {
+                            camera.setColorFilter(resources.getColor(R.color.e6a50e))
+                            attachment.setColorFilter(resources.getColor(R.color.e6a50e))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.e6a50e))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.e6a50e))
+                        }
+                        else if (snapshot.value.toString() == "#69c90c" || snapshot.value.toString() == "#69C90C") {
+                            camera.setColorFilter(resources.getColor(R.color.a69c90c))
+                            attachment.setColorFilter(resources.getColor(R.color.a69c90c))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.a69c90c))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.a69c90c))
+                        }
+                        else if (snapshot.value.toString() == "#4e42ad" || snapshot.value.toString() == "#4E42AD") {
+                            camera.setColorFilter(resources.getColor(R.color.a4e42ad))
+                            attachment.setColorFilter(resources.getColor(R.color.a4e42ad))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.a4e42ad))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.a4e42ad))
+                        }
+                        else if (snapshot.value.toString() == "#a80ddd" || snapshot.value.toString() == "#A80DDD") {
+                            camera.setColorFilter(resources.getColor(R.color.a80ddd))
+                            attachment.setColorFilter(resources.getColor(R.color.a80ddd))
+                            btn_icon_chat.setColorFilter(resources.getColor(R.color.a80ddd))
+                            btn_send_message.setColorFilter(resources.getColor(R.color.a80ddd))
+                        }
+                    }
+
+                }
+
+            })
     }
 
     private fun StartRecording() {
@@ -500,6 +574,8 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
         })
+
+
     }
 
 
@@ -632,7 +708,7 @@ class ChatLogActivity : AppCompatActivity() {
                         pickFromCamera()
                     }
                     else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Truy cập bị từ chối",Toast.LENGTH_LONG).show()
                     }
                 }
                 else {
@@ -646,7 +722,7 @@ class ChatLogActivity : AppCompatActivity() {
                         pickFromGallery()
                     }
                     else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Truy cập bị từ chối",Toast.LENGTH_LONG).show()
                     }
                 }
                 else {
@@ -662,7 +738,7 @@ class ChatLogActivity : AppCompatActivity() {
                         Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show()
                     }
                     else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,"Truy cập bị từ chối",Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -685,7 +761,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun sendImageMess(imageUri: Uri?) {
 
         val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Sending image...")
+        progressDialog.setMessage("Đang gửi hình ảnh..")
         progressDialog.show()
 
         val timestamp = "" + System.currentTimeMillis()
@@ -712,7 +788,7 @@ class ChatLogActivity : AppCompatActivity() {
 
                         val lastMess = hashMapOf<String, Any?>()
 
-                        lastMess["lastMess"] = "[Photo]"
+                        lastMess["lastMess"] = "[Hình ảnh]"
                         lastMess["lastTime"] = timestamp
 
                         FirebaseDatabase.getInstance().reference.child("chats").child(senderRoom.toString()).updateChildren(lastMess)
@@ -736,7 +812,7 @@ class ChatLogActivity : AppCompatActivity() {
 
                                     val lastMess = hashMapOf<String, Any?>()
 
-                                    lastMess["lastMess"] = "[Photo]"
+                                    lastMess["lastMess"] = "[Hình ảnh]"
                                     lastMess["lastTime"] = timestamp
 
 
@@ -868,13 +944,71 @@ class ChatLogActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId) {
-            R.id.chat_color -> {}
+            R.id.chat_color -> {
+                openColorPicker()
+            }
             R.id.chat_call -> {}
             R.id.chat_videocall -> {makeVideoCall()}
             R.id.chat_see_profile -> {}
             R.id.chat_nickname -> {}
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun openColorPicker() {
+        val colorPicker = ColorPicker(this)
+        val colors = arrayListOf<String>()
+
+        colors.add("#eb3a2a")
+        colors.add("#a598eb")
+        colors.add("#e84fcf")
+        colors.add("#0e92eb")
+        colors.add("#b53f3f")
+        colors.add("#de625b")
+        colors.add("#e6a50e")
+        colors.add("#69c90c")
+        colors.add("#4e42ad")
+        colors.add("#a80ddd")
+
+
+
+        colorPicker.setColors(colors)
+            .setColumns(5)
+            .setRoundColorButton(true)
+            .setOnChooseColorListener(object : ColorPicker.OnChooseColorListener{
+                override fun onChooseColor(position: Int, color: Int) {
+
+                    val hashMap = hashMapOf<String, Any?>()
+
+
+                    val hexColor = java.lang.String.format("#%06X", 0xFFFFFF and color)
+
+                    hashMap["color"] = hexColor
+
+
+
+                    FirebaseDatabase.getInstance().reference
+                        .child("chats")
+                        .child(senderRoom.toString())
+                        .updateChildren(hashMap)
+                        .addOnSuccessListener {
+                            FirebaseDatabase.getInstance().reference
+                                .child("chats")
+                                .child(receiveRoom.toString())
+                                .updateChildren(hashMap)
+                                .addOnSuccessListener {
+
+                                }
+                        }
+                }
+
+                override fun onCancel() {
+                }
+
+            })
+            .show()
+
+
     }
 
     private fun makeVideoCall() {
