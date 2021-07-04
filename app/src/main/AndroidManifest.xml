@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.lamhong.mybook">
+    package="com.lamhong.mybook" >
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,8 +19,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyBook">
-        <activity android:name=".ForgotPasswordActivity"></activity>
+        android:theme="@style/Theme.MyBook" >
+        <activity android:name=".PrivateActivity" >
+        </activity>
+        <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".MyShotVideoActivity" />
         <activity android:name=".ShotVideoActivity" />
@@ -48,7 +50,7 @@
         <activity android:name=".FriendListActivity" />
         <activity
             android:name=".ChatLogActivity"
-            tools:ignore="ExtraText">
+            tools:ignore="ExtraText" >
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".NewMessageActivity" />
@@ -57,7 +59,7 @@
         <activity android:name=".CommentActivity" />
         <activity android:name=".Post_Activity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccountSettingActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
 
             <!-- android:label="@string/app_name" -->
 
