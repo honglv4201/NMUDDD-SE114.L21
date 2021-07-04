@@ -243,9 +243,9 @@ class ShotVideoAdapter (private val mcontext : Context, private val listShot: Ar
             try {
                 val response = RetrofitInstance.api.postNotification(notification)
                 if(response.isSuccessful){
-                    Log.d("TAG","Response: ${Gson().toJson(response)}")
+                   // Log.d("TAG","Response: ${Gson().toJson(response)}")
                 }else{
-                    Log.e("TAG",response.errorBody().toString())
+                   // Log.e("TAG",response.errorBody().toString())
                 }
             }catch (e: Exception){
                 Log.e("TAG", e.toString())
