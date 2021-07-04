@@ -1,5 +1,6 @@
 package com.lamhong.mybook
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
 import com.lamhong.mybook.Fragment.SettingFragment
 import com.lamhong.mybook.Fragment.*
+import com.lamhong.mybook.Network.MyFirebaseMessagingService
 import com.lamhong.mybook.Utilities.Constants
 
 class MainActivity : AppCompatActivity() {
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 sendFCMTokenToDatabase(fbToken)
             }
         }
+        MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
     }
 
 
@@ -89,4 +92,6 @@ class MainActivity : AppCompatActivity() {
         fragmentselect.replace(R.id.frameLayout, fragment)
         fragmentselect.commit()
     }
+
+
 }
