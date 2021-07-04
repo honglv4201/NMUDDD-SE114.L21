@@ -24,15 +24,26 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devlomi.record_view.OnBasketAnimationEnd
 import com.devlomi.record_view.OnRecordListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.internal.InternalTokenProvider
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.lamhong.mybook.Adapter.MessageAdapter
+import com.lamhong.mybook.Listeners.UsersListener
 import com.lamhong.mybook.Models.Message
+import com.lamhong.mybook.Models.User
+import com.lamhong.mybook.Utilities.Constants
 import com.squareup.picasso.Picasso
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.EmojiTextView
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.activity_incoming_invitation.*
+import kotlinx.android.synthetic.main.activity_outgoing_invitation.*
+import kotlinx.android.synthetic.main.activity_outgoing_invitation.userNametxt
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -63,6 +74,9 @@ class ChatLogActivity : AppCompatActivity() {
     var imageUri:Uri? = null
 
     var senderUid: String? = FirebaseAuth.getInstance().uid
+    var receiverUid: String? = null
+    val receiInfor : User = User()
+    val senderInfor :User = User()
 
 
 
@@ -78,7 +92,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         var name:String? = intent.getStringExtra("name")
         var image:String? = intent.getStringExtra("image")
-        var receiverUid:String?= intent.getStringExtra("uid")
+        receiverUid= intent.getStringExtra("uid")
 
         setSupportActionBar(toolbar_chatlog)
 
@@ -89,6 +103,38 @@ class ChatLogActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
+        val userRef = FirebaseDatabase.getInstance().reference
+            .child("UserInformation").child(receiverUid!!)
+        userRef.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    receiInfor.setAvatar(snapshot.child("avatar").value.toString())
+                    receiInfor.setName(snapshot.child("fullname").value.toString())
+                    receiInfor.setEmail(snapshot.child("email").value.toString())
+                    receiInfor.setUid(snapshot.child("uid").value.toString())
+                    receiInfor.setToken(snapshot.child(Constants.KEY_FCM_TOKEN).value.toString())
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        val userRef_2 = FirebaseDatabase.getInstance().reference
+            .child("UserInformation").child(senderUid!!)
+        userRef_2.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    senderInfor.setAvatar(snapshot.child("avatar").value.toString())
+                    senderInfor.setName(snapshot.child("fullname").value.toString())
+                    senderInfor.setEmail(snapshot.child("email").value.toString())
+                    senderInfor.setUid(snapshot.child("uid").value.toString())
+                    senderInfor.setToken(snapshot.child(Constants.KEY_FCM_TOKEN).value.toString())
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
 
 
         senderRoom = senderUid + receiverUid
@@ -131,11 +177,6 @@ class ChatLogActivity : AppCompatActivity() {
                     //rv_chat_log.smoothScrollToPosition(adater.itemCount)
                 }
             })
-
-
-
-
-
 
         messagebox.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -254,13 +295,13 @@ class ChatLogActivity : AppCompatActivity() {
         }
 
         camera.setOnClickListener{
-//            if (!checkCameraPermission()) {
-//                requestCameraPermission()
-//            }
-//            else {
-//                pickFromCamera()
-//            }
-            pickFromCamera()
+            if (!checkCameraPermission()) {
+                requestCameraPermission()
+            }
+            else {
+                pickFromCamera()
+            }
+            //pickFromCamera()
         }
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -318,6 +359,8 @@ class ChatLogActivity : AppCompatActivity() {
             }
 
         })*/
+
+
 
     }
 
@@ -646,7 +689,7 @@ class ChatLogActivity : AppCompatActivity() {
         progressDialog.show()
 
         val timestamp = "" + System.currentTimeMillis()
-        val fileNameAndPath = "ChatImages/" + "mess_" + timestamp
+        val fileNameAndPath = "ChatImages/mess_$timestamp"
 
 
         val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
@@ -712,6 +755,8 @@ class ChatLogActivity : AppCompatActivity() {
                 .addOnFailureListener{
                     progressDialog.dismiss()
                 }
+
+
     }
 
 
@@ -825,16 +870,30 @@ class ChatLogActivity : AppCompatActivity() {
         when(item?.itemId) {
             R.id.chat_color -> {}
             R.id.chat_call -> {}
-            R.id.chat_videocall -> {}
+            R.id.chat_videocall -> {makeVideoCall()}
             R.id.chat_see_profile -> {}
             R.id.chat_nickname -> {}
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun makeVideoCall() {
+
+        //usersListener?.initiateVideoMetting();
+
+        var intent  = Intent(applicationContext, OutgoingInvitationActivity::class.java)
+        intent.putExtra("senderInfor", senderInfor)
+        intent.putExtra("receiInfor",receiInfor)
+        intent.putExtra("type", "video")
+        startActivity(intent)
+    }
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
     }
+
+    private val usersListener : UsersListener?= null
+
+
 
 }

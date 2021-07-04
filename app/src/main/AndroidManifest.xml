@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -19,11 +20,36 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.MyBook" >
         <activity android:name=".PrivateActivity" >
         </activity>
         <activity android:name=".ForgotPasswordActivity" />
+
+
+        <activity android:name=".ForgotPasswordActivity"></activity>
+
         <activity android:name=".SettingActivity" />
+
+        <activity android:name=".CommentShareActivity"></activity>
+      
+
+
+        android:theme="@style/Theme.MyBook"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+      
+        <activity android:name=".OutgoingInvitationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".IncomingInvitationActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".GroupEditActivity"></activity>
+        <activity android:name=".GroupInfoActivity" />
+        <activity android:name=".GroupAddMemberActivity" />
+        <activity android:name=".SettingActivity"></activity>
+
+
         <activity android:name=".MyShotVideoActivity" />
         <activity android:name=".ShotVideoActivity" />
         <activity android:name=".AddShotVideoActivity" />
@@ -36,7 +62,6 @@
         <activity android:name=".GroupChatsLogActivity" />
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
-        <activity android:name=".ReplayCommentActivity" />
         <activity android:name=".FollowingListActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NewSearchActivity" />
@@ -86,6 +111,27 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+
+        <service
+            android:name=".Network.MyFirebaseMessagingService"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+            </intent-filter>
+        </service>
+
+
     </application>
+
+
 
 </manifest>

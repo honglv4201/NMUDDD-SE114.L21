@@ -14,9 +14,15 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
+
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.lamhong.mybook.Utilities.Constants
+
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -147,6 +153,7 @@ class LoginActivity : AppCompatActivity() {
                             val intent= Intent(this@LoginActivity, MainActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
+
                             finish()
                         }
                         else{
@@ -159,6 +166,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+    var meUid : String? = FirebaseAuth.getInstance().uid
+    private fun sendFCMTokenToDatabase(fbToken: String) {
+        FirebaseDatabase.getInstance().reference.child("UserInformation")
+            .child(meUid.toString())
+            .child(Constants.KEY_FCM_TOKEN)
+            .setValue(fbToken)
+    }
+
     override fun onStart() {
         super.onStart()
         if(FirebaseAuth.getInstance().currentUser !=null){
