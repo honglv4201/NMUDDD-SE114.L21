@@ -103,6 +103,8 @@ dependencies {
     //implementation 'androidx.swiperefreshlayout:siperefreshlayout:1.1.0'
     //Jitsi Meet (-devBlinkCat)
     implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
+    implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
+
 
 
 }
