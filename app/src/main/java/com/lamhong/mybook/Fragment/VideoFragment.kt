@@ -19,6 +19,7 @@ import com.lamhong.mybook.MyShotVideoActivity
 import com.lamhong.mybook.R
 import com.lamhong.mybook.ShotVideoActivity
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_video.*
 import kotlinx.android.synthetic.main.fragment_video.view.*
@@ -109,15 +110,19 @@ class VideoFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     if(snapshot.child("followerList").exists()){
+                        if(numFollower_shotprofile!=null)
                         numFollower_shotprofile.text=snapshot.child("followerList").childrenCount.toString()
                     }
                     else{
+                        if(numFollower_shotprofile!=null)
                         numFollower_shotprofile.text="0"
                     }
                     if(snapshot.child("followingList").exists()){
+                        if(numFollowinng_shotprofile!=null)
                         numFollowinng_shotprofile.text=snapshot.child("followingList").childrenCount.toString()
                     }
                     else{
+                        if(numFollowinng_shotprofile!=null)
                         numFollowinng_shotprofile.text="0"
                     }
                 }

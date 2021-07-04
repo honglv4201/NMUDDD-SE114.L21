@@ -35,19 +35,7 @@ class UserActiviesActivity : AppCompatActivity() {
         btn_return_fromsavepost.setOnClickListener{
             finish()
         }
-        firebaseUser = FirebaseAuth.getInstance().currentUser
-        ShowImagePost1()
-        //recycleview_activities
-        var recycleview1 : RecyclerView
-        recycleview1= findViewById(R.id.recycleview_activities)
-        val linearLayoutManager1 = LinearLayoutManager(this)
-        //linearLayoutManager1.stackFromEnd=true
-        //linearLayoutManager1.reverseLayout=true
-        recycleview1.layoutManager= linearLayoutManager1
-        postAdapter=  PostAdapter(this, imagePostList as ArrayList<Post> , lstIndex as ArrayList,
-            lstTypeAdapter as ArrayList, shareList as ArrayList , avatarList as ArrayList,
-            coverImageList as ArrayList)
-        recycleview1.adapter= postAdapter
+
 
     }
 
