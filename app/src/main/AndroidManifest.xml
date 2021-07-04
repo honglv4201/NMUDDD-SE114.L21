@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
-        <activity android:name=".CommentShareActivity"></activity>
+        <activity android:name=".FullScreenPictureActivity"></activity>
+        <activity android:name=".CommentShareActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".MyShotVideoActivity" />
         <activity android:name=".ShotVideoActivity" />

@@ -37,7 +37,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                    private val mShare: List<SharePost>, private val mAvatarList : List<Post>,
                     private val mCoverImageList : List<Post>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var firebaseUser : FirebaseUser?=null
-
+    var uri: String=""
     inner class ViewHolder0(@NonNull itemVIew: View): RecyclerView.ViewHolder(itemVIew){
         var btn_option : ImageView = itemView.findViewById(R.id.btn_option)
         var postImage :ImageView
@@ -191,7 +191,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     mcontext.startActivity(userIntent)
                 }
                 holder1.btn_option.setOnClickListener{
-                    val bottomSheetFragment = BottomSheetFragment(mcontext,"post", post.getpost_id())
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"post", post.getpost_id(), post.getpublisher())
                     bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
                 }
                 Picasso.get().load(post.getpost_image()).into(holder1.postImage)
@@ -249,7 +249,19 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     val shareIntent = Intent(mcontext, SharePostActivity::class.java)
                     shareIntent.putExtra("postID", post.getpost_id())
                     shareIntent.putExtra("publisher", post.getpublisher())
+                    shareIntent.putExtra("type", "post")
                     mcontext.startActivity(shareIntent)
+                }
+                holder1.postImage.setOnClickListener{
+                    val intentFull= Intent(mcontext, FullScreenPictureActivity::class.java)
+                    intentFull.putExtra("imageuri", post.getpost_image())
+                    mcontext.startActivity(intentFull)
+                }
+                holder1.postImage.setOnClickListener{
+
+                    val intentFull= Intent(mcontext, FullScreenPictureActivity::class.java)
+                    intentFull.putExtra("imageuri", post.getpost_image())
+                    mcontext.startActivity(intentFull)
                 }
             }
             1->{
@@ -269,7 +281,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     mcontext.startActivity(userIntent)
                 }
                 holder1.btn_option.setOnClickListener{
-                    val bottomSheetFragment = BottomSheetFragment(mcontext,"share", sharePost.getShareID())
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"sharepost", sharePost.getShareID() , sharePost.getPublisher())
                     bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
                 }
 
@@ -334,6 +346,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 }
 
 
+
             }
             2->{
                 val holder1 : ViewHolder2 = holderc as ViewHolder2
@@ -342,7 +355,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                 val post= mAvatarList[mLstIndex[position]]
 
                 holder1.btn_option.setOnClickListener{
-                    val bottomSheetFragment = BottomSheetFragment(mcontext,"avatar", post.getpost_id())
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"changeavatar", post.getpost_id(), post.getpublisher())
                     bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
                 }
 
@@ -400,6 +413,11 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     shareIntent.putExtra("type", "avatar")
                     mcontext.startActivity(shareIntent)
                 }
+                holder1.avatarImage.setOnClickListener{
+                    val intentFull= Intent(mcontext, FullScreenPictureActivity::class.java)
+                    intentFull.putExtra("imageuri", post.getpost_image())
+                    mcontext.startActivity(intentFull)
+                }
             }
             3->{
                 val holder1 : ViewHolder0 = holderc as ViewHolder0
@@ -448,7 +466,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     }
                 }
                 holder1.btn_option.setOnClickListener{
-                    val bottomSheetFragment = BottomSheetFragment(mcontext,"share", post.getpost_id())
+                    val bottomSheetFragment = BottomSheetFragment(mcontext,"changecover", post.getpost_id(), post.getpublisher())
                     bottomSheetFragment.show((mcontext as AppCompatActivity).supportFragmentManager, "")
                 }
                 holder1.btnComment.setOnClickListener{
@@ -464,6 +482,11 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                     shareIntent.putExtra("publisher", post.getpublisher())
                     shareIntent.putExtra("type", "cover")
                     mcontext.startActivity(shareIntent)
+                }
+                holder1.postImage.setOnClickListener{
+                    val intentFull= Intent(mcontext, FullScreenPictureActivity::class.java)
+                    intentFull.putExtra("imageuri", post.getpost_image())
+                    mcontext.startActivity(intentFull)
                 }
             }
         }
@@ -539,6 +562,7 @@ class PostAdapter (private val mcontext: Context, private val mPost : List<Post>
                         postImage.visibility= View.VISIBLE
 
                     }
+                    uri=post!!.getpost_image()
 
                     publishInfo(avatar_shared, name_shared,  post!!.getpublisher())
                     //describe import
