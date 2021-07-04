@@ -61,9 +61,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cài đặt tài khoản"
-            android:textSize="18dp"
+            android:textSize="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
+
+            />
+        <TextView
+            android:id="@+id/tv_changePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thay đổi mật khẩu"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
 
             />
 
@@ -80,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cài đặt hệ thống"
-            android:textSize="18dp"
+            android:textSize="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
 

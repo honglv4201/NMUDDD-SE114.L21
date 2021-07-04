@@ -64,7 +64,9 @@ class SettingFragment : Fragment() {
             startActivity(Intent(context, FriendListActivity::class.java))
         }
 
-
+        view.btn_Private.setOnClickListener{
+            startActivity(Intent(context, PrivateActivity::class.java))
+        }
         view.btn_movetoUserActivity.setOnClickListener{
             startActivity(Intent(context, UserActiviesActivity::class.java))
         }

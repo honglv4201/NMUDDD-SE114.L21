@@ -251,7 +251,7 @@
                     android:textSize="14dp"
                     />
                 <RelativeLayout
-                    android:layout_marginTop="10dp "
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -278,6 +278,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/btn_Private"
                 android:layout_width="match_parent"
                 android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
@@ -382,7 +383,7 @@
                     android:textSize="14dp"
                     />
                 <RelativeLayout
-                    android:layout_marginTop="10dp "
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -515,7 +516,7 @@
                     android:textSize="14dp"
                     />
                 <RelativeLayout
-                    android:layout_marginTop="10dp "
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
