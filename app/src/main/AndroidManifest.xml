@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -52,11 +53,9 @@
         <activity android:name=".UserActiviesActivity" />
         <activity android:name=".UserSavePostActivity" />
         <activity android:name=".ReplayCommentActivity" />
-
         <activity android:name=".GroupChatsLogActivity" />
         <activity android:name=".GroupChatsActivity" />
         <activity android:name=".GroupCreateActivity" />
-        <activity android:name=".ReplayCommentActivity" />
         <activity android:name=".FollowingListActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NewSearchActivity" />
@@ -116,9 +115,11 @@
 
         <service
             android:name=".Network.MyFirebaseMessagingService"
+            android:permission="com.google.android.c2dm.permission.SEND"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
             </intent-filter>
         </service>
 

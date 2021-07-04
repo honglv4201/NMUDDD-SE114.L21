@@ -26,6 +26,11 @@ public class Constants {
         public final val KEY_AVATAR = "avatar"
         public final val KEY_FCM_TOKEN = "fcm_token"
 
+        const val MESSAGING_SERVICE_TYPE = "messagingType"
+
+        const val BASE_URL = "https://fcm.googleapis.com"
+        const val SERVER_KEY = "AAAA12IGRrg:APA91bFukI15Blcri8wXmatTFUlnWCTpeOARwf2Co_ZAfWAkIzeo1ddpKVUkQLG9zp6-e896BTTgvUi-bpBvhUA1Z3Z-6LEhBiXuSOTYWYBDZs8g_OaUEd04qIHHEREeQbMccjyWgbrB"
+        const val CONTENT_TYPE = "application/json"
 
         public fun getRemoteMessageHeaders(): HashMap<String, String> {
             val headers: HashMap<String, String> = HashMap()
