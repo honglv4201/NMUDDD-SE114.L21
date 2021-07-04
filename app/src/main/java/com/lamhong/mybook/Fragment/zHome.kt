@@ -192,16 +192,23 @@ class zHome : Fragment() {
                         tl!!.setPostType(s.child("post_type").value.toString())
                         if (tl!!.getPostType() == "sharepost") {
 
-                            var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)
-                                 shareList!!.add(sharePost!!)
-                            (shareListID as ArrayList).add(tl.getId())
-                            (lstTypeAdapter as ArrayList).add(1)
-                            (lstIndex as ArrayList).add(ind1)
-                            ind1 += 1
+                            if(snapshot.child("Share Posts").child(tl.getId()).child("type").exists()){
+                                var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)
+                                shareList!!.add(sharePost!!)
+                                sharePost.setType(snapshot.child("Share Posts").child(tl.getId()).child("type").value.toString())
+                                sharePost.setPostOwner(snapshot.child("Share Posts").child(tl.getId()).child("postOwner").value.toString())
+
+                                (shareListID as ArrayList).add(tl.getId())
+                                (lstTypeAdapter as ArrayList).add(1)
+                                (lstIndex as ArrayList).add(ind1)
+                                ind1 += 1
+                            }
+
                         } else if (tl!!.getPostType() == "post") {
 
 
                             val post = snapshot.child("Posts").child(tl.getId()).getValue(Post::class.java)
+                            post!!.setpostContent(snapshot.child("Posts").child(tl.getId()).child("post_content").value.toString())
                             postList!!.add(post!!)
                             (postListID as ArrayList).add(tl.getId())
                             (lstTypeAdapter as ArrayList).add(0)
@@ -210,6 +217,10 @@ class zHome : Fragment() {
                         }
                         else if (tl!!.getPostType()=="changeavatar"){
                             val avatarPost = snapshot.child("AvatarPost").child(tl.getId()).getValue(Post::class.java)
+                            avatarPost!!.setpostContent(snapshot.child("AvatarPost").child(tl.getId()).child("post_content")
+                                .value.toString())
+
+
                             avatarList!!.add(avatarPost!!)
                             (lstTypeAdapter as ArrayList).add(2)
                             (lstIndex as ArrayList).add(ind3)
@@ -217,6 +228,7 @@ class zHome : Fragment() {
                         }
                         else if(tl!!.getPostType()=="changecover"){
                             val coverImagePost = snapshot.child("CoverPost").child(tl.getId()).getValue(Post::class.java)
+                            coverImagePost!!.setpostContent(snapshot.child("CoverPost").child(tl.getId()).child("post_content").value.toString())
                             coverImageList!!.add(coverImagePost!!)
                             (lstTypeAdapter as ArrayList).add(3)
                             (lstIndex as ArrayList).add(ind4)

@@ -303,12 +303,14 @@ class ProfileActivity : AppCompatActivity() {
                         val tl = s.getValue(TimelineContent::class.java)
                         tl!!.setPostType(s.child("post_type").value.toString())
                         if (tl!!.getPostType() == "sharepost") {
+                            if(snapshot.child("Share Posts").child(tl.getId()).exists()){
+                                var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)
+                                shareList!!.add(sharePost!!)
+                                (lstTypeAdapter as ArrayList).add(1)
+                                (lstIndex as ArrayList).add(ind1)
+                                ind1 += 1
+                            }
 
-                            var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)
-                            shareList!!.add(sharePost!!)
-                            (lstTypeAdapter as ArrayList).add(1)
-                            (lstIndex as ArrayList).add(ind1)
-                            ind1 += 1
                         } else if (tl!!.getPostType() == "post") {
 
 

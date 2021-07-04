@@ -1,6 +1,7 @@
 package com.lamhong.mybook
 
 import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
@@ -8,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,30 +22,45 @@ import com.lamhong.mybook.Models.Comment
 import com.lamhong.mybook.Models.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_comment.*
+import kotlinx.android.synthetic.main.activity_comment_share.*
+import kotlinx.android.synthetic.main.activity_comment_share.btn_close
+import kotlinx.android.synthetic.main.activity_comment_share.btn_dangBinhLuan
+import kotlinx.android.synthetic.main.activity_comment_share.container_post_avatar_comment
+import kotlinx.android.synthetic.main.activity_comment_share.edit_add_comment
+import kotlinx.android.synthetic.main.activity_comment_share.image_avatar_incomment
+import kotlinx.android.synthetic.main.activity_comment_share.post_avatar_comment
+import kotlinx.android.synthetic.main.activity_comment_share.tv_comment_appbar
 
-class  CommentActivity : AppCompatActivity() {
+class CommentShareActivity : AppCompatActivity() {
 
     private var postID : String= ""
+    private var shareID : String= ""
     private var type : String= ""
     private var publisher: String = ""
-    private var firebaseUser: FirebaseUser ?=null
+    private var postowner: String = ""
+    private var content: String = ""
+    private var firebaseUser: FirebaseUser?=null
     private var commentAdapter : CommentAdapter?=null
     private var commentList : MutableList<Comment>?=null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_comment)
+        setContentView(R.layout.activity_comment_share)
+
         btn_close.setOnClickListener{
             this.finish()
         }
 
-
         val intent = intent
         postID= intent.getStringExtra("postID").toString()
         publisher= intent.getStringExtra("publisher").toString()
+        postowner= intent.getStringExtra("postowner").toString()
+        content= intent.getStringExtra("content").toString()
+        shareID= intent.getStringExtra("shareID").toString()
         type= intent.getStringExtra("type").toString()
-        firebaseUser=FirebaseAuth.getInstance().currentUser
+        // set infor
+
+        firebaseUser= FirebaseAuth.getInstance().currentUser
         userInfor()
         imageandOwnerInfor()
         // set image to separate post
@@ -56,7 +71,7 @@ class  CommentActivity : AppCompatActivity() {
         }
         else if(type=="avatar"){
             getImageAvatar()
-            image_post_incomment.visibility= View.GONE
+            image_content.visibility= View.GONE
 
         }
         else if (type=="cover"){
@@ -64,6 +79,7 @@ class  CommentActivity : AppCompatActivity() {
             container_post_avatar_comment.visibility= View.GONE
 
         }
+
 
         btn_dangBinhLuan.setOnClickListener {
             if (TextUtils.isEmpty(edit_add_comment.text)) {
@@ -75,7 +91,7 @@ class  CommentActivity : AppCompatActivity() {
         // add recycleview
         val recyclerView : RecyclerView
         recyclerView= findViewById(R.id.recycleview_comment)
-        val linearLayoutManager : LinearLayoutManager= LinearLayoutManager(this)
+        val linearLayoutManager : LinearLayoutManager = LinearLayoutManager(this)
         //linearLayoutManager.reverseLayout=true
         recyclerView.layoutManager= linearLayoutManager
 
@@ -83,15 +99,14 @@ class  CommentActivity : AppCompatActivity() {
         commentList= ArrayList()
         commentAdapter= CommentAdapter(this, commentList as ArrayList<Comment>)
         recyclerView.adapter=commentAdapter
-        recyclerView.visibility=View.VISIBLE
+        recyclerView.visibility= View.VISIBLE
 
         viewComment()
-
     }
     private fun viewComment(){
         val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
-            .child("Comments").child(postID)
-        commentRef.addValueEventListener(object: ValueEventListener{
+            .child("Comments").child(shareID)
+        commentRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     commentList!!.clear()
@@ -100,7 +115,7 @@ class  CommentActivity : AppCompatActivity() {
                         comment.setOwner(snap.child("ownerComment").value.toString())
                         commentList!!.add(comment)
                     }
-                   // (commentList as ArrayList).reverse()
+                    // (commentList as ArrayList).reverse()
                     commentAdapter!!.notifyDataSetChanged()
                 }
             }
@@ -111,7 +126,7 @@ class  CommentActivity : AppCompatActivity() {
     }
     private fun addComment(){
         val commentRef= FirebaseDatabase.getInstance().reference.child("AllComment")
-            .child("Comments").child(postID)
+            .child("Comments").child(shareID)
         val commentMap =HashMap<String, Any>()
         val key : String = commentRef.push().key.toString()
         commentMap["content"]=edit_add_comment.text.toString()
@@ -131,7 +146,7 @@ class  CommentActivity : AppCompatActivity() {
         val idpush : String = notiRef.push().key.toString()
         notiMap["userID"]=firebaseUser!!.uid
         notiMap["notify"]=edit_add_comment.text.toString()
-        notiMap["postID"]=postID
+        notiMap["postID"]=shareID
         notiMap["type"]="binhluan"
         notiMap["notifyID"]=idpush
 
@@ -139,14 +154,31 @@ class  CommentActivity : AppCompatActivity() {
 
     }
     private fun userInfor(){
-        val userRef=FirebaseDatabase.getInstance().reference
+        val userRef= FirebaseDatabase.getInstance().reference
             .child("UserInformation").child(firebaseUser!!.uid)
-        userRef.addValueEventListener(object: ValueEventListener{
+        userRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     val user = snapshot.getValue(User::class.java)
-                   //Picasso.get().load(user!!.getAvatar()).into(image_post_incomment)
-                   Picasso.get().load(user!!.getAvatar()).into(image_avatar_incomment)
+                    //Picasso.get().load(user!!.getAvatar()).into(image_post_incomment)
+                    Picasso.get().load(user!!.getAvatar()).into(image_avatar_incomment)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        val userRef1= FirebaseDatabase.getInstance().reference
+            .child("UserInformation").child(postowner)
+        userRef1.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val user = snapshot.getValue(User::class.java)
+                    user!!.setAvatar(snapshot.child("avatar").value.toString())
+                    user!!.setName(snapshot.child("fullname").value.toString())
+                    Picasso.get().load(user!!.getAvatar()).into(user_avatar_shared)
+                    user_name_shared.text=user!!.getName()
                 }
             }
 
@@ -157,24 +189,14 @@ class  CommentActivity : AppCompatActivity() {
     private fun imageandOwnerInfor(){
         val userref= FirebaseDatabase.getInstance().reference
             .child("UserInformation").child(publisher)
-        userref.addValueEventListener(object: ValueEventListener{
+        userref.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     val fname= snapshot.child("fullname").value.toString()
                     val fnamefix= getColoredSpanned(fname, "#00BCD4")
-                    val anhbiacua= getColoredSpanned("Ảnh bìa của ", "#A1B4B6")
-                    val baiviet= getColoredSpanned("Bài viết của ", "#A1B4B6")
-                    val anhdaidien= getColoredSpanned("Ảnh đại diện của ", "#A1B4B6")
-                    if(type=="cover"){
-                        tv_comment_appbar.setText(Html.fromHtml(anhbiacua + fname))
-                    }
-                    else if(type=="post")
-                    {
-                        tv_comment_appbar.setText(Html.fromHtml(baiviet + fname))
-                    }
-                    else if(type=="avatar"){
-                        tv_comment_appbar.setText(Html.fromHtml(anhdaidien + fname))
-                    }
+                    val tt= getColoredSpanned("Bài chia sẻ của ", "#A1B4B6")
+                    tv_comment_appbar.setText(Html.fromHtml(tt + fnamefix))
+
                 }
             }
 
@@ -190,13 +212,22 @@ class  CommentActivity : AppCompatActivity() {
 
     private fun getImagePost(){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("Posts")
-            .child(postID).child("post_image")
+            .child(postID)
 
-        postRef.addValueEventListener(object: ValueEventListener{
+        postRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    val imageContent= snapshot.value.toString()
-                    Picasso.get().load(imageContent).into(image_post_incomment)
+                    val imageContent= snapshot.child("post_image").value.toString()
+                    Picasso.get().load(imageContent).into(image_content)
+
+                    val tcontent= snapshot.child("post_content").value.toString()
+                    if(tcontent==null || tcontent==""){
+                        content_inshared.visibility=View.GONE
+                    }
+                    else{
+                        content_inshared.visibility=View.VISIBLE
+                        content_inshared.text=tcontent
+                    }
                 }
                 else {
                     Log.d("hong","nothing")
@@ -209,13 +240,23 @@ class  CommentActivity : AppCompatActivity() {
     }
     private fun getCoverPost(){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("CoverPost")
-            .child(postID).child("post_image")
+            .child(postID)
 
-        postRef.addValueEventListener(object: ValueEventListener{
+        postRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    val imageContent= snapshot.value.toString()
-                    Picasso.get().load(imageContent).into(image_post_incomment)
+                    val imageContent= snapshot.child("post_image").value.toString()
+                    Picasso.get().load(imageContent).into(image_content)
+
+                    val tcontent= snapshot.child("post_content").value.toString()
+                    if(tcontent==null || tcontent==""){
+                        content_inshared.visibility=View.GONE
+                    }
+                    else{
+                        content_inshared.visibility=View.VISIBLE
+                        content_inshared.text=tcontent
+                    }
+
                 }
                 else {
                     Log.d("hong","nothing")
@@ -228,13 +269,26 @@ class  CommentActivity : AppCompatActivity() {
     }
     private fun getImageAvatar(){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents").child("AvatarPost")
-            .child(postID).child("post_image")
+            .child(postID)
+            //.child("post_image")
 
-        postRef.addValueEventListener(object: ValueEventListener{
+
+        postRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    val imageContent= snapshot.value.toString()
+                    val imageContent= snapshot.child("post_image").value.toString()
                     Picasso.get().load(imageContent).into(post_avatar_comment)
+
+                    val tcontent= snapshot.child("post_content").value.toString()
+                    if(tcontent==null || tcontent==""){
+                        content_inshared.visibility=View.GONE
+                    }
+                    else{
+                        content_inshared.visibility=View.VISIBLE
+                        content_inshared.text=tcontent
+                    }
+
+
                 }
                 else {
                     Log.d("hong","nothing")
