@@ -20,8 +20,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBook">
-        <activity android:name=".CommentShareActivity"></activity>
+
+        <activity android:name=".ForgotPasswordActivity"></activity>
         <activity android:name=".SettingActivity" />
+
+        <activity android:name=".CommentShareActivity"></activity>
+      
 
 
         android:theme="@style/Theme.MyBook"
@@ -37,6 +41,7 @@
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupAddMemberActivity" />
         <activity android:name=".SettingActivity"></activity>
+
 
         <activity android:name=".MyShotVideoActivity" />
         <activity android:name=".ShotVideoActivity" />
