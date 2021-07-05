@@ -162,13 +162,12 @@ class SettingFragment : Fragment() {
     private fun setNumberProfile() {
         val ref= FirebaseDatabase.getInstance().reference
             .child("Friends").child(firebaseUser.uid).child("friendList")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    if(NumFriends!=null)
                     NumFriends.text=snapshot.childrenCount.toString()
                 }
                 else{
@@ -194,7 +193,6 @@ class SettingFragment : Fragment() {
 //                        }
                     }
                 }
-                if(numPost!=null)
                 numPost.text=ss.toString()
             }
         })

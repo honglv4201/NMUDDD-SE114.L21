@@ -2,7 +2,6 @@ package com.lamhong.mybook
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +19,6 @@ class SharePostActivity : AppCompatActivity() {
 
     private var postID: String=""
     private var publisher: String=""
-    private var type: String=""
     private var firebaseUser : FirebaseUser?=null
     private var followingList : ArrayList<String> = ArrayList()
 
@@ -30,16 +28,14 @@ class SharePostActivity : AppCompatActivity() {
         firebaseUser=FirebaseAuth.getInstance().currentUser
         postID= intent.getStringExtra("postID").toString()
         publisher= intent.getStringExtra("publisher").toString()
-        type= intent.getStringExtra("type").toString()
         btn_dangShare.setOnClickListener{
-            sharePost(type)
+            sharePost()
         }
         btn_close.setOnClickListener{
             finish()
         }
-      showProfile()
         getFollowinglist()
-
+        showProfile()
 
     }
 
@@ -65,24 +61,8 @@ class SharePostActivity : AppCompatActivity() {
 
             }
         })
-        var path:String=""
-        if(type=="cover")
-        {
-            path="CoverPost"
-            tv_typeInshare.text="đã thay đổi ảnh bìa"
-        }
-        else if(type=="avatar"){
-            tv_typeInshare.text="đã thay đổi ảnh đại diện"
-            path="AvatarPost"
-
-        }
-        else{
-            path="Posts"
-            tv_typeInshare.text=""
-
-        }
         val postRef= FirebaseDatabase.getInstance().reference
-            .child("Contents").child(path).child(postID)
+            .child("Contents").child("Posts").child(postID)
         postRef.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
@@ -91,24 +71,8 @@ class SharePostActivity : AppCompatActivity() {
                 if(snapshot.exists()){
                     val imageuri= snapshot.child("post_image").value.toString()
                     val content= snapshot.child("post_content").value.toString()
-                    if(content=="" || content==null){
-                        content_inshared.visibility=View.GONE
-                    }
-                    else{
-                        content_inshared.text=content
-                        content_inshared.visibility=View.VISIBLE
-                    }
-
-                    if(type=="avatar"){
-                        container_post_avatar_comment.visibility=View.VISIBLE
-                        imagePost.visibility=View.GONE
-                        Picasso.get().load(imageuri).into(post_avatar_comment)
-                    }
-                    else{
-                        Picasso.get().load(imageuri).into(imagePost)
-                        container_post_avatar_comment.visibility= View.GONE
-                        imagePost.visibility=View.VISIBLE
-                    }
+                    content_inshared.text=content
+                    Picasso.get().load(imageuri).into(imagePost)
                 }
             }
         })
@@ -133,7 +97,7 @@ class SharePostActivity : AppCompatActivity() {
             }
         })
     }
-    fun sharePost(type: String){
+    fun sharePost(){
         val shareRef= FirebaseDatabase.getInstance().reference.child("Contents")
             .child("Share Posts")
         val shareMap = HashMap<String, Any>()
@@ -142,10 +106,9 @@ class SharePostActivity : AppCompatActivity() {
         shareMap["shareID"]=idref
         shareMap["postID"]=postID
         shareMap["content"]=edit_content.text.toString()
-        shareMap["type"]=type
+        shareMap["type"]="baiviet"
         shareMap["typeshare"]="friend"
         shareMap["publisher"]=firebaseUser!!.uid
-        shareMap["postOwner"]=publisher
 
 
         val timelineUser= FirebaseDatabase.getInstance().reference.child("Contents")

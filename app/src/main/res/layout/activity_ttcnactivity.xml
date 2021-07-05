@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Models.TTCNActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar_layout_friendList"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/btn_return_fromsetting"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_return_blue" />
+
+            <TextView
+
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:textStyle="bold"
+                android:textColor="#00BCD4"
+                android:text="Trang cá nhân và cài đặt của bạn"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"/>
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar_layout_friendList">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@drawable/canhan2"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trang cá nhân kể câu chuyện về bạn. Bạn có thể chọn nội dung sẽ chia sẻ, chẳng hạn như sở thích, ảnh và thông tin cá nhân như quê quán và người sẽ chia sẻ. Trang cá nhân cũng bao gồm Dòng thời gian, nơi bạn có thể nhìn thấy bài viết của chính mình và những bài viết bạn được gắn thẻ. Cài đặt Dòng thời gian và gắn thẻ sẽ giúp bạn quản lý thẻ cũng như xem xét người có thể thêm và nhìn thấy nội dung trên Dòng thời gian của bạn."
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:layout_marginRight="10dp"
+                />
+        </LinearLayout>
+    </GridLayout>
+
+</RelativeLayout>

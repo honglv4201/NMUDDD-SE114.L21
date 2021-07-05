@@ -21,7 +21,6 @@ import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewMessageActivity
 import com.lamhong.mybook.R
 import kotlinx.android.synthetic.main.fragment_message.view.*
-import java.lang.StringBuilder
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -48,7 +47,6 @@ class MessageFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,15 +57,13 @@ class MessageFragment : Fragment() {
 
         val users = ArrayList<User>()
 
-
-
         val adapter = MessageUsersAdapter(users)
 
         view.rv_message_users.layoutManager = LinearLayoutManager(activity)
 
         view.rv_message_users.adapter = adapter
 
-        val usersmess = HashMap<String,String>()
+        val usersmess = ArrayList<String>()
 
         var senderUid: String? = FirebaseAuth.getInstance().uid
 
@@ -79,7 +75,7 @@ class MessageFragment : Fragment() {
                 usersmess.clear()
                 for (ss in snapshot.children) {
                     val usermess = ss.key.toString()
-                    usersmess.put(usermess,ss.child("lastTime").value.toString())
+                    usersmess.add(usermess)
                 }
             }
         })
@@ -98,14 +94,12 @@ class MessageFragment : Fragment() {
                     user!!.setName(ss.child("fullname").value.toString())
                     user!!.setUid(ss.child("uid").value.toString())
                     for (i in usersmess) {
-                        if (user != null && (senderUid+user.getUid())==i.key) {
-                            user.setTimeChat(i.value)
+                        if (user != null && (senderUid+user.getUid())==i) {
                             users.add(user)
                         }
                         //Toast.makeText(activity,i, Toast.LENGTH_SHORT).show()
                     }
                 }
-                users.sortByDescending { it -> it.getTimeChat() }
                 adapter.notifyDataSetChanged()
             }
         })
