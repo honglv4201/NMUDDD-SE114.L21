@@ -947,7 +947,7 @@ class ChatLogActivity : AppCompatActivity() {
             R.id.chat_color -> {
                 openColorPicker()
             }
-            R.id.chat_call -> {}
+            R.id.chat_call -> {makeAudioCall()}
             R.id.chat_videocall -> {makeVideoCall()}
             R.id.chat_see_profile -> {}
             R.id.chat_nickname -> {}
@@ -1028,6 +1028,12 @@ class ChatLogActivity : AppCompatActivity() {
 
     private val usersListener : UsersListener?= null
 
-
+    private fun makeAudioCall(){
+        var intent  = Intent(applicationContext, OutgoingInvitationActivity::class.java)
+        intent.putExtra("senderInfor", senderInfor)
+        intent.putExtra("receiInfor",receiInfor)
+        intent.putExtra("type", "audio")
+        startActivity(intent)
+    }
 
 }
