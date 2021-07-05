@@ -79,12 +79,19 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                 message.text= recyclerViewModel.getMessageG()
             }
 
-            if (date.day!=date2.day) {
-
-                timestamp.text = dateFormat.format(date)
+            if (date.date!=date2.date) {
+                if (date.date==(date2.date-1)) {
+                    timestamp.text = "Hôm qua"
+                    timestampimage.text = "Hôm qua"
+                }
+                else {
+                    timestamp.text = dateFormat.format(date)
+                    timestampimage.text = dateFormat.format(date)
+                }
             }
             else {
                 timestamp.text = dateFormat2.format(date)
+                timestampimage.text = dateFormat2.format(date)
             }
 
 
@@ -97,6 +104,10 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
         var image = itemView.image_chat_log_group
         var timestamp = itemView.time_chat_receive_group
         var name = itemView.name_group
+        var imageimage = itemView.image_chatlog2_group
+        var image_chat = itemView.image_chat_receive_group
+        var timestamp2 = itemView.time_chat_receive2_group
+        var name2 = itemView.name_group2
 
         fun bind (position: Int) {
             val recyclerViewModel = groupMessageList[position]
@@ -111,14 +122,39 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
             if (recyclerViewModel.getTypeG()=="text") {
                 message.text= recyclerViewModel.getMessageG()
+                //Picasso.get().load(uri).into(image)
+            }
+            else if (recyclerViewModel.getTypeG()=="image") {
+                image_chat.visibility = View.VISIBLE
+                message.visibility = View.GONE
+                timestamp.visibility = View.GONE
+                timestamp2.visibility = View.VISIBLE
+                image.visibility = View.GONE
+                imageimage.visibility = View.VISIBLE
+                name.visibility = View.GONE
+                name2.visibility = View.VISIBLE
+
+
+                Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image_chat)
+                //Picasso.get().load().into(imageimage)
+
             }
 
-            if (date.day!=date2.day) {
+            if (date.date!=date2.date) {
 
-                timestamp.text = dateFormat.format(date)
+                if (date.date==(date2.date-1)) {
+                    timestamp.text = "Hôm qua"
+                    timestamp2.text = "Hôm qua"
+                }
+                else {
+                    timestamp.text = dateFormat.format(date)
+                    timestamp2.text = dateFormat.format(date)
+                }
+
             }
             else {
                 timestamp.text = dateFormat2.format(date)
+                timestamp2.text = dateFormat2.format(date)
             }
 
             FirebaseDatabase.getInstance().reference.child("UserInformation")
@@ -132,6 +168,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                         for (ds in snapshot.children) {
                             val namee = "" + ds.child("fullname").value
                             name.text = namee
+                            name2.text = namee
                         }
                     }
 
