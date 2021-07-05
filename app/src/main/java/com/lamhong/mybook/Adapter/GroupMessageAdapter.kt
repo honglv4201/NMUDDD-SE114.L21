@@ -98,7 +98,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                 Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image)
             }
 
-            if (date.day!=date2.day) {
+            if (date.date!=date2.date) {
                 if (date.date==(date2.date-1)) {
                     timestamp.text = "Hôm qua"
                     timestampimage.text = "Hôm qua"
@@ -158,7 +158,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                 //Picasso.get().load().into(imageimage)
             }
 
-            if (date.day!=date2.day) {
+            if (date.date!=date2.date) {
 
                 if (date.date==(date2.date-1)) {
                     timestamp.text = "Hôm qua"
