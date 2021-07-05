@@ -10,11 +10,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.lamhong.mybook.Adapter.ActivitiesPostAdapter
 import com.lamhong.mybook.Adapter.PostAdapter
+import com.lamhong.mybook.Models.ActivityManager
 import com.lamhong.mybook.Models.Post
 import com.lamhong.mybook.Models.SharePost
 import com.lamhong.mybook.Models.TimelineContent
+import kotlinx.android.synthetic.main.activities_layout.*
 import kotlinx.android.synthetic.main.activity_user_activies.*
+import kotlinx.android.synthetic.main.activity_user_activies.btn_return_fromsavepost
 
 class UserActiviesActivity : AppCompatActivity() {
 
@@ -23,19 +27,39 @@ class UserActiviesActivity : AppCompatActivity() {
     private var avatarList : ArrayList<Post> = ArrayList()
     private var coverImageList : ArrayList<Post> = ArrayList()
     private var shareList: MutableList<SharePost> = ArrayList()
+    private var activityList: ArrayList<ActivityManager> = ArrayList()
+
     private var lstTypeAdapter : List<Int> = ArrayList()
     private var lstIndex : List<Int> = ArrayList()
-    private var imagePostList : List<Post> ?=null
-    private var postAdapter: PostAdapter?=null
+    private var imagePostList : List<Post> = ArrayList()
+    private var postAdapter: ActivitiesPostAdapter?=null
 
-
+    // intent transfer
+    var userAvatar =""
+    var userName=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_activies)
         btn_return_fromsavepost.setOnClickListener{
             finish()
         }
+        //get intent transfer
+        userAvatar= intent.getStringExtra("userAvatar").toString()
+        userName= intent.getStringExtra("userName").toString()
 
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        ShowImagePost1()
+        //recycleview_activities
+        var recycleview1 : RecyclerView
+        recycleview1= findViewById(R.id.recycleview_activities)
+        val linearLayoutManager1 = LinearLayoutManager(this)
+        linearLayoutManager1.stackFromEnd=true
+        linearLayoutManager1.reverseLayout=true
+        recycleview1.layoutManager= linearLayoutManager1
+        postAdapter=  ActivitiesPostAdapter(this, imagePostList as ArrayList<Post> , lstIndex as ArrayList,
+            lstTypeAdapter as ArrayList, shareList as ArrayList , avatarList as ArrayList,
+            coverImageList as ArrayList , activityList as ArrayList, userAvatar, userName )
+        recycleview1.adapter= postAdapter
 
     }
 
@@ -54,10 +78,16 @@ class UserActiviesActivity : AppCompatActivity() {
                     var ind2 = 0
                     var ind3=0
                     var ind4=0
-                    for (s in snapshot.child("ProfileTimeLine")
+                    for (s in snapshot.child("Activities")
                         .child(firebaseUser.uid).children) {
-                        val tl = s.getValue(TimelineContent::class.java)
+                       // val tl = s.getValue(ActivityManager::class.java)
+                        val tl = ActivityManager()
                         tl!!.setPostType(s.child("post_type").value.toString())
+                        tl!!.setId(s.child("id").value.toString())
+                        tl!!.setTimeStamp(s.child("timestamp").value.toString())
+                        tl!!.setActive(s.child("active").value.toString().toBoolean())
+                        tl!!.setType(s.child("type").value.toString())
+                        activityList.add(tl)
                         if (tl!!.getPostType() == "sharepost") {
                             if(snapshot.child("Share Posts").child(tl.getId()).exists()){
                                 var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)

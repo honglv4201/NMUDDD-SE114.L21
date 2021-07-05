@@ -1,5 +1,14 @@
 package com.lamhong.mybook.Utilities
 
+import android.util.Log
+import com.lamhong.mybook.Models.NotificationData
+import com.lamhong.mybook.Models.PushNotification
+import com.lamhong.mybook.Network.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Exception
+
 public class Constants {
 
     companion object {
@@ -41,6 +50,33 @@ public class Constants {
             headers.put(Constants.REMOTE_MSG_CONTENT_TYPE, "application/json")
             return headers
         }
+        private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.postNotification(notification)
+                if(response.isSuccessful){
+                    // Log.d("TAG","Response: ${Gson().toJson(response)}")
+                }else{
+                    // Log.e("TAG",response.errorBody().toString())
+                }
+            }catch (e: Exception){
+                Log.e("TAG", e.toString())
+            }
+        }
+
+        public fun doSendNotify(name : String, token: String, notiContent: String ){
+            val title:String = "Thông báo"
+            val message:String = name +" "+notiContent
+            val recipientToken = token
+
+            PushNotification(
+                NotificationData(title,message),
+                recipientToken
+            ).also {
+                sendNotification(it)
+            }
+        }
+
+
     }
 
 }
