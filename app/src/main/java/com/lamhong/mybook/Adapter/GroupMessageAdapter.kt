@@ -123,9 +123,10 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
         var image = itemView.image_chat_log_group
         var timestamp = itemView.time_chat_receive_group
         var name = itemView.name_group
-        var imageimage = itemView.image_chatlog2
-        var image_chat = itemView.image_chat_receive
-        var timestamp2 = itemView.time_chat_receive
+        var imageimage = itemView.image_chatlog2_group
+        var image_chat = itemView.image_chat_receive_group
+        var timestamp2 = itemView.time_chat_receive2_group
+        var name2 = itemView.name_group2
 
         fun bind (position: Int) {
             val recyclerViewModel = groupMessageList[position]
@@ -149,6 +150,9 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                 timestamp2.visibility = View.VISIBLE
                 image.visibility = View.GONE
                 imageimage.visibility = View.VISIBLE
+                name.visibility = View.GONE
+                name2.visibility = View.VISIBLE
+
 
                 Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image_chat)
                 //Picasso.get().load().into(imageimage)
@@ -158,7 +162,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
                 if (date.date==(date2.date-1)) {
                     timestamp.text = "Hôm qua"
-                    timestamp2.text = "Hôm qua"
+                    //timestamp2.text = "Hôm qua"
                 }
                 else {
                     timestamp.text = dateFormat.format(date)
@@ -182,6 +186,7 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
                         for (ds in snapshot.children) {
                             val namee = "" + ds.child("fullname").value
                             name.text = namee
+                            name2.text = namee
                         }
                     }
 
