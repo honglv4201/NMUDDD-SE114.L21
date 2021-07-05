@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Models.BMActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar_layout_friendList"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/btn_return_fromsetting"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icon_return_blue" />
+
+            <TextView
+
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:textStyle="bold"
+                android:textColor="#00BCD4"
+                android:text="Quyền riêng tư của bạn"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"/>
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar_layout_friendList">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@drawable/baomat2"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bạn có thể sử dụng tính năng Kiểm tra quyền riêng tư và xem lại, điều chỉnh phần cài đặt của mình để đảm bảo bạn chỉ chia sẻ với những người mình muốn. Để chắc chắn bạn tiếp tục chia sẻ với những người mình muốn, bạn nên thường xuyên kiểm tra xem thông tin và bài viết trên trang cá nhân của mình có đối tượng là ai. Với lối tắt quyền riêng tư, bạn có thể truy cập nhanh phần cài đặt quyền riêng tư."
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:layout_marginRight="10dp"
+                />
+        </LinearLayout>
+    </GridLayout>
+
+</RelativeLayout>

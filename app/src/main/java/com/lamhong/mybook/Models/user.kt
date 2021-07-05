@@ -1,15 +1,10 @@
-package com.lamhong.mybook.Models
+    package com.lamhong.mybook.Models
 
-import java.io.Serializable
-
-
-    class User : Serializable {
+class User {
     private var fullname : String=""
     private var email: String=""
     private var uid: String=""
     private var avatar : String=""
-    private var token : String=""
-        private var timeChat : String  = ""
   //  private var imageUrl : String=""
     constructor()
     constructor( fullname : String,email: String, uid: String , avatar : String){
@@ -43,18 +38,6 @@ import java.io.Serializable
     fun setUid(uid : String){
         this.uid=uid
     }
-    fun getToken():String{
-        return token
-    }
-    fun setToken(token :String ){
-        this.token = token
-    }
-        fun getTimeChat():String{
-            return timeChat
-        }
-        fun setTimeChat(timeChat :String ){
-            this.timeChat =timeChat
-        }
 //    fun setImageurl(imageUrl: String){
 //        this.imageUrl=imageUrl
 //    }

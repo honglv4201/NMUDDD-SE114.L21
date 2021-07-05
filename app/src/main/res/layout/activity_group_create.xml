@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/message_new_user"
-                android:text="Tạo nhóm mới"
+                android:text="New Group"
                 android:layout_alignParentLeft="true"
                 android:textSize="25sp"
                 android:textStyle="bold"/>
@@ -40,7 +40,7 @@
         android:layout_height="100dp"
         android:layout_below="@id/appbar_layout_create_group"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/sontung" />
+        android:src="@drawable/ic_group" />
 
     <EditText
         android:id="@+id/groupTitleEt"
@@ -50,7 +50,7 @@
         android:background="#eee"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:hint="Tên nhóm"/>
+        android:hint="Group Title"/>
 
     <EditText
         android:id="@+id/groupDescriptionEt"
@@ -63,7 +63,7 @@
         android:background="#eee"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:hint="Mô tả"/>
+        android:hint="Group Description"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"

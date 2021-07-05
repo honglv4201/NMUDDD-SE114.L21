@@ -1,6 +1,5 @@
 package com.lamhong.mybook.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Models.GroupMessage
 import com.lamhong.mybook.R
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_receive_message.view.*
 import kotlinx.android.synthetic.main.row_group_chat_left.view.*
 import kotlinx.android.synthetic.main.row_group_chat_right.view.*
-import kotlinx.android.synthetic.main.row_group_chat_right.view.message
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>) :RecyclerView.Adapter<RecyclerView.ViewHolder> () {
@@ -66,11 +61,6 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
         var message = itemView.message
         var timestamp = itemView.time_chat_sent
-        var image = itemView.image_chat_sent
-        var timestampimage = itemView.time_chat_sent2_group
-
-
-
 
 
         fun bind (position: Int) {
@@ -83,34 +73,18 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
             val currenttime = System.currentTimeMillis()
             val date2 = Date(currenttime)
 
-
             val senderID = recyclerViewModel.getsenderIDG()
 
             if (recyclerViewModel.getTypeG()=="text") {
                 message.text= recyclerViewModel.getMessageG()
             }
-            else if (recyclerViewModel.getTypeG()=="image") {
-                image.visibility = View.VISIBLE
-                message.visibility = View.GONE
-                timestamp.visibility = View.GONE
-                timestampimage.visibility = View.VISIBLE
-
-                Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image)
-            }
 
             if (date.day!=date2.day) {
-                if (date.date==(date2.date-1)) {
-                    timestamp.text = "Hôm qua"
-                    timestampimage.text = "Hôm qua"
-                }
-                else {
-                    timestamp.text = dateFormat.format(date)
-                    timestampimage.text = dateFormat.format(date)
-                }
+
+                timestamp.text = dateFormat.format(date)
             }
             else {
                 timestamp.text = dateFormat2.format(date)
-                timestampimage.text = dateFormat2.format(date)
             }
 
 
@@ -123,9 +97,6 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
         var image = itemView.image_chat_log_group
         var timestamp = itemView.time_chat_receive_group
         var name = itemView.name_group
-        var imageimage = itemView.image_chatlog2
-        var image_chat = itemView.image_chat_receive
-        var timestamp2 = itemView.time_chat_receive
 
         fun bind (position: Int) {
             val recyclerViewModel = groupMessageList[position]
@@ -140,35 +111,14 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
             if (recyclerViewModel.getTypeG()=="text") {
                 message.text= recyclerViewModel.getMessageG()
-                //Picasso.get().load(uri).into(image)
-            }
-            else if (recyclerViewModel.getTypeG()=="image") {
-                image_chat.visibility = View.VISIBLE
-                message.visibility = View.GONE
-                timestamp.visibility = View.GONE
-                timestamp2.visibility = View.VISIBLE
-                image.visibility = View.GONE
-                imageimage.visibility = View.VISIBLE
-
-                Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image_chat)
-                //Picasso.get().load().into(imageimage)
             }
 
             if (date.day!=date2.day) {
 
-                if (date.date==(date2.date-1)) {
-                    timestamp.text = "Hôm qua"
-                    timestamp2.text = "Hôm qua"
-                }
-                else {
-                    timestamp.text = dateFormat.format(date)
-                    timestamp2.text = dateFormat.format(date)
-                }
+                timestamp.text = dateFormat.format(date)
             }
-
             else {
                 timestamp.text = dateFormat2.format(date)
-                timestamp2.text = dateFormat2.format(date)
             }
 
             FirebaseDatabase.getInstance().reference.child("UserInformation")
