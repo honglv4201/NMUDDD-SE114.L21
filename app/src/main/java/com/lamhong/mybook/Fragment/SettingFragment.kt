@@ -22,8 +22,10 @@ import com.lamhong.mybook.*
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.Models.UserInfor
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activities_layout.*
 import kotlinx.android.synthetic.main.activity_profile_editting.*
 import kotlinx.android.synthetic.main.fragment_setting.*
+import kotlinx.android.synthetic.main.fragment_setting.avatar
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 import kotlinx.coroutines.Dispatchers.Main
 
@@ -51,7 +53,9 @@ class SettingFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
+    // intent transfer
+    var userAvatar1 =""
+    var userName1=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,7 +65,9 @@ class SettingFragment : Fragment() {
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
         view.btn_movetoFriendList.setOnClickListener{
-            startActivity(Intent(context, FriendListActivity::class.java))
+            val friendListIntent= Intent(context, FriendListActivity::class.java)
+            friendListIntent.putExtra("userID", firebaseUser.uid)
+            this?.startActivity(friendListIntent)
         }
         view.btn_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -71,7 +77,10 @@ class SettingFragment : Fragment() {
             startActivity(Intent(context, PrivateActivity::class.java))
         }
         view.btn_movetoUserActivity.setOnClickListener{
-            startActivity(Intent(context, UserActiviesActivity::class.java))
+            val acIntent = Intent(context, UserActiviesActivity::class.java)
+            acIntent.putExtra("userAvatar", userAvatar1  )
+            acIntent.putExtra("userName", userName1)
+            startActivity(acIntent)
         }
         view.btn_movetoSavePost.setOnClickListener{
             startActivity(Intent(context, UserSavePostActivity::class.java))
@@ -125,8 +134,15 @@ class SettingFragment : Fragment() {
                 if(snapshot.exists()){
                     val curUser = snapshot.getValue(User::class.java)
                     curUser!!.setName(snapshot.child("fullname").value.toString())
+                    if(userName!=null)
                     userName.text=curUser!!.getName()
+
+                    if(avatar!=null)
                     Picasso.get().load(curUser!!.getAvatar()).into(avatar)
+
+                    //prepare value for intent
+                    userName1= curUser!!.getName()
+                    userAvatar1=curUser!!.getAvatar()
 
 
                 }
@@ -146,9 +162,9 @@ class SettingFragment : Fragment() {
                     val user : UserInfor= UserInfor()
                     user!!.setBio(snapshot.child("bio").value.toString())
 
-                    Picasso.get().load(snapshot.child("coverImage").value.toString()).placeholder(R.drawable.cty)
+                    if(coverBlur!=null)
+                    Picasso.get().load(snapshot.child("coverImage").value.toString()).placeholder(R.color.white)
                         .into(coverBlur)
-                    coverBlur.setBlur(2)
 
                 }
             }
