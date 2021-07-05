@@ -7,18 +7,15 @@ class SharePost {
     private var type : String = ""
     private var typeshare : String = ""
     private var publisher: String = ""
-    private var postOwner: String = ""
 
     constructor()
-    constructor(shareID: String, postID: String, content: String, type: String, typeshare: String , publisher: String
-            , postOwner : String) {
+    constructor(shareID: String, postID: String, content: String, type: String, typeshare: String , publisher: String) {
         this.shareID = shareID
         this.postID = postID
         this.content = content
         this.type = type
         this.typeshare = typeshare
         this.publisher=publisher
-        this.postOwner= postOwner
     }
     fun getShareID() : String {
         return shareID
@@ -41,7 +38,7 @@ class SharePost {
     fun getType() : String{
         return type
     }
-    fun setType(type: String){
+    fun setType(typeshare: String){
         this.type=type
     }
     fun getTypeShare(): String{
@@ -55,11 +52,5 @@ class SharePost {
     }
     fun setPubliher (publisher: String){
         this.publisher= publisher
-    }
-    fun getPostOwner(): String{
-        return postOwner
-    }
-    fun setPostOwner(postOwner: String){
-        this.postOwner= postOwner
     }
 }

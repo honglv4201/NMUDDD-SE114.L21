@@ -185,7 +185,7 @@
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hộp thư hỗ trợ"
+            android:text="Hộp thư phản hồi"
             android:textStyle="bold"
             android:textSize="14dp"
             />
@@ -204,7 +204,7 @@
         </RelativeLayout>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/btnwarning"
+        android:id="@+id/btnrules"
         android:layout_width="match_parent"
         android:layout_marginTop="260dp"
         android:layout_height="wrap_content"
@@ -226,7 +226,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/warning"
+                android:src="@drawable/rules"
                 android:layout_marginLeft="50dp"
                 android:translationZ="3dp"
                 />
@@ -238,7 +238,7 @@
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Báo cáo sự cố"
+            android:text="Điều khoản dịch vụ"
             android:textStyle="bold"
             android:textSize="14dp"
             />

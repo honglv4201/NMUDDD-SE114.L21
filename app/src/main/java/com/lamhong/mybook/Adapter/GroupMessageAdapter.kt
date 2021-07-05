@@ -1,6 +1,5 @@
 package com.lamhong.mybook.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lamhong.mybook.Models.GroupMessage
 import com.lamhong.mybook.R
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_receive_message.view.*
 import kotlinx.android.synthetic.main.row_group_chat_left.view.*
 import kotlinx.android.synthetic.main.row_group_chat_right.view.*
-import kotlinx.android.synthetic.main.row_group_chat_right.view.message
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>) :RecyclerView.Adapter<RecyclerView.ViewHolder> () {
@@ -66,11 +61,6 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
         var message = itemView.message
         var timestamp = itemView.time_chat_sent
-        var image = itemView.image_chat_sent
-        var timestampimage = itemView.time_chat_sent2_group
-
-
-
 
 
         fun bind (position: Int) {
@@ -83,19 +73,10 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
             val currenttime = System.currentTimeMillis()
             val date2 = Date(currenttime)
 
-
             val senderID = recyclerViewModel.getsenderIDG()
 
             if (recyclerViewModel.getTypeG()=="text") {
                 message.text= recyclerViewModel.getMessageG()
-            }
-            else if (recyclerViewModel.getTypeG()=="image") {
-                image.visibility = View.VISIBLE
-                message.visibility = View.GONE
-                timestamp.visibility = View.GONE
-                timestampimage.visibility = View.VISIBLE
-
-                Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image)
             }
 
             if (date.date!=date2.date) {
@@ -156,20 +137,21 @@ class GroupMessageAdapter(private val groupMessageList: ArrayList<GroupMessage>)
 
                 Picasso.get().load(recyclerViewModel.getMessageG()).placeholder(R.drawable.loading_image).into(image_chat)
                 //Picasso.get().load().into(imageimage)
+
             }
 
             if (date.date!=date2.date) {
 
                 if (date.date==(date2.date-1)) {
                     timestamp.text = "Hôm qua"
-                    //timestamp2.text = "Hôm qua"
+                    timestamp2.text = "Hôm qua"
                 }
                 else {
                     timestamp.text = dateFormat.format(date)
                     timestamp2.text = dateFormat.format(date)
                 }
-            }
 
+            }
             else {
                 timestamp.text = dateFormat2.format(date)
                 timestamp2.text = dateFormat2.format(date)

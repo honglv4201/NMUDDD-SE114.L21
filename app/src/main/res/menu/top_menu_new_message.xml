@@ -4,11 +4,9 @@
 
     <item
         android:id="@+id/new_message_search"
-        android:icon="@drawable/search_n"
+        android:icon="@drawable/ic_search_message"
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
-
-
 
 </menu>
