@@ -128,7 +128,7 @@ class SettingFragment : Fragment() {
 
                     val userInfor: UserInfor = UserInfor()
                     userInfor!!.setBio(snapshot.child("bio").value.toString())
-                    describe.text=userInfor!!.getBio()
+                   // describe.text=userInfor!!.getBio()
                 }
             }
 

@@ -27,6 +27,7 @@ import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.NewSearchActivity
 import com.lamhong.mybook.Post_Activity
 import com.lamhong.mybook.R
+import kotlinx.android.synthetic.main.activities_layout.*
 import kotlinx.android.synthetic.main.fragment_notify.*
 import kotlinx.android.synthetic.main.fragment_z_home.*
 import kotlinx.android.synthetic.main.fragment_z_home.view.*
@@ -46,7 +47,8 @@ class zHome : Fragment() {
     lateinit var currentUser : FirebaseUser
 
     private var postAdapter : PostAdapter?=null
-    private var followingList : MutableList<Post>?=null
+    private var followingList : MutableList<String>?=null
+    private var friendList : MutableList<String>?=null
     private var postList : MutableList<Post>?=null
     private var avatarList : ArrayList<Post> = ArrayList()
     private var coverImageList : ArrayList<Post> = ArrayList()
@@ -88,6 +90,7 @@ class zHome : Fragment() {
 
 
         checkFollowing()
+        getFriendList()
         //(postList as ArrayList).add(getPost("-Mbg2gLimdhyWjSh0Tc7"))
         retrievePosts1()
 
@@ -124,13 +127,35 @@ class zHome : Fragment() {
 
         val followRef = FirebaseDatabase.getInstance().reference
             .child("Friends").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("friendList")
+            .child("followingList")
         followRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     (followingList as ArrayList<String>).clear()
                     for (s in snapshot.children){
                         s.key?.let { (followingList as ArrayList<String>).add(it) }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
+    private fun getFriendList() {
+        friendList=ArrayList()
+
+        val followRef = FirebaseDatabase.getInstance().reference
+            .child("Friends").child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .child("friendList")
+        followRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    (friendList as ArrayList<String>).clear()
+                    for (s in snapshot.children){
+                        if(s.value=="friend")
+                        s.key?.let { (friendList as ArrayList<String>).add(it) }
                     }
                 }
             }
@@ -166,6 +191,7 @@ class zHome : Fragment() {
                         val post = s.getValue<TimelineContent>(TimelineContent::class.java)
                         lstUserPostTimeline.add(post!!)
                     }
+                    postAdapter!!.notifyDataSetChanged()
 
                 }
             }
@@ -176,7 +202,7 @@ class zHome : Fragment() {
 
     private fun retrievePosts1(){
         val postRef= FirebaseDatabase.getInstance().reference.child("Contents")
-        postRef.addValueEventListener(object:  ValueEventListener{
+        postRef.addListenerForSingleValueEvent(object:  ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -197,14 +223,49 @@ class zHome : Fragment() {
 
                             if(snapshot.child("Share Posts").child(tl.getId()).child("type").exists()){
                                 var sharePost = snapshot.child("Share Posts").child(tl.getId()).getValue<SharePost>(SharePost::class.java)
-                                shareList!!.add(sharePost!!)
-                                sharePost.setType(snapshot.child("Share Posts").child(tl.getId()).child("type").value.toString())
-                                sharePost.setPostOwner(snapshot.child("Share Posts").child(tl.getId()).child("postOwner").value.toString())
 
-                                (shareListID as ArrayList).add(tl.getId())
-                                (lstTypeAdapter as ArrayList).add(1)
-                                (lstIndex as ArrayList).add(ind1)
-                                ind1 += 1
+                                sharePost!!.setType(snapshot.child("Share Posts").child(tl.getId()).child("type").value.toString())
+                                sharePost!!.setPostOwner(snapshot.child("Share Posts").child(tl.getId()).child("postOwner").value.toString())
+                                sharePost!!.setPubliher(snapshot.child("Share Posts").child(tl.getId()).child("publisher").value.toString())
+
+                                // set private to post
+                                var ch1= false
+                                for(us in followingList as ArrayList){
+                                    if(sharePost.getPublisher()==us){
+                                        ch1=true
+                                        break
+                                    }
+                                }
+                                var ch2= false
+                                for(us in friendList as ArrayList){
+                                    if(sharePost.getPublisher()==us){
+                                        ch2=true
+                                        break
+                                    }
+                                }
+
+
+
+                                if(ch1 && snapshot.child("User")
+                                        .child(snapshot.child("Share Posts").child(tl.getId()).child("publisher").value.toString())
+                                        .child("post").value =="public" && !snapshot.child("Delete").child(tl.getId()).exists()){
+                                    shareList!!.add(sharePost!!)
+                                    (shareListID as ArrayList).add(tl.getId())
+                                    (lstTypeAdapter as ArrayList).add(1)
+                                    (lstIndex as ArrayList).add(ind1)
+                                    ind1 += 1
+                                }
+                                else if(ch2 && snapshot.child("User")
+                                        .child(snapshot.child("Share Posts").child(tl.getId()).child("publisher").value.toString())
+                                        .child("post").value =="friend" && !snapshot.child("Delete").child(tl.getId()).exists()){
+                                    shareList!!.add(sharePost!!)
+                                    (shareListID as ArrayList).add(tl.getId())
+                                    (lstTypeAdapter as ArrayList).add(1)
+                                    (lstIndex as ArrayList).add(ind1)
+                                    ind1 += 1
+                                }
+
+
                             }
 
                         } else if (tl!!.getPostType() == "post") {
@@ -212,11 +273,40 @@ class zHome : Fragment() {
 
                             val post = snapshot.child("Posts").child(tl.getId()).getValue(Post::class.java)
                             post!!.setpostContent(snapshot.child("Posts").child(tl.getId()).child("post_content").value.toString())
-                            postList!!.add(post!!)
-                            (postListID as ArrayList).add(tl.getId())
-                            (lstTypeAdapter as ArrayList).add(0)
-                            (lstIndex as ArrayList).add(ind2)
-                            ind2 += 1
+
+                            // set private to post
+                            var ch1= false
+                            for(us in followingList as ArrayList){
+                                if(post.getpublisher()==us){
+                                    ch1=true
+                                    break
+                                }
+                            }
+                            var ch2= false
+                            for(us in friendList as ArrayList){
+                                if(post.getpublisher()==us){
+                                    ch2=true
+                                    break
+                                }
+                            }
+                            if(ch1 && snapshot.child("User")
+                                    .child(snapshot.child("Posts").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="public" && !snapshot.child("Delete").child(tl.getId()).exists()){
+                                postList!!.add(post!!)
+                                (postListID as ArrayList).add(tl.getId())
+                                (lstTypeAdapter as ArrayList).add(0)
+                                (lstIndex as ArrayList).add(ind2)
+                                ind2 += 1
+                            }
+                            else if(ch2 && snapshot.child("User")
+                                    .child(snapshot.child("Posts").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="friend" && !snapshot.child("Delete").child(tl.getId()).exists()){
+                                postList!!.add(post!!)
+                                (postListID as ArrayList).add(tl.getId())
+                                (lstTypeAdapter as ArrayList).add(0)
+                                (lstIndex as ArrayList).add(ind2)
+                                ind2 += 1
+                            }
                         }
                         else if (tl!!.getPostType()=="changeavatar"){
                             val avatarPost = snapshot.child("AvatarPost").child(tl.getId()).getValue(Post::class.java)
@@ -224,18 +314,79 @@ class zHome : Fragment() {
                                 .value.toString())
 
 
-                            avatarList!!.add(avatarPost!!)
-                            (lstTypeAdapter as ArrayList).add(2)
-                            (lstIndex as ArrayList).add(ind3)
-                            ind3+=1
+
+                            // set private to post
+                            var ch1= false
+                            for(us in followingList as ArrayList){
+                                if(avatarPost.getpublisher()==us){
+                                    ch1=true
+                                    break
+                                }
+                            }
+                            var ch2= false
+                            for(us in friendList as ArrayList){
+                                if(avatarPost.getpublisher()==us){
+                                    ch2=true
+                                    break
+                                }
+                            }
+                            if(ch1 && snapshot.child("User")
+                                    .child(snapshot.child("AvatarPost").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="public" && !snapshot.child("Delete").child(tl.getId()).exists()){
+
+                                avatarList!!.add(avatarPost!!)
+                                (lstTypeAdapter as ArrayList).add(2)
+                                (lstIndex as ArrayList).add(ind3)
+                                ind3+=1
+                            }
+                            else if(ch2 && snapshot.child("User")
+                                    .child(snapshot.child("AvatarPost").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="friend" && !snapshot.child("Delete").child(tl.getId()).exists()){
+
+                                avatarList!!.add(avatarPost!!)
+                                (lstTypeAdapter as ArrayList).add(2)
+                                (lstIndex as ArrayList).add(ind3)
+                                ind3+=1
+                            }
                         }
                         else if(tl!!.getPostType()=="changecover"){
                             val coverImagePost = snapshot.child("CoverPost").child(tl.getId()).getValue(Post::class.java)
                             coverImagePost!!.setpostContent(snapshot.child("CoverPost").child(tl.getId()).child("post_content").value.toString())
-                            coverImageList!!.add(coverImagePost!!)
-                            (lstTypeAdapter as ArrayList).add(3)
-                            (lstIndex as ArrayList).add(ind4)
-                            ind4+=1
+
+
+                            // set private to post
+                            var ch1= false
+                            for(us in followingList as ArrayList){
+                                if(coverImagePost.getpublisher()==us){
+                                    ch1=true
+                                    break
+                                }
+                            }
+                            var ch2= false
+                            for(us in friendList as ArrayList){
+                                if(coverImagePost.getpublisher()==us){
+                                    ch2=true
+                                    break
+                                }
+                            }
+                            if(ch1 && snapshot.child("User")
+                                    .child(snapshot.child("CoverPost").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="public" && !snapshot.child("Delete").child(tl.getId()).exists()){
+
+                                coverImageList!!.add(coverImagePost!!)
+                                (lstTypeAdapter as ArrayList).add(3)
+                                (lstIndex as ArrayList).add(ind4)
+                                ind4+=1
+                            }
+                           else if(ch2 && snapshot.child("User")
+                                    .child(snapshot.child("CoverPost").child(tl.getId()).child("publisher").value.toString())
+                                    .child("post").value =="friend" && !snapshot.child("Delete").child(tl.getId()).exists()){
+
+                                coverImageList!!.add(coverImagePost!!)
+                                (lstTypeAdapter as ArrayList).add(3)
+                                (lstIndex as ArrayList).add(ind4)
+                                ind4+=1
+                            }
                         }
                       //  getPostAndShare()
 

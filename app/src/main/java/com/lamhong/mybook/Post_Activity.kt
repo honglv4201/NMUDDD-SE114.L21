@@ -86,7 +86,7 @@ class   Post_Activity : AppCompatActivity() {
     private fun getFollowinglist(){
         val ref = FirebaseDatabase.getInstance().reference.child("Friends")
             .child(FirebaseAuth.getInstance().currentUser.uid)
-            .child("friendList")
+            .child("followerList")
         ref.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
@@ -152,7 +152,7 @@ class   Post_Activity : AppCompatActivity() {
                 pMap["post_type"]="post"
                 pMap["id"]=nunu
                 pMap["active"]=true
-                timelineUser.push().setValue(pMap)
+                timelineUser.child(nunu).setValue(pMap)
 
                 // getFollowinglist()
 
@@ -165,13 +165,13 @@ class   Post_Activity : AppCompatActivity() {
                     postMap["id"]=nunu
                     postMap["active"]=true
 
-                    timelineRef.push().setValue(postMap)
+                    timelineRef.child(nunu).setValue(postMap)
 
                 }
 
-                val intent = Intent(this@Post_Activity, zHome::class.java)
-                Toast.makeText(this, "Đã cập nhật thông tin !!", Toast.LENGTH_LONG).show()
-                startActivity(intent)
+                //val intent = Intent(this@Post_Activity, zHome::class.java)
+                Toast.makeText(this, "Đã đăng bài thành công !!", Toast.LENGTH_LONG).show()
+              //  startActivity(intent)
                 finish()
                 progressDialog.dismiss()
 

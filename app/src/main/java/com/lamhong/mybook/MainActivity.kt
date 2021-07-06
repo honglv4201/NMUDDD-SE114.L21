@@ -3,7 +3,13 @@ package com.lamhong.mybook
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+
 import androidx.appcompat.app.AlertDialog
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -85,6 +91,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            moveFragment(zHome())
+        }, 3500)
+        Handler(Looper.getMainLooper()).postDelayed({
+            moveFragment(zHome())
+        }, 2000)
+        //moveFragment(zHome())
+
     }
 
 
