@@ -23,10 +23,11 @@
         android:theme="@style/Theme.MyBook"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".DestinationPostActivity"></activity>
+        <activity android:name=".ChangeNickNameActivity"></activity>
+        <activity android:name=".DestinationPostActivity" />
         <activity android:name=".FullScreenPictureActivity" />
         <activity android:name=".CommentShareActivity" />
-        <activity android:name=".PrivateActivity"></activity>
+        <activity android:name=".PrivateActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity
             android:name=".OutgoingInvitationActivity"

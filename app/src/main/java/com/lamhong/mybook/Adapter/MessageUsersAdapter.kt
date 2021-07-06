@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -17,6 +18,7 @@ import com.lamhong.mybook.Models.Message
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_change_nick_name.*
 import kotlinx.android.synthetic.main.message_users_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -190,6 +192,20 @@ class MessageUsersAdapter(private val messageUsersList: ArrayList<User>) : Recyc
             v.context.startActivity(intent)
         }
 
+        FirebaseDatabase.getInstance().reference.child("chats")
+            .child(senderRoom)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child("receiver_nickname").value != null)
+                        holder.textView.text = snapshot.child("receiver_nickname").value.toString()
+                }
+
+            })
+
     }
 
     class MessageUsersViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -199,4 +215,6 @@ class MessageUsersAdapter(private val messageUsersList: ArrayList<User>) : Recyc
         var timeMess = itemView.time_message
         var tick = itemView.tick
     }
+
+
 }

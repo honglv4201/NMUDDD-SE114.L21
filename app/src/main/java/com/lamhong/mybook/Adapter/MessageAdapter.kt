@@ -3,6 +3,7 @@ package com.lamhong.mybook.Adapter
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.*
@@ -12,6 +13,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.collection.LLRBNode
 import com.lamhong.mybook.Models.Message
 import com.lamhong.mybook.R
 import com.squareup.picasso.Picasso
@@ -127,7 +129,6 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                     .child("color")
                     .addValueEventListener(object : ValueEventListener {
                         override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
                         }
 
                         override fun onDataChange(snapshot: DataSnapshot) {
@@ -168,6 +169,12 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
 
                     })
 
+            }
+            else if (type == "delete") {
+                message.text= recyclerViewModel.getMessage()
+                message.setTypeface(null,Typeface.ITALIC)
+                message.setBackgroundResource(R.drawable.bg_delete_text)
+                message.setTextColor(Color.BLACK)
             }
 
 //            if (recyclerViewModel.getMessage() == "[Photo]") {
@@ -349,7 +356,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                         //ss.ref.removeValue()
                         val hashMap = hashMapOf<String, Any?>()
                         hashMap["message"] = "Bạn đã gỡ một tin nhắn"
-                        hashMap["type"] = "text"
+                        hashMap["type"] = "delete"
                         ss.ref.updateChildren(hashMap)
 
                         val lastMess = hashMapOf<String, Any?>()
@@ -409,7 +416,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                         //ss.ref.removeValue()
                         val hashMap = hashMapOf<String, Any?>()
                         hashMap["message"] = "Tin nhắn này đã được gỡ"
-                        hashMap["type"] = "text"
+                        hashMap["type"] = "delete"
                         ss.ref.updateChildren(hashMap)
 
                         if (position==(messageList.size-1)) {
@@ -479,7 +486,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
                         //ss.ref.removeValue()
                         val hashMap = hashMapOf<String, Any?>()
                         hashMap["message"] = "Bạn đã xóa một tin nhắn"
-                        hashMap["type"] = "text"
+                        hashMap["type"] = "delete"
                         ss.ref.updateChildren(hashMap)
 
                         if (position==(messageList.size-1)) {
@@ -567,6 +574,13 @@ class MessageAdapter(private val messageList: ArrayList<Message>, private val se
             else if (type == "text") {
                 message.text= recyclerViewModel.getMessage()
                 Picasso.get().load(uri).into(image)
+            }
+            else if (type == "delete") {
+                message.setTypeface(null,Typeface.ITALIC)
+                message.text= recyclerViewModel.getMessage()
+                Picasso.get().load(uri).into(image)
+                message.setBackgroundResource(R.drawable.bg_delete_text)
+                message.setTextColor(Color.BLACK)
             }
 
 
