@@ -24,6 +24,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity android:name=".ChangeNickNameActivity"></activity>
+        <activity android:name=".DoiTenActivity"></activity>
+        <activity android:name=".ThaydoimatkhauActivity" />
+        <activity android:name=".TKMKActivity" />
+        <activity android:name=".TTCNActivity" />
+        <activity android:name=".TTTGActivity" />
+        <activity android:name=".RulesActivity" />
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".BMActivity" />
         <activity android:name=".DestinationPostActivity" />
         <activity android:name=".FullScreenPictureActivity" />
         <activity android:name=".CommentShareActivity" />

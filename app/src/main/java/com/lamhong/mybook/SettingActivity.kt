@@ -1,5 +1,6 @@
 package com.lamhong.mybook
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -15,21 +16,20 @@ class SettingActivity : AppCompatActivity() {
         btn_return_fromsetting.setOnClickListener{
             this.finish()
         }
+        btnName.setOnClickListener {
+            startActivity(Intent(this@SettingActivity, DoiTenActivity::class.java))
+        }
+        btnrules.setOnClickListener {
+            startActivity(Intent(this@SettingActivity, RulesActivity::class.java))
+        }
+        btnHelp.setOnClickListener {
+            startActivity(Intent(this@SettingActivity, HelpActivity::class.java))
+        }
+        btnTTTG.setOnClickListener {
+            startActivity(Intent(this@SettingActivity, TTTGActivity::class.java))
+        }
         btnPassword.setOnClickListener {
-            val user : FirebaseUser = FirebaseAuth.getInstance().currentUser
-                FirebaseAuth.getInstance().sendPasswordResetEmail(user.email)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful){
-                            Toast.makeText(
-                                this@SettingActivity,
-                                "Email sent successfully to reset your password",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }else{
-                            Toast.makeText(this@SettingActivity, task.exception!!.message.toString(), Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
+            startActivity(Intent(this@SettingActivity, ThaydoimatkhauActivity::class.java))
         }
     }
 }
