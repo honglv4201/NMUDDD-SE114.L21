@@ -23,6 +23,7 @@ import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.Models.UserInfor
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activities_layout.*
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_profile_editting.*
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.avatar
@@ -176,6 +177,27 @@ class SettingFragment : Fragment() {
     }
 
     private fun setNumberProfile() {
+        val followList= FirebaseDatabase.getInstance().reference
+            .child("Friends").child(firebaseUser.uid)
+            .child("followerList")
+
+        followList.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+
+
+                    numFollow?.text=snapshot.childrenCount.toString()
+
+                }
+                else {
+                    numFollow?.text="0"
+                }
+            }
+        })
         val ref= FirebaseDatabase.getInstance().reference
             .child("Friends").child(firebaseUser.uid).child("friendList")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -185,7 +207,16 @@ class SettingFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     if(NumFriends!=null)
-                    NumFriends.text=snapshot.childrenCount.toString()
+                    {
+                        var sum=0
+                        for (s in snapshot.children){
+                            if(s.value.toString()=="friend"){
+                                sum+=1
+                            }
+                        }
+                        NumFriends?.text=sum.toString()
+                    }
+
                 }
                 else{
                     NumFriends.text="0"
