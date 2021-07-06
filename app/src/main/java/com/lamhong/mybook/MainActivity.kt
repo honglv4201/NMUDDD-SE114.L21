@@ -3,9 +3,13 @@ package com.lamhong.mybook
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+
+import androidx.appcompat.app.AlertDialog
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -104,6 +108,16 @@ class MainActivity : AppCompatActivity() {
         fragmentselect.replace(R.id.frameLayout, fragment)
         fragmentselect.commit()
     }
-
+    override fun onBackPressed() {
+        val alert = AlertDialog.Builder(this)
+        alert.setTitle("Xác nhận")
+        alert.setIcon(R.drawable.ic_exit)
+        alert.setMessage("Bạn muốn thoát khỏi ứng dụng ?")
+        alert.setCancelable(false)
+        alert.setNegativeButton("Thoát") { dialog, which -> finish() }
+        alert.setPositiveButton("Không") { dialog, which -> }
+        val alertDialog = alert.create()
+        alertDialog.show()
+    }
 
 }
