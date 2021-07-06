@@ -23,6 +23,7 @@
         android:theme="@style/Theme.MyBook"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".ChangeNickNameActivity"></activity>
         <activity android:name=".DoiTenActivity"></activity>
         <activity android:name=".ThaydoimatkhauActivity" />
         <activity android:name=".TKMKActivity" />
