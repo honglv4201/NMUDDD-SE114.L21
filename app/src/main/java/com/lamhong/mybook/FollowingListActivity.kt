@@ -25,12 +25,15 @@ class FollowingListActivity : AppCompatActivity() {
     private var type: String = ""
     private var lstFollowList : ArrayList<String> = ArrayList()
     private var lstFollowmeList : ArrayList<String> = ArrayList()
+    private var lstBlockList : ArrayList<String> = ArrayList()
 
     private var lstFollowLists : ArrayList<String> = ArrayList()
     private var lstFollowmeLists : ArrayList<String> = ArrayList()
+    private var lstBlockLists : ArrayList<String> = ArrayList()
 
     private var lstFollowListAdapter : FriendAdapter?=null
     private var lstFollowmeListAdapter : FriendAdapter?=null
+    private var lstBlockListAdapter : FriendAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class FollowingListActivity : AppCompatActivity() {
 
         lstFollowmeListAdapter= this?.let { FriendAdapter(it, lstFollowmeList as ArrayList, lstFollowmeLists as ArrayList,userID  ) }
         lstFollowListAdapter= this?.let { FriendAdapter(it, lstFollowList as ArrayList, lstFollowLists as ArrayList,userID  ) }
+        lstBlockListAdapter= this?.let { FriendAdapter(it, lstBlockList as ArrayList, lstBlockLists as ArrayList,userID  ) }
 
 
         // set if user choosen
@@ -107,7 +111,7 @@ class FollowingListActivity : AppCompatActivity() {
             //recyclerView.layoutManager= linearLayoutManager
             //recyclerView.adapter= lst_confirmFriendAdapter
             // recyclerView1.visibility= View.GONE
-            recyclerView.adapter= lstFollowmeListAdapter
+            recyclerView.adapter= lstBlockListAdapter
         }
 
     }
@@ -147,6 +151,25 @@ class FollowingListActivity : AppCompatActivity() {
                         (lstFollowmeLists as ArrayList).add("friend")
                     }
                     lstFollowmeListAdapter!!.notifyDataSetChanged()
+                }
+            }
+        })
+
+        lstBlockList= ArrayList()
+        val friendRef2= FirebaseDatabase.getInstance().reference
+            .child("Friends").child(userID).child("blockList")
+        friendRef2.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    (lstBlockList as ArrayList).clear()
+                    for (ss in snapshot.children){
+                        (lstBlockList as ArrayList).add(ss.key.toString())
+                        (lstBlockLists as ArrayList).add("friend")
+                    }
+                    lstBlockListAdapter!!.notifyDataSetChanged()
                 }
             }
         })

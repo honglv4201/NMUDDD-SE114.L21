@@ -134,6 +134,15 @@ class ProfileActivity : AppCompatActivity() {
             intentFull.putExtra("imageuri", uriCover)
             this.startActivity(intentFull)
         }
+        btnNhanTin.setOnClickListener{
+            val intent = Intent(this,ChatLogActivity::class.java)
+
+            intent.putExtra("name",name)
+            intent.putExtra("uid", profileId)
+            intent.putExtra("image", imagex)
+
+            startActivity(intent)
+        }
         btnAddfriend.setOnClickListener{
             when(statusFriend) {
                 "friend" -> {
@@ -926,6 +935,8 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
     }
+    private var name :String =""
+    private var imagex :String=""
 
     private fun getInfor(){
         // get name methods 1
@@ -938,9 +949,11 @@ class ProfileActivity : AppCompatActivity() {
                 user?.setEmail(snapshot.child("email").value.toString())
                 user?.setName(snapshot.child("fullname").value.toString())
                 txt_name_avatar.text=user?.getName()
+                name=user?.getName().toString()
                 username_toolbar.text=user?.getName()
                 uri= user!!.getAvatar()
                 Picasso.get().load(user?.getAvatar()).into(avatar)
+                imagex = user?.getAvatar()
                 Picasso.get().load(user?.getAvatar()).into(avatar_intoolbar)
             }
             override fun onCancelled(error: DatabaseError) {
