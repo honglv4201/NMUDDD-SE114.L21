@@ -49,6 +49,10 @@ class   Post_Activity : AppCompatActivity() {
                 .start(this)
         }
 
+        btn_close11.setOnClickListener{
+            onBackPressed()
+        }
+
 
 
     }
