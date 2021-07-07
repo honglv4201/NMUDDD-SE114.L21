@@ -46,6 +46,7 @@
                    android:layout_height="50dp"
                    >
                    <ImageButton
+                       android:id="@+id/btn_addFriends"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:src="@drawable/icon_add"
@@ -55,9 +56,10 @@
 
                        />
                    <TextView
+                       android:layout_marginRight="20dp"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="Shot Video"
+                       android:text="Shot Video      "
                        android:textStyle="bold"
                        android:textSize="20dp"
                        android:textColor="@color/white"
@@ -65,7 +67,7 @@
                        android:layout_gravity="center_vertical"
                        android:gravity="center_horizontal|center_vertical"/>
                    <ImageButton
-                   android:layout_width="wrap_content"
+                   android:layout_width="0dp"
                    android:layout_height="wrap_content"
                    android:src="@drawable/more_btn"
                    android:backgroundTint="#03A9F4"

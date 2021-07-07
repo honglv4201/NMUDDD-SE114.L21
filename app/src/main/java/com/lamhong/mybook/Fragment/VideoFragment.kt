@@ -12,12 +12,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.lamhong.mybook.AddShotVideoActivity
+import com.lamhong.mybook.*
 import com.lamhong.mybook.Models.User
 import com.lamhong.mybook.Models.UserInfor
-import com.lamhong.mybook.MyShotVideoActivity
-import com.lamhong.mybook.R
-import com.lamhong.mybook.ShotVideoActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_setting.*
@@ -70,6 +67,10 @@ class VideoFragment : Fragment() {
         view.btn_videocuatoi.setOnClickListener{
             val intent = (Intent(context, MyShotVideoActivity::class.java))
             intent.putExtra("id", firebaseUser.uid)
+            startActivity(intent)
+        }
+        view.btn_addFriends.setOnClickListener{
+            val intent = Intent(context, NewSearchActivity::class.java)
             startActivity(intent)
         }
         showInfor()
